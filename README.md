@@ -1,5 +1,6 @@
 # dotfiles
 
+* this repo is an extension of [dannydannydanny/methodology](https://github.com/DannyDannyDanny/methodology/)
 * this is my install script
 * i run it right after install artix-cinnamon-openrc
 * it's very much a work in progress 🚧
