@@ -4,7 +4,7 @@
 * this is my install script
 * i run it right after install artix-cinnamon-openrc
 * it's very much a work in progress 🚧
-* mpd, mpc, ncmpcpp ([Mac guide](https://killtheyak.com/install-mpd-mpc-ncmpcpp/))
+* mpd, mpc, ncmpcpp ([Mac guide](https://killtheyak.com/install-mpd-mpc-ncmpcpp/), [config guide for mac](https://computingforgeeks.com/install-configure-mpd-ncmpcpp-macos/))
 
 ```sh
 #!/bin/sh
