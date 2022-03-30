@@ -18,6 +18,7 @@ Plug 'vimwiki/vimwiki'
 Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-commentary'
 Plug 'ap/vim-css-color'
+Plug 'editorconfig/editorconfig-vim'    " editor-config extension for vim
 " Plug 'rrethy/vim-illuminate'  	" highlight other uses of the current word under the cursor
 call plug#end()
 
