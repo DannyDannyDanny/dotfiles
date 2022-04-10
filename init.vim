@@ -20,6 +20,7 @@ Plug 'tpope/vim-commentary'
 Plug 'ap/vim-css-color'
 Plug 'editorconfig/editorconfig-vim'    " editor-config extension for vim
 " Plug 'rrethy/vim-illuminate'  	" highlight other uses of the current word under the cursor
+" Plug 'jupyter-vim/jupyter-vim'
 call plug#end()
 
 set title
