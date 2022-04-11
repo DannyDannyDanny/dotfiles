@@ -4,15 +4,22 @@
 # or `brew bundle --file=~/.private/Brewfile`
 
 tap "homebrew/cask"
+
 brew "tree"
 brew "mas"
 brew "handbrake"
+# brew "macvim"
+# brew "vim"
 brew "neovim" # always neovim
 brew "ack"
 brew "profanity" # XMPP client
 brew "lf"  # CLI file browser (gokcehan/lf/)
 # brew "mutt" # CLI email cient (muttmua/mutt)
 brew "diskonaut" # CLI disk usage visual treemap
+brew "tmux"  # terminal multiplexer
+
+# youtube downloader
+#"yt-dlp/taps/yt-dlp"
 
 cask "basictex"	# minimal Tex Distribution
 # cask "mactex" # LaTeX Live distribution w GUI
@@ -35,6 +42,7 @@ cask "visual-studio-code"
 cask "discord"
 cask "qutebrowser"
 cask "waterfox"
+
 # cask "adium"
 # # adium or pidgin?
 # cask "pidgin"
