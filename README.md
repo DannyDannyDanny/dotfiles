@@ -4,6 +4,9 @@
 * this is my install script
 * i run it right after install artix-cinnamon-openrc
 * it's very much a work in progress 🚧
+* Roadmap:
+  * **tmux**: get cosy, remote nested sessions
+  * [config syncing](https://www.atlassian.com/git/tutorials/dotfiles)
 * mpd, mpc, ncmpcpp ([Mac guide](https://killtheyak.com/install-mpd-mpc-ncmpcpp/), [config guide for mac](https://computingforgeeks.com/install-configure-mpd-ncmpcpp-macos/))
 * TODO: read [atlassian's git config sync article](https://www.atlassian.com/git/tutorials/dotfiles)
 
