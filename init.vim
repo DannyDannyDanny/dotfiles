@@ -15,12 +15,13 @@ Plug 'junegunn/goyo.vim'
 Plug 'jreybert/vimagit'
 Plug 'lukesmithxyz/vimling'
 Plug 'vimwiki/vimwiki'
+Plug 'itchyny/calendar.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-commentary'
-Plug 'ap/vim-css-color'
+Plug 'ap/vim-css-color'			" show css colors
 Plug 'editorconfig/editorconfig-vim'    " editor-config extension for vim
 " Plug 'rrethy/vim-illuminate'  	" highlight other uses of the current word under the cursor
-" Plug 'jupyter-vim/jupyter-vim'
+" Plug 'jupyter-vim/jupyter-vim'	" one day we'll start using jupyter in vim
 call plug#end()
 
 set title
@@ -158,5 +159,4 @@ nnoremap <leader>h :call ToggleHiddenAll()<CR>
 " Here leader is ";".
 " So ":vs ;cfz" will expand into ":vs /home/<user>/.config/zsh/.zshrc"
 " if typed fast without the timeout.
-" source ~/.config/nvim/shortcuts.vim 
-
+" source ~/.config/nvim/shortcuts.vim
