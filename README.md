@@ -3,6 +3,7 @@
 * this repo is an extension of [dannydannydanny/methodology](https://github.com/DannyDannyDanny/methodology/)
 * this is my install script
 * i run it right after install artix-cinnamon-openrc
+  * Install and use [arch packages on artix](https://dev.to/nabbisen/artix-linux-add-arch-linux-repos-extra-community-35ab)
 * it's very much a work in progress 🚧
 * Roadmap:
   * **tmux**: get cosy, remote nested sessions
