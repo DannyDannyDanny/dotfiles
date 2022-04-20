@@ -8,22 +8,45 @@ if ! filereadable(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autolo
 endif
 
 call plug#begin(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/plugged"'))
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-fugitive' " git helper
+Plug 'tpope/vim-surround'		" surround for parentheses, brackets, quotes, XML tags etc
+Plug 'tpope/vim-fugitive' 		" git helper
 Plug 'preservim/nerdtree'
 Plug 'junegunn/goyo.vim'
 Plug 'jreybert/vimagit'
 Plug 'lukesmithxyz/vimling'
-Plug 'vimwiki/vimwiki'
-Plug 'itchyny/calendar.vim'
+Plug 'vimwiki/vimwiki'			" take notes in vimwiki
+Plug 'michal-h21/vimwiki-sync'		" sync notes to git repo
+Plug 'itchyny/calendar.vim'		" integrate calendar into vimwiki (todo)
 Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-commentary'
 Plug 'ap/vim-css-color'			" show css colors
 Plug 'editorconfig/editorconfig-vim'    " editor-config extension for vim
-" Plug 'rrethy/vim-illuminate'  	" highlight other uses of the current word under the cursor
+Plug 'scrooloose/syntastic'		" syntax checker
+Plug 'airblade/vim-gitgutter'		" git diff insertions / deletions
+Plug 'rrethy/vim-illuminate'		" highlight other uses of the current word under the cursor
 " Plug 'jupyter-vim/jupyter-vim'	" one day we'll start using jupyter in vim
 call plug#end()
 
+
+" syntastic recommended settings
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+" let g:syntastic_python_checker = 'flake8'
+let g:syntastic_python_checkers = ['python', 'flake8']
+let g:syntastic_python_python_exec = 'python3'
+
+" VimWiki setup
+let g:vimwiki_list = [{'path':'$HOME/.local/share/nvim/vimwiki/'}]
+let g:vimwiki_sync_branch = "main"
+let g:vimwiki_sync_commit_message = '$HOST | %c'
+let g:sync_taskwarrior = 0
+
+" LARBS inspired below
 set title
 set bg=light
 set go=a
