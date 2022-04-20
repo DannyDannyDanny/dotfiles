@@ -28,10 +28,11 @@ Plug 'rrethy/vim-illuminate'		" highlight other uses of the current word under t
 call plug#end()
 
 " show invisibles
-:set fileencoding=utf-8
-:set list
+set fileencoding=utf-8
+set list
+set listchars=tab:→\ ,trail:␣,extends:…,eol:⏎
 " :set listchars=tab:‚Üí\ ,space:¬∑,nbsp:‚ê£,trail:‚Ä¢,eol:¬∂,precedes:¬´,extends:¬ª
-:set listchars=tab:‚Üí\ ,nbsp:‚ê£,trail:‚Ä¢,precedes:¬´,extends:¬ª
+" :set listchars=tab:‚Üí\ ,nbsp:‚ê£,trail:‚Ä¢,precedes:¬´,extends:¬ª
 
 
 " syntastic recommended settings
@@ -48,7 +49,7 @@ let g:syntastic_python_python_exec = 'python3'
 " VimWiki setup
 let g:vimwiki_list = [{'path':'$HOME/.local/share/nvim/vimwiki/'}]
 let g:vimwiki_sync_branch = "main"
-let g:vimwiki_sync_commit_message = '$HOST | %c'
+let g:vimwiki_sync_commit_message = '$USER @ $HOST'
 let g:sync_taskwarrior = 0
 
 " LARBS inspired below
