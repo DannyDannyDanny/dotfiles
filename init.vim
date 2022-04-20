@@ -27,6 +27,12 @@ Plug 'rrethy/vim-illuminate'		" highlight other uses of the current word under t
 " Plug 'jupyter-vim/jupyter-vim'	" one day we'll start using jupyter in vim
 call plug#end()
 
+" show invisibles
+:set fileencoding=utf-8
+:set list
+" :set listchars=tab:‚Üí\ ,space:¬∑,nbsp:‚ê£,trail:‚Ä¢,eol:¬∂,precedes:¬´,extends:¬ª
+:set listchars=tab:‚Üí\ ,nbsp:‚ê£,trail:‚Ä¢,precedes:¬´,extends:¬ª
+
 
 " syntastic recommended settings
 set statusline+=%#warningmsg#
@@ -36,7 +42,6 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-" let g:syntastic_python_checker = 'flake8'
 let g:syntastic_python_checkers = ['python', 'flake8']
 let g:syntastic_python_python_exec = 'python3'
 
