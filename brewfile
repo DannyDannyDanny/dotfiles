@@ -17,6 +17,7 @@ brew "diskonaut"	# CLI disk usage visual treemap
 brew "tmux"		# terminal multiplexer
 brew "f3"		# fight flash fraud (USB / SD card checker)
 brew "task"		# for nvim taskwiki
+brew "pyenv"		# python environment manager
 
 
 # youtube downloader
