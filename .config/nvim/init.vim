@@ -30,9 +30,7 @@ call plug#end()
 " show invisibles
 set fileencoding=utf-8
 set list
-set listchars=tab:→\ ,trail:␣,extends:…,eol:⏎
-" :set listchars=tab:‚Üí\ ,space:¬∑,nbsp:‚ê£,trail:‚Ä¢,eol:¬∂,precedes:¬´,extends:¬ª
-" :set listchars=tab:‚Üí\ ,nbsp:‚ê£,trail:‚Ä¢,precedes:¬´,extends:¬ª
+set listchars=tab:→\ ,nbsp:␣,trail:•,precedes:«,extends:»
 
 
 " syntastic recommended settings
@@ -47,7 +45,7 @@ let g:syntastic_python_checkers = ['python', 'flake8']
 let g:syntastic_python_python_exec = 'python3'
 
 " VimWiki setup
-let g:vimwiki_list = [{'path':'$HOME/.local/share/nvim/vimwiki/'}]
+let g:vimwiki_list = [{'path':'$HOME/.local/share/nvim/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}, {'path':'$HOME/methodology/', 'syntax': 'markdown', 'ext': '.md'}]
 let g:vimwiki_sync_branch = "main"
 let g:vimwiki_sync_commit_message = '$USER @ $HOST'
 let g:sync_taskwarrior = 0
@@ -131,13 +129,19 @@ set noshowcmd
 " Ensure files are read as what I want:
 	let g:vimwiki_ext2syntax = {'.Rmd': 'markdown', '.rmd': 'markdown','.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
 	map <leader>v :VimwikiIndex<CR>
-	let g:vimwiki_list = [{'path': '~/.local/share/nvim/vimwiki', 'syntax': 'markdown', 'ext': '.md'}]
+	" let g:vimwiki_list = [{'path': '~/.local/share/nvim/vimwiki', 'syntax': 'markdown', 'ext': '.md'}]
 	autocmd BufRead,BufNewFile /tmp/calcurse*,~/.calcurse/notes/* set filetype=markdown
 	autocmd BufRead,BufNewFile *.ms,*.me,*.mom,*.man set filetype=groff
 	autocmd BufRead,BufNewFile *.tex set filetype=tex
 
 " Save file as sudo on files that require root permission
 	cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+
+" Enable Goyo by default for mutt writing
+	autocmd BufRead,BufNewFile /tmp/neomutt* let g:goyo_width=80
+	autocmd BufRead,BufNewFile /tmp/neomutt* :Goyo | set bg=light
+	autocmd BufRead,BufNewFile /tmp/neomutt* map ZZ :Goyo\|x!<CR>
+	autocmd BufRead,BufNewFile /tmp/neomutt* map ZQ :Goyo\|q!<CR>
 
 " Automatically deletes all trailing whitespace and newlines at end of file on save. & reset cursor position
  	autocmd BufWritePre * let currPos = getpos(".")
