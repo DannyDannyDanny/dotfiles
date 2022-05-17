@@ -45,7 +45,7 @@ let g:syntastic_python_checkers = ['python', 'flake8']
 let g:syntastic_python_python_exec = 'python3'
 
 " VimWiki setup
-let g:vimwiki_list = [{'path':'$HOME/.local/share/nvim/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}, {'path':'$HOME/methodology/', 'syntax': 'markdown', 'ext': '.md'}]
+let g:vimwiki_list = [{'path':'$HOME/.local/share/nvim/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}, {'path':'$HOME/methodology/', 'syntax': 'markdown', 'ext': '.md'}, {'path':'$HOME/administration/', 'syntax': 'markdown', 'ext': '.md'}]
 let g:vimwiki_sync_branch = "main"
 let g:vimwiki_sync_commit_message = '$USER @ $HOST'
 let g:sync_taskwarrior = 0
