@@ -37,3 +37,6 @@ setup_music:
 	ln -s -f ~/dotfiles/.config/mpd/mpd.conf ~/.config/mpd/mpd.conf
 	mkdir -p ~/.config/ncmpcpp/
 	ln -s -f ~/dotfiles/.config/ncmpcpp/config ~/.config/ncmpcpp/config
+
+setup_editorconfig:
+	ln -s -f ~/dotfiles/.editorconfig ~/.editorconfig
