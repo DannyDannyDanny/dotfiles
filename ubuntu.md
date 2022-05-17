@@ -10,6 +10,7 @@ sudo apt install tmux
 sudo apt install make
 sudo apt install curl
 sudo apt install ffmpeg
+sudo apt install keepass2
 sudo apt install zsh		      # install oh-my-zsh to set zsh as default shell
 
 # music setup
