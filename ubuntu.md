@@ -11,4 +11,14 @@ sudo apt install make
 sudo apt install curl
 sudo apt install ffmpeg
 sudo apt install zsh		      # install oh-my-zsh to set zsh as default shell
+
+# music setup
+sudo apt-get install mpd
+sudo apt-get install ncmpcpp
+```
+
+## Snap Apps
+
+```
+sudo snap install yt-dlp
 ```
