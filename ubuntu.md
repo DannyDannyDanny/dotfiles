@@ -18,8 +18,14 @@ sudo apt-get install mpd
 sudo apt-get install ncmpcpp
 ```
 
-## Snap Apps
+## Homebrew casks
 
-```
-sudo snap install yt-dlp
-```
+> :construction: I'm still forming opinions but here's the rundown
+> 1. snap is opinionated
+> 2. snap is slow
+> 3. homebrew / brew has been great on Mac
+> 4. already have brewfile
+> 5. homebrew also works on WSL
+> 6. snap apps have been unable to detect ffmpeg (even when it is in my path)
+
+* Install yt-dlp
