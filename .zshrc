@@ -1,10 +1,10 @@
-" README:
-" If zsh is not yet installed:
-" https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH
-" If oh-my-zsh is not yet installed:
-" https://ohmyz.sh/#install
-" During zsh setup, a `.zhrc` file is generated and left in the root.
-" The following .zshrc content should extend (rather than replace) your `.zshrc`.
+# README:
+# If zsh is not yet installed:
+# https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH
+# If oh-my-zsh is not yet installed:
+# https://ohmyz.sh/#install
+# During zsh setup, a `.zhrc` file is generated and left in the root.
+# The following .zshrc content should extend (rather than replace) your `.zshrc`.
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
