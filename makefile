@@ -1,3 +1,6 @@
+setup_zshrc:
+	ln -s -f ~/dotfiles/.zshrc ~/.zshrc
+
 setup_alacritty:
 	mkdir -p ~/.config/alacritty
 	ln -s -f ~/dotfiles/.config/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
