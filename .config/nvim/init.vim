@@ -50,6 +50,10 @@ let g:vimwiki_sync_branch = "main"
 let g:vimwiki_sync_commit_message = '$USER @ $HOST'
 let g:sync_taskwarrior = 0
 
+" Calendar setup
+let g:calendar_first_day = 'monday'   " set monday as first day of week
+let g:calendar_week_number = 1        " add weeknumber
+
 " LARBS inspired below
 set title
 set bg=light
@@ -138,17 +142,17 @@ set noshowcmd
 	cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
 " Enable Goyo by default for mutt writing
-	autocmd BufRead,BufNewFile /tmp/neomutt* let g:goyo_width=80
-	autocmd BufRead,BufNewFile /tmp/neomutt* :Goyo | set bg=light
-	autocmd BufRead,BufNewFile /tmp/neomutt* map ZZ :Goyo\|x!<CR>
-	autocmd BufRead,BufNewFile /tmp/neomutt* map ZQ :Goyo\|q!<CR>
+  autocmd BufRead,BufNewFile /tmp/neomutt* let g:goyo_width=80
+  autocmd BufRead,BufNewFile /tmp/neomutt* :Goyo | set bg=light
+  autocmd BufRead,BufNewFile /tmp/neomutt* map ZZ :Goyo\|x!<CR>
+  autocmd BufRead,BufNewFile /tmp/neomutt* map ZQ :Goyo\|q!<CR>
 
 " Automatically deletes all trailing whitespace and newlines at end of file on save. & reset cursor position
- 	autocmd BufWritePre * let currPos = getpos(".")
-	autocmd BufWritePre * %s/\s\+$//e
-	autocmd BufWritePre * %s/\n\+\%$//e
-	autocmd BufWritePre *.[ch] %s/\%$/\r/e
-  	autocmd BufWritePre * cal cursor(currPos[1], currPos[2])
+  autocmd BufWritePre * let currPos = getpos(".")
+  autocmd BufWritePre * %s/\s\+$//e
+  autocmd BufWritePre * %s/\n\+\%$//e
+  autocmd BufWritePre *.[ch] %s/\%$/\r/e
+  autocmd BufWritePre * cal cursor(currPos[1], currPos[2])
 
 " When shortcut files are updated, renew bash and ranger configs with new material:
 	autocmd BufWritePost bm-files,bm-dirs !shortcuts
