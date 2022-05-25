@@ -51,6 +51,7 @@ let g:syntastic_python_python_exec = 'python3'
 let g:vimwiki_sync_branch = "main"
 let g:vimwiki_sync_commit_message = '$USER @ $HOST'
 let g:sync_taskwarrior = 0
+let g:vimwiki_markdown_link_ext = 1   " explicitly add .md extension in vimwiki
 
 let wiki_1 = {}
 let wiki_1.path = '~/.local/share/nvim/vimwiki/'
