@@ -10,15 +10,15 @@ endif
 call plug#begin(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/plugged"'))
 Plug 'tpope/vim-surround'		" surround for parentheses, brackets, quotes, XML tags etc
 Plug 'tpope/vim-fugitive' 		" git helper
-Plug 'preservim/nerdtree'
-Plug 'junegunn/goyo.vim'
-Plug 'jreybert/vimagit'
-Plug 'lukesmithxyz/vimling'
+Plug 'preservim/nerdtree'		" file tree
+Plug 'jreybert/vimagit'			" git diffing with :Magit
+Plug 'lukesmithxyz/vimling'		" toggle deadkeys, IPA, prose-mode
+Plug 'junegunn/goyo.vim'		" prose mode but better
 Plug 'vimwiki/vimwiki'			" take notes in vimwiki
 Plug 'michal-h21/vimwiki-sync'		" sync notes to git repo
 Plug 'itchyny/calendar.vim'		" integrate calendar into vimwiki (todo)
-Plug 'vim-airline/vim-airline'
-Plug 'tpope/vim-commentary'
+Plug 'vim-airline/vim-airline'		" status bar
+Plug 'tpope/vim-commentary'		" comment out word / line with 'gc'
 Plug 'ap/vim-css-color'			" show css colors
 Plug 'editorconfig/editorconfig-vim'    " editor-config extension for vim
 Plug 'scrooloose/syntastic'		" syntax checker
@@ -27,10 +27,13 @@ Plug 'rrethy/vim-illuminate'		" highlight other uses of the current word under t
 " Plug 'jupyter-vim/jupyter-vim'	" one day we'll start using jupyter in vim
 call plug#end()
 
+
 " show invisibles
 set fileencoding=utf-8
 set list
 set listchars=tab:→\ ,nbsp:␣,trail:•,precedes:«,extends:»
+" TODO: remove line below or line above
+" set listchars=tab:→\ ,trail:␣,extends:…,eol:⏎
 
 
 " syntastic recommended settings
@@ -45,10 +48,26 @@ let g:syntastic_python_checkers = ['python', 'flake8']
 let g:syntastic_python_python_exec = 'python3'
 
 " VimWiki setup
-let g:vimwiki_list = [{'path':'$HOME/.local/share/nvim/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}, {'path':'$HOME/methodology/', 'syntax': 'markdown', 'ext': '.md'},{'path':'$HOME/administration/', 'syntax': 'markdown', 'ext': '.md'}]
 let g:vimwiki_sync_branch = "main"
 let g:vimwiki_sync_commit_message = '$USER @ $HOST'
 let g:sync_taskwarrior = 0
+
+let wiki_1 = {}
+let wiki_1.path = '~/.local/share/nvim/vimwiki/'
+let wiki_1.syntax = 'markdown'
+let wiki_1.ext = 'md'
+
+let wiki_2 = {}
+let wiki_2.path = '~/methodology/'
+let wiki_2.syntax = 'markdown'
+let wiki_2.ext = 'md'
+
+let wiki_3 = {}
+let wiki_3.path = '~/administration/'
+let wiki_3.syntax = 'markdown'
+let wiki_3.ext = 'md'
+
+let g:vimwiki_list = [wiki_1, wiki_2, wiki_3]
 
 " Calendar setup
 let g:calendar_first_day = 'monday'   " set monday as first day of week
