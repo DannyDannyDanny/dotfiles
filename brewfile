@@ -4,21 +4,20 @@
 # or `brew bundle --file=~/.private/Brewfile`
 
 tap "homebrew/cask"
-
-brew "tree"
-brew "mas"
-brew "handbrake"	# video formatting
-brew "neovim" 		# always neovim, no macvim or regular vim
-brew "ack"
-# brew "profanity" 	# XMPP client
-brew "lf"  		# CLI file browser (gokcehan/lf/)
-# brew "mutt" 		# CLI email cient (muttmua/mutt)
+brew "tree"				# CLI file tree
+# brew "mas"				# CLI wrapper for Mac App Store
+brew "lf"					# CLI file browser (gokcehan/lf/)
 brew "diskonaut"	# CLI disk usage visual treemap
-brew "tmux"		# terminal multiplexer
-brew "f3"		# fight flash fraud (USB / SD card checker)
-brew "task"		# for nvim taskwiki
+brew "neovim" 		# always neovim, no macvim or regular vim
+brew "tmux"			# terminal multiplexer
+brew "f3"				# fight flash fraud (USB / SD card checker)
+brew "task"			# for nvim taskwiki
 brew "pyenv"		# python environment manager
-brew "fzf"    # fuzzy-finder
+brew "fzf"			# fuzzy-finder
+brew "ack"			# grep replacer
+# brew "handbrake"	# video formatting (swap to ffmpeg?)
+# brew "mutt" 		# CLI email cient (muttmua/mutt)
+# brew "profanity" 	# XMPP client
 
 
 # youtube downloader
