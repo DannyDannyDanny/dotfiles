@@ -18,6 +18,7 @@ brew "tmux"		# terminal multiplexer
 brew "f3"		# fight flash fraud (USB / SD card checker)
 brew "task"		# for nvim taskwiki
 brew "pyenv"		# python environment manager
+brew "fzf"    # fuzzy-finder
 
 
 # youtube downloader
