@@ -21,7 +21,7 @@ indent_style = space
 indent_size = 4
 
 # Tab indentation (no size specified)
-[Makefile]
+[{makefile,Makefile,brewfile,.editorconfig}]
 indent_style = tab
 
 # Indentation override for all JS under lib directory
