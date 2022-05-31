@@ -25,6 +25,7 @@ Plug 'scrooloose/syntastic'		" syntax checker
 Plug 'airblade/vim-gitgutter'		" git diff insertions / deletions
 Plug 'rrethy/vim-illuminate'		" highlight other uses of the current word under the cursor
 " Plug 'jupyter-vim/jupyter-vim'	" one day we'll start using jupyter in vim
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " fuzzy-finder
 call plug#end()
 
 
