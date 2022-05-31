@@ -107,3 +107,6 @@ alias docos="docker compose -f docker-compose.staging.yml"
 
 # use vim bindings
 bindkey -v
+
+# fuzzy-finder
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
