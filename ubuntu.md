@@ -4,6 +4,7 @@ All the startup installation stuff for ubuntu clients.
 sudo apt install git
 sudo apt install neovim
 sudo apt install librewolf    # add librewolf repo first
+sudo apt install qutebrowser
 sudo apt install gnome-tweaks
 sudo apt install alacritty    # add alacritty repo first
 sudo apt install tmux
@@ -14,8 +15,8 @@ sudo apt install keepass2
 sudo apt install zsh		      # install oh-my-zsh to set zsh as default shell
 
 # music setup
-sudo apt-get install mpd
-sudo apt-get install ncmpcpp
+sudo apt install mpd
+sudo apt install ncmpcpp
 ```
 
 ## Homebrew casks
