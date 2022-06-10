@@ -26,7 +26,9 @@ Use thunderbird to attach to just about any mail + cal clients
 
 ## Password Manager
 
-Use keepass
+* [ ] Start using keepass
+* [ ] Avoid uploading the keepass DB
+* [ ] Start using a secret file to unlock DB
 
 
 ## Homebrew casks
