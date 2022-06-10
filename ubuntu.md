@@ -19,6 +19,16 @@ sudo apt install mpd
 sudo apt install ncmpcpp
 ```
 
+## Mail & Calendar
+
+Use thunderbird to attach to just about any mail + cal clients
+
+
+## Password Manager
+
+Use keepass
+
+
 ## Homebrew casks
 
 > :construction: I'm still forming opinions but here's the rundown
