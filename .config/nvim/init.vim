@@ -14,6 +14,7 @@ Plug 'preservim/nerdtree'		" file tree
 Plug 'jreybert/vimagit'			" git diffing with :Magit
 Plug 'lukesmithxyz/vimling'		" toggle deadkeys, IPA, prose-mode
 Plug 'junegunn/goyo.vim'		" prose mode but better
+Plug 'junegunn/vim-emoji'     " emoji in vim
 Plug 'vimwiki/vimwiki'			" take notes in vimwiki
 Plug 'michal-h21/vimwiki-sync'		" sync notes to git repo
 Plug 'itchyny/calendar.vim'		" integrate calendar into vimwiki (todo)
@@ -35,6 +36,13 @@ set list
 set listchars=tab:→\ ,nbsp:␣,trail:•,precedes:«,extends:»
 " TODO: remove line below or line above
 " set listchars=tab:→\ ,trail:␣,extends:…,eol:⏎
+
+
+" vim-emoji setup
+let g:gitgutter_sign_added = emoji#for('small_blue_diamond')
+let g:gitgutter_sign_modified = emoji#for('small_orange_diamond')
+let g:gitgutter_sign_removed = emoji#for('small_red_triangle')
+let g:gitgutter_sign_modified_removed = emoji#for('collision')
 
 
 " syntastic recommended settings
