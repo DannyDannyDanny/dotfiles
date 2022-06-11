@@ -8,22 +8,22 @@ if ! filereadable(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autolo
 endif
 
 call plug#begin(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/plugged"'))
-Plug 'tpope/vim-surround'		" surround for parentheses, brackets, quotes, XML tags etc
-Plug 'tpope/vim-fugitive' 		" git helper
-Plug 'preservim/nerdtree'		" file tree
-Plug 'jreybert/vimagit'			" git diffing with :Magit
-Plug 'lukesmithxyz/vimling'		" toggle deadkeys, IPA, prose-mode
-Plug 'junegunn/goyo.vim'		" prose mode but better
-Plug 'junegunn/vim-emoji'     " emoji in vim
-Plug 'vimwiki/vimwiki'			" take notes in vimwiki
-Plug 'michal-h21/vimwiki-sync'		" sync notes to git repo
-Plug 'itchyny/calendar.vim'		" integrate calendar into vimwiki (todo)
-Plug 'vim-airline/vim-airline'		" status bar
-Plug 'tpope/vim-commentary'		" comment out word / line with 'gc'
-Plug 'ap/vim-css-color'			" show css colors
+Plug 'tpope/vim-surround'     " surround for parentheses, brackets, quotes, XML tags etc
+Plug 'tpope/vim-fugitive'     " git helper
+Plug 'preservim/nerdtree'     " file tree
+Plug 'jreybert/vimagit'       " git diffing with :Magit
+Plug 'lukesmithxyz/vimling'   " toggle deadkeys, IPA, prose-mode
+Plug 'junegunn/goyo.vim'      " prose mode but better
+Plug 'vimwiki/vimwiki'        " take notes in vimwiki
+Plug 'michal-h21/vimwiki-sync'  " sync notes to git repo
+Plug 'itchyny/calendar.vim'     " integrate calendar into vimwiki (todo)
+Plug 'vim-airline/vim-airline'  " status bar
+Plug 'tpope/vim-commentary'   " comment out word / line with 'gc'
+Plug 'ap/vim-css-color'       " show css colors
 Plug 'editorconfig/editorconfig-vim'    " editor-config extension for vim
 Plug 'scrooloose/syntastic'		" syntax checker
-Plug 'airblade/vim-gitgutter'		" git diff insertions / deletions
+Plug 'airblade/vim-gitgutter'		" show git diff insertions / deletions
+Plug 'junegunn/vim-emoji'       " emoji autocomplete + emojis in gitgutter
 Plug 'rrethy/vim-illuminate'		" highlight other uses of the current word under the cursor
 " Plug 'jupyter-vim/jupyter-vim'	" one day we'll start using jupyter in vim
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " fuzzy-finder
@@ -39,6 +39,7 @@ set listchars=tab:→\ ,nbsp:␣,trail:•,precedes:«,extends:»
 
 
 " vim-emoji setup
+set completefunc=emoji#complete
 let g:gitgutter_sign_added = emoji#for('small_blue_diamond')
 let g:gitgutter_sign_modified = emoji#for('small_orange_diamond')
 let g:gitgutter_sign_removed = emoji#for('small_red_triangle')
