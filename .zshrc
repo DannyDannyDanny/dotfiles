@@ -111,3 +111,9 @@ bindkey -v
 
 # fuzzy-finder
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# make brew accessible
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# add lvim to path
+export PATH=.local/bin:$PATH
