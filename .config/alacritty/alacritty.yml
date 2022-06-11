@@ -1,3 +1,19 @@
+font:
+  normal:
+    family: FantasqueSansMono Nerd Font
+    style: Regular
+  bold:
+    family: FantasqueSansMono Nerd Font
+    style: Bold
+  italic:
+    family: FantasqueSansMono Nerd Font
+    style: Italic
+  bold_italic:
+    family: FantasqueSansMono Nerd Font
+    style: Bold Italic
+  size: 16
+
+
 schemes:
   gruvbox_material_hard_dark: &gruvbox_material_hard_dark
     primary:
@@ -138,6 +154,6 @@ schemes:
 # colors: *gruvbox_material_medium_dark
 # colors: *gruvbox_material_soft_dark
 
-# colors: *gruvbox_material_hard_light
-colors: *gruvbox_material_medium_light
+colors: *gruvbox_material_hard_light
+# colors: *gruvbox_material_medium_light
 # colors: *gruvbox_material_soft_light
