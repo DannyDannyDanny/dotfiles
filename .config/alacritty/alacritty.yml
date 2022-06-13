@@ -1,15 +1,16 @@
+# run `fc-list` to see available fonts
 font:
   normal:
-    family: FantasqueSansMono Nerd Font
+    family: NotoSansMono Nerd Font
     style: Regular
   bold:
-    family: FantasqueSansMono Nerd Font
+    family: NotoSansMono Nerd Font
     style: Bold
   italic:
-    family: FantasqueSansMono Nerd Font
+    family: NotoSansMono Nerd Font
     style: Italic
   bold_italic:
-    family: FantasqueSansMono Nerd Font
+    family: NotoSansMono Nerd Font
     style: Bold Italic
   size: 16
 
