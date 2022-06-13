@@ -115,5 +115,8 @@ bindkey -v
 # make brew accessible
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-# add lvim to path
-export PATH=.local/bin:$PATH
+# set PATH so it includes user's private ~/.local/bin if it exists
+# lvim is installed to this directory (at least on ubuntu)
+if [ -d "$HOME/.local/bin" ] ; then
+	PATH="$HOME/.local/bin:$PATH"
+fi
