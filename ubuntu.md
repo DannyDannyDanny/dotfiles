@@ -1,23 +1,35 @@
+## apt packages
+
 All the startup installation stuff for ubuntu clients.
 
 ```
-sudo apt install git
-sudo apt install neovim
+sudo apt install git          # version control
+# sudo apt install neovim     # brew install nvim to get version 0.7
 sudo apt install librewolf    # add librewolf repo first
-sudo apt install qutebrowser
-sudo apt install gnome-tweaks
+sudo apt install qutebrowser  # minimal vim-binding browser
+sudo apt install gnome-tweaks # tool to remap caps to ctrl
 sudo apt install alacritty    # add alacritty repo first
-sudo apt install tmux
-sudo apt install make
-sudo apt install curl
-sudo apt install ffmpeg
-sudo apt install keepass2
-sudo apt install zsh		      # install oh-my-zsh to set zsh as default shell
+sudo apt install tmux         # terminal multiplexer
+sudo apt install make         # utility to maintain shell program groups
+sudo apt install curl         # file transfer helper
+sudo apt install ffmpeg       # audio/video converter
+sudo apt install keepass2     # password manager
+sudo apt install zsh          # install oh-my-zsh to set zsh as default shell
 
 # music setup
 sudo apt install mpd
 sudo apt install ncmpcpp
 ```
+
+## Homebrew packages
+
+Install [brew](https://brew.sh/) and brew install:
+
+```
+brew install yt-dlp
+brew install neovim
+```
+
 
 ## Mail & Calendar
 
@@ -26,19 +38,6 @@ Use thunderbird to attach to just about any mail + cal clients
 
 ## Password Manager
 
-* [ ] Start using keepass
-* [ ] Avoid uploading the keepass DB
+* [X] Start using keepass
+* [ ] Research version controlling DB
 * [ ] Start using a secret file to unlock DB
-
-
-## Homebrew casks
-
-> :construction: I'm still forming opinions but here's the rundown
-> 1. snap is opinionated
-> 2. snap is slow
-> 3. homebrew / brew has been great on Mac
-> 4. already have brewfile
-> 5. homebrew also works on WSL
-> 6. snap apps have been unable to detect ffmpeg (even when it is in my path)
-
-* Install yt-dlp
