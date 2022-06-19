@@ -43,3 +43,7 @@ setup_music:
 
 setup_editorconfig:
 	ln -s -f ~/dotfiles/.editorconfig ~/.editorconfig
+
+setup_nerdfonts:
+	git clone --depth 2 https://github.com/ryanoasis/nerd-fonts/ ~/nerd-fonts
+	cd ~/nerd-fonts && ./install.sh
