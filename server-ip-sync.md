@@ -9,9 +9,10 @@ Make rules:
   * [ ] add oneliner to cron `<path-to-venv>/python server-ip-sync.py --upload`
 
 ```makefile
+" https://stackoverflow.com/a/9578959
 addcron:
     CRONENTRY=
-    { crontab -l; echo "*/2 * * * * /usr/bin/node cronapp.js >> logfile.log" } | crontab -
+    { crontab -l; echo "* * * * * path-to-venv/python >> ip.log" } | crontab -
 
 add_github_token:
     echo "Visit github to generate new token:"
