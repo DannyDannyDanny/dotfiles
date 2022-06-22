@@ -47,3 +47,16 @@ setup_editorconfig:
 setup_nerdfonts:
 	git clone --depth 2 https://github.com/ryanoasis/nerd-fonts/ ~/nerd-fonts
 	cd ~/nerd-fonts && ./install.sh
+
+setup_server_ip_sync:
+	echo "Visit github to generate new token:"
+	echo "    github.com/settings/tokens/new"
+	@echo "Enter github token: "; \
+	read token; \
+	echo "Your token is ", $$(token)
+
+setup_server_ip_sync_python_env:
+	mkdir -p ~/.venvs
+	python3 -m venv ~/.venvs/server_ip_sync
+	~/.venvs/server_ip_sync/bin/pip install python-dotenv
+	echo "~/.venvs/server_ip_sync/bin/python server-ip-sync.py" >> ~/deleteme-server-in-sync.txt

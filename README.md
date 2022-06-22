@@ -11,6 +11,8 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 * [o] configure **tmux**:
   * [X] remote nested sessions
   * [X] change tmux:pane-switching bindings from arrow keys to vim bindings
+* [ ] add server-sync make-rule for ip-upload python cronjob
+* [ ] add server-sync make-rule for server ip fetching (and writing...)
 * [ ] nvim / lvim
   * [ ] make-rule for setting up `$HOME/.venvs/nvim/bin/python`
   * [ ] make-rules for getting nvim checkhealth up to speed
