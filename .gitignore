@@ -1,1 +1,5 @@
+# ignore jupyterlab checkpoints
+.ipynb_checkpoints/
+
+# env file associated with server-ip-sync.py / SIS.py
 .env
