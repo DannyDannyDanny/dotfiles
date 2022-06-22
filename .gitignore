@@ -1,3 +1,6 @@
+# jupyter environment
+env/
+
 # ignore jupyterlab checkpoints
 .ipynb_checkpoints/
 
