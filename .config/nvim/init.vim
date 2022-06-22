@@ -57,6 +57,9 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers = ['python', 'flake8']
 let g:syntastic_python_python_exec = 'python3'
 
+" python stuff
+let g:python3_host_prog = "$HOME/.venvs/nvim/bin/python"
+
 " VimWiki setup
 let g:vimwiki_sync_branch = "main"
 let g:vimwiki_sync_commit_message = '$USER @ $HOST'
