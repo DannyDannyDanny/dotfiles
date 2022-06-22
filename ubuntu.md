@@ -21,6 +21,11 @@ sudo apt install mpd
 sudo apt install ncmpcpp
 ```
 
+## Snap packages
+```
+snap install codium --classic
+```
+
 ## Homebrew packages
 
 Install [brew](https://brew.sh/) and brew install:
