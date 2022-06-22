@@ -1,13 +1,35 @@
 ## Requirements
 
-
 ### Env file
+
+Make rules:
+* [.] add make rules python cronjob for servers
+  * [.] make `.env`: `setup_server_ip_sync_dotenv_file`
+  * [.] make venv and install requirements: `setup_server_ip_sync_python_env`
+  * [ ] add oneliner to cron `<path-to-venv>/python server-ip-sync.py --upload`
+
+```makefile
+addcron:
+    CRONENTRY=
+    { crontab -l; echo "*/2 * * * * /usr/bin/node cronapp.js >> logfile.log" } | crontab -
+
+add_github_token:
+    echo "Visit github to generate new token:"
+    echo "    github.com/settings/tokens/new"
+    @echo "Enter github token: "; \
+    read token; \
+    echo "Your token is ", $$(token)
+```
+
+
+* [get token](https://github.com/settings/tokens/new)
+* refernce [API description](https://docs.github.com/en/rest/gists#update-a-gist)
 
 ```python
 # template .env file
-token='ghp_<your gist token>'
-gist_id='abc...123'
-filename='<filename-in-gist>.txt'
+token='ghp_<your gist token>'     # github token
+gist_id='abc...123'               # gist id
+filename='<filename-in-gist>'     # nickname for the server (i.e iot-hub-server)
 ```
 
 ### python requirements
