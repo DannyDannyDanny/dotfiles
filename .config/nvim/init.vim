@@ -67,26 +67,34 @@ let g:sync_taskwarrior = 0
 let g:vimwiki_markdown_link_ext = 1   " explicitly add .md extension in vimwiki
 
 let wiki_1 = {}
+let wiki_1.name = 'vimwiki_private'
 let wiki_1.path = '~/.local/share/nvim/vimwiki/'
 let wiki_1.syntax = 'markdown'
 let wiki_1.ext = 'md'
+let wiki_1.automatic_nested_syntaxes = 1
 
 let wiki_2 = {}
+let wiki_2.name = 'methodology_public'
 let wiki_2.path = '~/methodology/'
 let wiki_2.syntax = 'markdown'
 let wiki_2.ext = 'md'
+let wiki_2.automatic_nested_syntaxes = 1
 
 let wiki_3 = {}
+let wiki_3.name = 'taiga_admin_private'
 let wiki_3.path = '~/administration/'
 let wiki_3.syntax = 'markdown'
 let wiki_3.ext = 'md'
+let wiki_3.automatic_nested_syntaxes = 1
 
-let wiki_3 = {}
-let wiki_3.path = '~/dotfiles/'
-let wiki_3.syntax = 'markdown'
-let wiki_3.ext = 'md'
+let wiki_4 = {}
+let wiki_4.name = 'dotfiles_public'
+let wiki_4.path = '~/dotfiles/'
+let wiki_4.syntax = 'markdown'
+let wiki_4.ext = 'md'
+let wiki_4.automatic_nested_syntaxes = 1
 
-let g:vimwiki_list = [wiki_1, wiki_2, wiki_3]
+let g:vimwiki_list = [wiki_1, wiki_2, wiki_3, wiki_4]
 
 " Calendar setup
 let g:calendar_first_day = 'monday'   " set monday as first day of week
