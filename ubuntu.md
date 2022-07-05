@@ -1,7 +1,5 @@
 ## Document Roadmap
 
-* ubunutu script should install all programs in one go (and not ask go Y every time)
-* add necessary packages:
 * oh-my-zsh install
 * ssh setup from vimwiki
 * git clone dotfiles
@@ -85,6 +83,17 @@ The public ssh key is in `~/.ssh/id_*_mynetwork.pub`.
 Copy the public key to machines which you want to access with this machine.
 Inversely, if you want other machines to ssh to this machine,
 copy their public keys to this machine.
+
+#### ssh resources
+* [Digital Ocean ssh essentials](https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys)
+
+#### server-side setup checklist
+* setup locales (LC_LANGUAGE, LC_ALL)
+* install openssh-server
+* enable ssh service on startup
+* copy workstation public key to server
+* ssh via key (i.e no password)
+* disable password authentication
 
 
 ## Snap packages
