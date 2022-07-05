@@ -1,24 +1,32 @@
-## apt packages
+## Document Roadmap
 
-All the startup installation stuff for ubuntu clients.
+* ubunutu script should install all programs in one go (and not ask go Y every time)
+* add necessary packages:
+sudo add-apt-repository ppa:aslatter/ppa # for alacritty
+* oh-my-zsh install
+* ssh setup from vimwiki
+* git clone dotfiles
+* cd dotfiles and run makefile
+  * (make toplevel rules, i.e `setup_nerdfonts` is a sub of `setup_alacritty`)
 
 ```
-sudo apt install git          # version control
-# sudo apt install neovim     # brew install nvim to get version 0.7
-sudo apt install librewolf    # add librewolf repo first
-sudo apt install qutebrowser  # minimal vim-binding browser
-sudo apt install gnome-tweaks # tool to remap caps to ctrl
-sudo apt install alacritty    # add alacritty repo first
-sudo apt install tmux         # terminal multiplexer
-sudo apt install make         # utility to maintain shell program groups
-sudo apt install curl         # file transfer helper
-sudo apt install ffmpeg       # audio/video converter
-sudo apt install keepass2     # password manager
-sudo apt install zsh          # install oh-my-zsh to set zsh as default shell
+## apt package - startup installation for ubuntu clients
+sudo apt install git -y           # version control
+# sudo apt install neovim -y      # brew install nvim to get version 0.7
+sudo apt install librewolf -y     # add librewolf repo first
+sudo apt install qutebrowser -y   # minimal vim-binding browser
+sudo apt install gnome-tweaks -y  # tool to remap caps to ctrl
+sudo apt install alacritty -y     # add alacritty repo first
+sudo apt install tmux -y          # terminal multiplexer
+sudo apt install make -y          # utility to maintain shell program groups
+sudo apt install curl -y          # file transfer helper
+sudo apt install ffmpeg -y        # audio/video converter
+sudo apt install keepass2 -y      # password manager
+sudo apt install zsh -y           # install oh-my-zsh to set zsh as default shell
 
 # music setup
-sudo apt install mpd
-sudo apt install ncmpcpp
+sudo apt install mpd -y           # music player daemon
+sudo apt install ncmpcpp -y       # ncurses music player controller plus plus
 ```
 
 ## Snap packages
