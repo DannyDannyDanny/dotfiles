@@ -62,7 +62,7 @@ let g:python3_host_prog = "$HOME/.venvs/nvim/bin/python"
 
 " VimWiki setup
 let g:vimwiki_sync_branch = "main"
-let g:vimwiki_sync_commit_message = '$USER @ $HOST'
+let g:vimwiki_sync_commit_message = 'vimwiki: $USER @ $HOST'
 let g:sync_taskwarrior = 0
 let g:vimwiki_markdown_link_ext = 1   " explicitly add .md extension in vimwiki
 
@@ -78,6 +78,11 @@ let wiki_2.ext = 'md'
 
 let wiki_3 = {}
 let wiki_3.path = '~/administration/'
+let wiki_3.syntax = 'markdown'
+let wiki_3.ext = 'md'
+
+let wiki_3 = {}
+let wiki_3.path = '~/dotfiles/'
 let wiki_3.syntax = 'markdown'
 let wiki_3.ext = 'md'
 
