@@ -60,3 +60,7 @@ setup_server_ip_sync_python_env:
 	python3 -m venv ~/.venvs/server_ip_sync
 	~/.venvs/server_ip_sync/bin/pip install python-dotenv
 	echo "~/.venvs/server_ip_sync/bin/python server-ip-sync.py" >> ~/deleteme-server-in-sync.txt
+
+
+git_overview:
+	cd ~ && find . -name .git -type d -prune
