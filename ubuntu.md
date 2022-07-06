@@ -1,25 +1,100 @@
-## apt packages
+## Document Roadmap
 
-All the startup installation stuff for ubuntu clients.
+* oh-my-zsh install
+* ssh setup from vimwiki
+* git clone dotfiles
+* cd dotfiles and run makefile
+  * (make toplevel rules, i.e `setup_nerdfonts` is a sub of `setup_alacritty`)
+
+## Intro
+
+This post-install script is intended to be run directly after ubuntu 22.05 installion.
+The scipt assumes device is encrypted and user account is protected.
+With a strong passphrasses for both.
+Open terminal, run one code snippet at the time and check that no errors occur:
+
+## apt package
+
+startup installation for ubuntu clients
 
 ```
-sudo apt install git          # version control
-# sudo apt install neovim     # brew install nvim to get version 0.7
-sudo apt install librewolf    # add librewolf repo first
-sudo apt install qutebrowser  # minimal vim-binding browser
-sudo apt install gnome-tweaks # tool to remap caps to ctrl
-sudo apt install alacritty    # add alacritty repo first
-sudo apt install tmux         # terminal multiplexer
-sudo apt install make         # utility to maintain shell program groups
-sudo apt install curl         # file transfer helper
-sudo apt install ffmpeg       # audio/video converter
-sudo apt install keepass2     # password manager
-sudo apt install zsh          # install oh-my-zsh to set zsh as default shell
+# add external repos
+sudo add-apt-repository ppa:aslatter/ppa    # for alacritty
+
+sudo apt install git -y           # version control
+# sudo apt install neovim -y      # brew install nvim to get version 0.7
+sudo apt install librewolf -y     # add librewolf repo first
+sudo apt install qutebrowser -y   # minimal vim-binding browser
+sudo apt install gnome-tweaks -y  # tool to remap caps to ctrl
+sudo apt install alacritty -y     # add alacritty repo first
+sudo apt install tmux -y          # terminal multiplexer
+sudo apt install make -y          # utility to maintain shell program groups
+sudo apt install curl -y          # file transfer helper
+sudo apt install ffmpeg -y        # audio/video converter
+sudo apt install keepass2 -y      # password manager
+sudo apt install zsh -y           # install oh-my-zsh to set zsh as default shell
 
 # music setup
-sudo apt install mpd
-sudo apt install ncmpcpp
+sudo apt install mpd -y           # music player daemon
+sudo apt install ncmpcpp -y       # ncurses music player controller plus plus
 ```
+
+Now **[install oh-my-zsh](https://ohmyz.sh/#install) and `reboot`**.
+
+## ssh setup
+
+> :construction: under construction
+>
+>
+> no-prompt ssh keys
+> https://stackoverflow.com/a/43235320
+
+
+### Setup ssh key for github
+
+The first ssh key is generated for github:
+
+```
+ssh-keygen -q -t ed25519 -N '' -f ~/.ssh/id_ed25519_github <<<y >/dev/null 2>&1
+
+# older machines might not support ed25519, then use RSA with 4096 bit key
+# ssh-keygen -q -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa_github <<<y >/dev/null 2>&1
+```
+
+Log in to github.
+Go to [github.com/settings/ssh/new](https://github.com/settings/ssh/new).
+Enter a title format in the format `2022-homeserver`.
+Enter the key returned by `cat ~/.ssh/id_*_github.pub`.
+Now you can clone your private repos and make changes to your public repos.
+
+
+### Setup ssh key for connecting to other servers
+
+This next ssh key is generated for github:
+
+```
+ssh-keygen -q -t ed25519 -N '' -f ~/.ssh/id_ed25519_mynetwork <<<y >/dev/null 2>&1
+
+# older machines might not support ed25519, then use RSA with 4096 bit key
+# ssh-keygen -q -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa_mynetwork <<<y >/dev/null 2>&1
+```
+
+The public ssh key is in `~/.ssh/id_*_mynetwork.pub`.
+Copy the public key to machines which you want to access with this machine.
+Inversely, if you want other machines to ssh to this machine,
+copy their public keys to this machine.
+
+#### ssh resources
+* [Digital Ocean ssh essentials](https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys)
+
+#### server-side setup checklist
+* setup locales (LC_LANGUAGE, LC_ALL)
+* install openssh-server
+* enable ssh service on startup
+* copy workstation public key to server
+* ssh via key (i.e no password)
+* disable password authentication
+
 
 ## Snap packages
 ```
