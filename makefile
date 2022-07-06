@@ -12,6 +12,7 @@ setup_tmux_a:
 setup_git:
 	git config --global user.email "DannyDannyDanny"
 	git config --global user.name "dth@taiga.ai"
+	git config --global pull.rebase false
 
 
 setup_vimwiki1:
