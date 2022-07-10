@@ -22,4 +22,4 @@ The central part of this repo is [ubuntu](ubuntu.md)
     * [Mac guide](https://killtheyak.com/install-mpd-mpc-ncmpcpp/)
     * [config guide for mac](https://computingforgeeks.com/install-configure-mpd-ncmpcpp-macos/)
   * test on new machine with music dir
-
+  * [fonts](https://www.programmingfonts.org/)
