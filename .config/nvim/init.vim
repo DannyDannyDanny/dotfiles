@@ -68,7 +68,7 @@ let g:vimwiki_markdown_link_ext = 1   " explicitly add .md extension in vimwiki
 
 let wiki_1 = {}
 let wiki_1.name = 'vimwiki_private'
-let wiki_1.path = '~/.local/share/nvim/vimwiki/'
+let wiki_1.path = '~/vimwiki/'
 let wiki_1.syntax = 'markdown'
 let wiki_1.ext = 'md'
 let wiki_1.automatic_nested_syntaxes = 1
