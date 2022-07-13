@@ -1,12 +1,11 @@
 # dotfiles
 
 This repo is an extension of [dannydannydanny/methodology](https://github.com/DannyDannyDanny/methodology/)
-* [ubuntu](ubuntu.md)
-* [firefox-scrolling](firefox-scrolling.md)
-
 
 ## Roadmap:
 
+* post OS install: [ubuntu](ubuntu.md)
+* post post OS install: [firefox-scrolling](firefox-scrolling.md)
 * extend *makefile*:
   * **low-level configs:**
     * config zsh
@@ -17,7 +16,6 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
     * config mac local machine
     * config ubuntu local machine
     * config ubuntu server
-
 * [o] configure **tmux**:
   * [X] remote nested sessions
   * [X] change tmux:pane-switching bindings from arrow keys to vim bindings
