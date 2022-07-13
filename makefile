@@ -17,7 +17,7 @@ setup_git:
 
 setup_vimwiki1:
 	rm -rf ~/.local/share/nvim/vimwiki/
-	git clone git@github.com:DannyDannyDanny/vimwiki.git ~/.local/share/nvim/vimwiki/
+	git clone git@github.com:DannyDannyDanny/vimwiki.git ~/vimwiki/
 
 
 setup_vimwiki2:
