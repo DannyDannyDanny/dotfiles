@@ -153,8 +153,8 @@ schemes:
 # Apply the color scheme.
 # colors: *gruvbox_material_hard_dark
 # colors: *gruvbox_material_medium_dark
-colors: *gruvbox_material_soft_dark
+# colors: *gruvbox_material_soft_dark
 
 # colors: *gruvbox_material_hard_light
 # colors: *gruvbox_material_medium_light
-# colors: *gruvbox_material_soft_light
+colors: *gruvbox_material_soft_light

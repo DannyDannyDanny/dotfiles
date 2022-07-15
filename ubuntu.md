@@ -108,6 +108,7 @@ Install [brew](https://brew.sh/) and brew install:
 ```
 brew install yt-dlp
 brew install neovim
+brew install lf
 ```
 
 
