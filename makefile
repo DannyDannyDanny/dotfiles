@@ -65,3 +65,7 @@ setup_server_ip_sync_python_env:
 
 git_overview:
 	cd ~ && find . -name .git -type d -prune
+
+setup_server_authorized_keys:
+	mkdir -p ~/.ssh
+	ln -s -f ~/dotfiles/.ssh/authorized_keys ~/.ssh/authorized_keys
