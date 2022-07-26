@@ -34,9 +34,6 @@ call plug#end()
 set fileencoding=utf-8
 set list
 set listchars=tab:→\ ,nbsp:␣,trail:•,precedes:«,extends:»
-" TODO: remove line below or line above
-" set listchars=tab:→\ ,trail:␣,extends:…,eol:⏎
-
 
 " vim-emoji setup
 set completefunc=emoji#complete
@@ -97,11 +94,15 @@ let wiki_4.automatic_nested_syntaxes = 1
 
 let g:vimwiki_list = [wiki_1, wiki_2, wiki_3, wiki_4]
 
-" Calendar setup
+" calendar setup
 let g:calendar_first_day = 'monday'   " set monday as first day of week
 let g:calendar_week_number = 1        " add weeknumber
 
-" LARBS inspired below
+" open new tab with tu - inspired by theniceboy/nvim
+noremap tu :tabe<CR>
+noremap tU :tab split<CR>
+
+" configs below are from LukeSmithxyz/LARBS
 set title
 set bg=light
 set go=a
@@ -179,8 +180,6 @@ set noshowcmd
 
 " Ensure files are read as what I want:
 	let g:vimwiki_ext2syntax = {'.Rmd': 'markdown', '.rmd': 'markdown','.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
-	map <leader>v :VimwikiIndex<CR>
-	" let g:vimwiki_list = [{'path': '~/.local/share/nvim/vimwiki', 'syntax': 'markdown', 'ext': '.md'}]
 	autocmd BufRead,BufNewFile /tmp/calcurse*,~/.calcurse/notes/* set filetype=markdown
 	autocmd BufRead,BufNewFile *.ms,*.me,*.mom,*.man set filetype=groff
 	autocmd BufRead,BufNewFile *.tex set filetype=tex
