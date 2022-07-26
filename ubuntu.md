@@ -70,7 +70,7 @@ Now you can clone your private repos and make changes to your public repos.
 
 ### Setup ssh key for connecting to other servers
 
-This next ssh key is generated for github:
+This next ssh key is generated for internal servers:
 
 ```
 ssh-keygen -q -t ed25519 -N '' -f ~/.ssh/id_ed25519_mynetwork <<<y >/dev/null 2>&1

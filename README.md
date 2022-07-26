@@ -6,6 +6,7 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 
 * post OS install: [ubuntu](ubuntu.md)
 * post post OS install: [firefox-scrolling](firefox-scrolling.md)
+* repurpose [server-ip-sync](server-ip-sync.md)
 * server cluster roadmap: [server](server.md)
 * extend *makefile*:
   * **low-level configs:**
