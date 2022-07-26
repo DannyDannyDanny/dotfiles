@@ -1,18 +1,18 @@
 # HOME SERVERS
 
-* [ ] auto-setup ssh on all machines
-  * [ ] test setup
-    * [ ] install and setup `ngrok` on test machine
-    * [ ] research replacing `ngrok` with [sish](https://github.com/antoniomika/sish)
-    * [ ] add authorized keys to version control (?)
-    * [ ] repurpose [server-ip-sync](server-ip-sync.md)
-  * [ ] client machines automation
-    * [ ] read ssh commands in [ubuntu](ubuntu.md)
-    * [ ] generate ssh key pair
+* [.] auto-setup ssh on all machines
+  * [o] client machines automation
+    * [X] read ssh commands in [ubuntu](ubuntu.md)
+    * [X] generate ssh key pair
     * [ ] write public key to gist
   * [ ] server machines
     * [ ] fetch keys and add to `.ssh/authorized_keys`
     * [ ] (auto)-setup `ngrok`
+  * [ ] test setup
+    * [ ] install and setup `ngrok` on test machine
+    * [ ] add authorized keys to version control (?)
+    * [ ] repurpose [server-ip-sync](server-ip-sync.md)
+  * [ ] research replacing `ngrok` with [sish](https://github.com/antoniomika/sish)
 * [X] set up lenovo machine as thin client
   * [ ] run pop os??
 * [ ] keepass get comfy
