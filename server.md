@@ -1,14 +1,16 @@
 # HOME SERVERS
 
-* [.] auto-setup ssh on all machines
+* [o] auto-setup ssh on all machines
   * [X] client machines automation
     * [X] read ssh commands in [ubuntu](ubuntu.md)
     * [X] generate ssh key pair
     * [X] ~~write public key to gist~~
     * [X] add ssh public keys to version control `dotfiles/.ssh/authorized_keys`
-  * [ ] server machines
-    * [ ] fetch keys and add to `.ssh/authorized_keys`
-    * [ ] (auto)-setup `ngrok`
+  * [o] server machines
+    * [X] fetch keys and add to `.ssh/authorized_keys`
+    * [X] install [ngrok](https://ngrok.com/download)
+    * [ ] setup [ngrok](https://dashboard.ngrok.com/get-started/setup)
+    * [ ] make makerule
   * [ ] test setup
     * [ ] install and setup `ngrok` on test machine
     * [ ] add authorized keys to version control (?)
