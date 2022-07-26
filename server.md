@@ -9,8 +9,9 @@
   * [o] server machines
     * [X] fetch keys and add to `.ssh/authorized_keys`
     * [X] install [ngrok](https://ngrok.com/download)
-    * [ ] setup [ngrok](https://dashboard.ngrok.com/get-started/setup)
-    * [ ] make makerule
+    * [X] setup [ngrok](https://dashboard.ngrok.com/get-started/setup)
+    * [ ] add [ngrok as service](https://stackoverflow.com/a/50808709)
+    * [ ] make makerule / script
   * [ ] test setup
     * [ ] install and setup `ngrok` on test machine
     * [ ] add authorized keys to version control (?)
