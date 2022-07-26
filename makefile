@@ -71,5 +71,6 @@ setup_server_mynetwork:
 	ln -s -f ~/dotfiles/.ssh/authorized_keys ~/.ssh/authorized_keys
 
 setup_client_mynetwork:
-	ssh-keygen -q -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa_mynetwork <<<y >/dev/null 2>&1
+	ssh-keygen -q -t rsa -b 4096 -f ~/.ssh/id_rsa_mynetwork -q -N ""
 	cat ~/.ssh/id_rsa_mynetwork.pub >> ~/dotfiles/.ssh/authorized_keys
+	echo "run\ncd ~/dotfiles && git status"
