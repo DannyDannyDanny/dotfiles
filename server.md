@@ -28,7 +28,7 @@
   * [.] setup raspberry pi
     * [X] install Raspberry Pi OS Lite (32-bit) [link](https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-32-bit)
       * [ ] Mac + Lenovo access
-    * [ ] setup ftp
+    * [ ] setup [sftp](https://linuxconfig.org/how-to-setup-sftp-server-on-ubuntu-22-04-jammy-jellyfish-linux)
   * [.] reinstall OS on imac
     * [.] obtain CD
     * [ ] decide imac purpose
