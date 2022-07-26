@@ -66,6 +66,10 @@ setup_server_ip_sync_python_env:
 git_overview:
 	cd ~ && find . -name .git -type d -prune
 
-setup_server_authorized_keys:
+setup_server_mynetwork:
 	mkdir -p ~/.ssh
 	ln -s -f ~/dotfiles/.ssh/authorized_keys ~/.ssh/authorized_keys
+
+setup_client_mynetwork:
+	ssh-keygen -q -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa_mynetwork <<<y >/dev/null 2>&1
+	cat ~/.ssh/id_rsa_mynetwork.pub >> ~/dotfiles/.ssh/authorized_keys
