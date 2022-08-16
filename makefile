@@ -1,3 +1,6 @@
+setup_locale:
+	sudo ln -s -f ~/dotfiles/.locale.conf /etc/default/locale
+
 setup_zshrc:
 	ln -s -f ~/dotfiles/.zshrc ~/.zshrc
 
