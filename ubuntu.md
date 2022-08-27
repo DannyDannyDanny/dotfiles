@@ -26,6 +26,8 @@ Generate an ssh key for github
 
 ### Setup ssh key for github
 
+> :construction: This needs to be turned into a little script or something
+
 The first ssh key is generated for github:
 
 ```
