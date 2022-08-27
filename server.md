@@ -40,16 +40,3 @@
     * [ ] decide what OS to run
 * [ ] move music collection from e540 to HDD
 * [ ] jailbreak iPads
-
-
-## Servers
-
-| machine      | name  |
-|--------------|-------|
-| MacBook Pro  | name1 |
-| MacBook Air  | name2 |
-| Lenovo E540  | name3 |
-| Lenovo E560  | ...   |
-| Lenovo X200s | ...   |
-| Raspberry Pi | ...   |
-| Jetson Nano  | ...   |
