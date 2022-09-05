@@ -13,8 +13,8 @@ setup_tmux_a:
 	ln -s -f ~/dotfiles/.tmux.conf ~/.tmux.conf
 
 setup_git:
-	git config --global user.email "DannyDannyDanny"
-	git config --global user.name "dth@taiga.ai"
+	git config --global user.name "DannyDannyDanny"
+	git config --global user.email "dth@taiga.ai"
 	git config --global pull.rebase false
 
 

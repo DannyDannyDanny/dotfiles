@@ -37,10 +37,21 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 
 ## Windows
 
-I'm back on a windows machine.
-I have no idea how to make it nice yet.
+I'm back on a windows machine and still learning how to make it nice.
+
 Here's what I've done so far:
-* install [wsl](https://docs.microsoft.com/en-us/windows/wsl/install#install-wsl-command)
+
+* change language / keyboard layout to `en_US`
+* get local admin rights
 * [install powertoys](https://docs.microsoft.com/en-us/windows/powertoys/install#install-with-windows-executable-file-via-github)
+  * remap CAPS LOCK to L-CTRL
 * install [alacritty](https://alacritty.org/) (use the installer, not portable)
-  * add config: `/mnt/c/Users/XXX/AppData/Roaming/alacritty/alacritty.yml`
+* install [wsl](https://docs.microsoft.com/en-us/windows/wsl/install#install-wsl-command)
+  * temporarily fix ubuntu dns issue via [stackoverflow](https://askubuntu.com/a/91596/882709)
+    * add config: `/mnt/c/Users/XXX/AppData/Roaming/alacritty/alacritty.yml` (here `XXX` is the windows users, and not linux user)
+  * setup [ssh github](ubuntu.md#setup-ssh-key-for-github)
+  * setup [zsh](ubuntu.md#apt-package) + omz
+  * clone this (dotfiles) repo and `cd dotfiles`
+    * configure git (inspired by `make setup_git`)
+      * TODO: remove email from this file
+    * run `make setup_locale setup_zshrc setup_tmux_a setup_nvim setup_editorconfig setup_client_mynetwork`
