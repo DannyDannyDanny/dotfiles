@@ -57,6 +57,6 @@ Here's what I've done so far:
     * install [build-essential](https://askubuntu.com/a/753113/882709) to get `make`
       * run `make setup_locale setup_zshrc setup_tmux_a setup_nvim setup_editorconfig setup_client_mynetwork`
 * Next steps:
-  * configure persistent DNS settings
+  * TODO: configure persistent DNS settings
     * > ... fix ubuntu dns issue via [stackoverflow](https://askubuntu.com/a/91596/882709)
-  * configure nvim clipboard to use system clipboard
+  * TODO: configure nvim clipboard to use system clipboard
