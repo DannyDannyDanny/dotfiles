@@ -50,8 +50,9 @@ Here's what I've done so far:
   * temporarily fix ubuntu dns issue via [stackoverflow](https://askubuntu.com/a/91596/882709)
     * add config: `/mnt/c/Users/XXX/AppData/Roaming/alacritty/alacritty.yml` (here `XXX` is the windows users, and not linux user)
   * setup [ssh github](ubuntu.md#setup-ssh-key-for-github)
-  * setup [zsh](ubuntu.md#apt-package) + omz
+  * install [zsh + omz](ubuntu.md#apt-package)
   * clone this (dotfiles) repo and `cd dotfiles`
     * configure git (inspired by `make setup_git`)
       * TODO: remove email from this file
-    * run `make setup_locale setup_zshrc setup_tmux_a setup_nvim setup_editorconfig setup_client_mynetwork`
+    * install [build-essential](https://askubuntu.com/a/753113/882709) to get `make`
+      * run `make setup_locale setup_zshrc setup_tmux_a setup_nvim setup_editorconfig setup_client_mynetwork`
