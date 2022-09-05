@@ -40,5 +40,7 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 I'm back on a windows machine.
 I have no idea how to make it nice yet.
 Here's what I've done so far:
+* install [wsl](https://docs.microsoft.com/en-us/windows/wsl/install#install-wsl-command)
 * [install powertoys](https://docs.microsoft.com/en-us/windows/powertoys/install#install-with-windows-executable-file-via-github)
 * install [alacritty](https://alacritty.org/) (use the installer, not portable)
+  * add config: `/mnt/c/Users/XXX/AppData/Roaming/alacritty/alacritty.yml`
