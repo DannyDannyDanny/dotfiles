@@ -59,4 +59,4 @@ Here's what I've done so far:
 * Next steps:
   * configure persistent DNS settings
     * > ... fix ubuntu dns issue via [stackoverflow](https://askubuntu.com/a/91596/882709)
-  * connect nvim clipboard
+  * configure nvim clipboard to use system clipboard
