@@ -122,7 +122,7 @@ Now **[install oh-my-zsh](https://ohmyz.sh/#install) and `reboot`**.
 snap install codium --classic
 ```
 
-## Homebrew packages
+## brew
 
 Install [brew](https://brew.sh/) and brew install:
 
