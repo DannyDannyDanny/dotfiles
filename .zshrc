@@ -120,3 +120,6 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 if [ -d "$HOME/.local/bin" ] ; then
 	PATH="$HOME/.local/bin:$PATH"
 fi
+
+alias pbpaste="powershell.exe -noprofile Get-Clipboard"
+alias pbcopy="clip.exe"
