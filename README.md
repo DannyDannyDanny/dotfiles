@@ -41,16 +41,20 @@ I'm back on a windows machine and still learning how to make it nice.
 
 Here's what I've done so far:
 
+* disable system sounds: `start menu search: "change system sounds" -> set profile to None`
 * change language / keyboard layout to `en_US`
 * get local admin rights
 * [install powertoys](https://docs.microsoft.com/en-us/windows/powertoys/install#install-with-windows-executable-file-via-github)
   * remap CAPS LOCK to L-CTRL
 * install [alacritty](https://alacritty.org/) (use the installer, not portable)
 * install [wsl](https://docs.microsoft.com/en-us/windows/wsl/install#install-wsl-command)
-  * temporarily fix ubuntu dns issue via [stackoverflow](https://askubuntu.com/a/91596/882709)
-    * add config: `/mnt/c/Users/XXX/AppData/Roaming/alacritty/alacritty.yml`
+  * temporarily fix ubuntu dns issue via [stackoverflow](https://askubuntu.com/questions/91543/apt-get-update-fails-to-fetch-files-temporary-failure-resolving-error/91595#comment1911934_91595)
+    * TODO: test long term fix:
+      * find symlink `ls -la /etc/resolv.conf`
+      * kill symlink and write new file
+  * add config: `/mnt/c/Users/XXX/AppData/Roaming/alacritty/alacritty.yml`
     * (here `XXX` is the windows users, and not linux user)
-  * apt install neovim (this might be a mistake) TODO: follow up
+  * `apt install neovim` (NVIM v0.4.3) - consider
   * setup [ssh github](ubuntu.md#setup-ssh-key-for-github)
   * install [zsh + omz](ubuntu.md#apt-package)
   * clone this (dotfiles) repo and `cd dotfiles`
@@ -60,7 +64,5 @@ Here's what I've done so far:
       * run `make setup_locale setup_zshrc setup_tmux_a setup_nvim setup_editorconfig setup_client_mynetwork`
   * TODO: move up: install [brew](ubuntu#brew) (should be done before install zsh / omz)
 * Next steps:
-  * TODO: configure persistent DNS settings
-    * > ... fix ubuntu dns issue via [stackoverflow](https://askubuntu.com/a/91596/882709)
   * TODO: configure nvim clipboard to use system clipboard
   * TODO: nvim + tmux pasteboard should play with windows pasteboard
