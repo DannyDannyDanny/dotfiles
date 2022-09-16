@@ -52,8 +52,8 @@ Here's what I've done so far:
     * TODO: test long term fix:
       * find symlink `ls -la /etc/resolv.conf`
       * kill symlink and write new file
-  * add config: `/mnt/c/Users/XXX/AppData/Roaming/alacritty/alacritty.yml`
-    * (here `XXX` is the windows users, and not linux user)
+  * add alacritty config: `/mnt/c/Users/<winuser>/AppData/Roaming/alacritty/alacritty.yml`
+  * add private folder symlink: `ln -s -f /mnt/c/Users/<winuser>/Private ~/Private`
   * `apt install neovim` (NVIM v0.4.3) - consider
   * setup [ssh github](ubuntu.md#setup-ssh-key-for-github)
   * install [zsh + omz](ubuntu.md#apt-package)
