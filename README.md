@@ -49,9 +49,14 @@ Here's what I've done so far:
 * install [alacritty](https://alacritty.org/) (use the installer, not portable)
 * install [wsl](https://docs.microsoft.com/en-us/windows/wsl/install#install-wsl-command)
   * temporarily fix ubuntu dns issue via [stackoverflow](https://askubuntu.com/questions/91543/apt-get-update-fails-to-fetch-files-temporary-failure-resolving-error/91595#comment1911934_91595)
-    * TODO: test long term fix:
+    * :warning: long fix like this doesn't work:
       * find symlink `ls -la /etc/resolv.conf`
       * kill symlink and write new file
+    * TODO: test long term solution 2:
+      * write wsl conf file:
+        * `sudo touch /etc/wsl.conf`
+        * `echo "[network]" | sudo tee /etc/wsl.conf > /dev/null`
+        * `echo "generateResolvConf = false" | sudo tee -a /etc/wsl.conf > /dev/null`
   * add alacritty config: `/mnt/c/Users/<winuser>/AppData/Roaming/alacritty/alacritty.yml`
   * add private folder symlink: `ln -s -f /mnt/c/Users/<winuser>/Private ~/Private`
   * `apt install neovim` (NVIM v0.4.3) - consider
