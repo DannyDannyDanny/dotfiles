@@ -48,19 +48,19 @@ Here's what I've done so far:
   * remap CAPS LOCK to L-CTRL
 * install [alacritty](https://alacritty.org/) (use the installer, not portable)
 * install [wsl](https://docs.microsoft.com/en-us/windows/wsl/install#install-wsl-command)
-  * temporarily fix ubuntu dns issue via [stackoverflow](https://askubuntu.com/questions/91543/apt-get-update-fails-to-fetch-files-temporary-failure-resolving-error/91595#comment1911934_91595)
-    * TODO: test long term solution 2:
-      * write wsl conf file:
-        * `sudo touch /etc/wsl.conf`
-        * `echo "[network]" | sudo tee /etc/wsl.conf > /dev/null`
-        * `echo "generateResolvConf = false" | sudo tee -a /etc/wsl.conf > /dev/null`
-      * write resolv.conf file:
-        * kill symlink `rm /etc/resolv.conf`
-        * write file `touch /etc/resolv.conf`
-        * add content `echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null`
+  * fix wsl dns issue via [stackoverflow](https://askubuntu.com/questions/91543/apt-get-update-fails-to-fetch-files-temporary-failure-resolving-error/91595#comment1911934_91595)
+    * write wsl.conf:
+      * `sudo touch /etc/wsl.conf`
+      * `echo "[network]" | sudo tee /etc/wsl.conf > /dev/null`
+      * `echo "generateResolvConf = false" | sudo tee -a /etc/wsl.conf > /dev/null`
+    * overwrite resolv.conf:
+      * kill symlink `rm /etc/resolv.conf`
+      * write file `touch /etc/resolv.conf`
+      * add content `echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null`
   * add alacritty config: `/mnt/c/Users/<winuser>/AppData/Roaming/alacritty/alacritty.yml`
   * add private folder symlink: `ln -s -f /mnt/c/Users/<winuser>/Private ~/Private`
   * `apt install neovim` (NVIM v0.4.3) - consider
+  * `apt install texlive`
   * setup [ssh github](ubuntu.md#setup-ssh-key-for-github)
   * install [zsh + omz](ubuntu.md#apt-package)
   * clone this (dotfiles) repo and `cd dotfiles`
