@@ -4,6 +4,9 @@ setup_locale:
 setup_zshrc:
 	ln -s -f ~/dotfiles/.zshrc ~/.zshrc
 
+setup_alacritty_wsl:
+	ln -s -f ~/dotfiles/.config/alacritty/alacritty.yml /mnt/c/Users/dnth/AppData/Roaming/alacritty/alacritty.yml
+
 setup_alacritty:
 	mkdir -p ~/.config/alacritty
 	ln -s -f ~/dotfiles/.config/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
@@ -16,7 +19,6 @@ setup_git:
 	git config --global user.name "DannyDannyDanny"
 	git config --global user.email "dth@taiga.ai"
 	git config --global pull.rebase false
-
 
 setup_vimwiki1:
 	rm -rf ~/.local/share/nvim/vimwiki/
