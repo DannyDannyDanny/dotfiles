@@ -76,7 +76,7 @@ copy their public keys to this machine.
   * `sudo apt install libfontconfig1-dev`
   * `sudo apt install libx11-dev`
   * X11/Xft?
-* clone from source `git clone https://git.suckless.org/st`	
+* clone from source `git clone https://git.suckless.org/st`
   * > Note: clone it somewhere reasonable (`$HOME/repos`)
 * run `sudo make clean install` inside `st/`
 * delete `st/config.h`
@@ -140,10 +140,10 @@ Use thunderbird to attach to just about any mail + cal clients
 
 ## Password Manager
 
-* [X] Start using keepass
-* [ ] Research version controlling DB
-* [ ] Start using a secret file to unlock DB
+use keepass :key: with secret file
 
+## emojis
+use emote: `sudo snap install emote`
 
 ## LunarVim
 
