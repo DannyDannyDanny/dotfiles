@@ -96,6 +96,9 @@ open terminal, run one code snippet at the time and check that no errors occur:
 
 sudo apt install git -y           # version control
 # sudo apt install neovim -y      # brew install nvim to get version 0.7
+# install neovim - src: https://vi.stackexchange.com/a/38348
+
+
 # sudo apt install librewolf -y   # add librewolf repo first
 sudo apt install qutebrowser -y   # minimal vim-binding browser
 sudo apt install gnome-tweaks -y  # tool to remap caps to ctrl

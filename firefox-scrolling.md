@@ -11,3 +11,8 @@ mousewheel.default.delta_multiplier_y: 10
 ```
 
 > [source](https://www.reddit.com/r/firefox/comments/mq9g52/linux_firefox_performancemacos_like_mouse_wheel/)
+
+## other firefox config
+
+* new tabs open next to current tab
+  * `browser.tabs.insertAfterCurrent = true`

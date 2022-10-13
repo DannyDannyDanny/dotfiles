@@ -5,7 +5,7 @@ setup_zshrc:
 	ln -s -f ~/dotfiles/.zshrc ~/.zshrc
 
 setup_alacritty_wsl:
-	ln -s -f ~/dotfiles/.config/alacritty/alacritty.yml /mnt/c/Users/dnth/AppData/Roaming/alacritty/alacritty.yml
+	cp ~/dotfiles/.config/alacritty/alacritty.yml /mnt/c/Users/dnth/AppData/Roaming/alacritty/alacritty.yml
 
 setup_alacritty:
 	mkdir -p ~/.config/alacritty
