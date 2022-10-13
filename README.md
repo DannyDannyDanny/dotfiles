@@ -46,8 +46,10 @@ Here's what I've done so far:
 * get local admin rights
 * [install powertoys](https://docs.microsoft.com/en-us/windows/powertoys/install#install-with-windows-executable-file-via-github)
   * remap CAPS LOCK to L-CTRL
+* install glasswire network monitor
+* install basic miktex (for LaTeX)
 * install [alacritty](https://alacritty.org/) (use the installer, not portable)
-* install [wsl](https://docs.microsoft.com/en-us/windows/wsl/install#install-wsl-command)
+* install [wsl](https://docs.microsoft.com/en-us/windows/wsl/install#install-wsl-command) + WSL specifics
   * fix wsl dns issue via [stackoverflow](https://askubuntu.com/questions/91543/apt-get-update-fails-to-fetch-files-temporary-failure-resolving-error/91595#comment1911934_91595)
     * write wsl.conf:
       * `sudo touch /etc/wsl.conf`
@@ -59,8 +61,9 @@ Here's what I've done so far:
       * add content `echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null`
   * add alacritty config: `/mnt/c/Users/<winuser>/AppData/Roaming/alacritty/alacritty.yml`
   * add private folder symlink: `ln -s -f /mnt/c/Users/<winuser>/Private ~/Private`
+* follow Ubuntu guide:
   * `apt install neovim` (NVIM v0.4.3) - consider
-  * `apt install texlive`
+  * `apt install texlive texlive-latex-extra`
   * setup [ssh github](ubuntu.md#setup-ssh-key-for-github)
   * install [zsh + omz](ubuntu.md#apt-package)
   * clone this (dotfiles) repo and `cd dotfiles`
