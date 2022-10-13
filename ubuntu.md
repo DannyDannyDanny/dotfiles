@@ -100,7 +100,7 @@ sudo apt install git -y           # version control
 #sudo apt-get install software-properties-common
 sudo add-apt-repository ppa:neovim-ppa/stable
 sudo apt-get update
-sudo apt-get install neovim
+sudo apt-get install neovim -y
 
 # sudo apt install librewolf -y   # add librewolf repo first
 sudo apt install qutebrowser -y   # minimal vim-binding browser
