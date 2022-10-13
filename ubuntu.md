@@ -96,7 +96,7 @@ open terminal, run one code snippet at the time and check that no errors occur:
 
 sudo apt install git -y           # version control
 
-# install neovim [src](https://vi.stackexchange.com/a/38348)
+# install neovim: [src](https://vi.stackexchange.com/a/38348)
 #sudo apt-get install software-properties-common
 sudo add-apt-repository ppa:neovim-ppa/stable
 sudo apt-get update
