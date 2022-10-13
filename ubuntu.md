@@ -95,9 +95,12 @@ open terminal, run one code snippet at the time and check that no errors occur:
 # replace alacritty with stterm
 
 sudo apt install git -y           # version control
-# sudo apt install neovim -y      # brew install nvim to get version 0.7
-# install neovim [src](https://vi.stackexchange.com/a/38348)
 
+# install neovim [src](https://vi.stackexchange.com/a/38348)
+#sudo apt-get install software-properties-common
+sudo add-apt-repository ppa:neovim-ppa/stable
+sudo apt-get update
+sudo apt-get install neovim
 
 # sudo apt install librewolf -y   # add librewolf repo first
 sudo apt install qutebrowser -y   # minimal vim-binding browser
