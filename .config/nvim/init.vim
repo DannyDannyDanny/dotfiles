@@ -35,9 +35,6 @@ Plug 'kyazdani42/nvim-web-devicons'
 call plug#end()
 
 
-" fuzzy find with ctrl + P
-nnoremap <c-P> <cmd>lua require('fzf-lua').files()<CR>
-
 " show invisibles
 set fileencoding=utf-8
 set list

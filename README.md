@@ -46,7 +46,9 @@ Here's what I've done so far:
 * get local admin rights
 * [install powertoys](https://docs.microsoft.com/en-us/windows/powertoys/install#install-with-windows-executable-file-via-github)
   * remap CAPS LOCK to L-CTRL
-* install glasswire network monitor
+* ~~install glasswire network monitor~~ (glasswire sucks)
+* install portmaster network monitor
+  * https://safing.io/blog/2022/10/27/portmaster-reaches-1.0/
 * install basic miktex (for LaTeX)
 * install [alacritty](https://alacritty.org/) (use the installer, not portable)
 * install [wsl](https://docs.microsoft.com/en-us/windows/wsl/install#install-wsl-command) + WSL specifics
