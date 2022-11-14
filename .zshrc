@@ -125,3 +125,18 @@ fi
 
 alias pbpaste="powershell.exe -noprofile Get-Clipboard"
 alias pbcopy="clip.exe"
+
+# on exit from lf this function changes directory to last browser fir in lf
+lfcd () {
+    tmp="$(mktemp)"
+    lf -last-dir-path="$tmp" "$@"
+    if [ -f "$tmp" ]; then
+        dir="$(cat "$tmp")"
+        rm -f "$tmp"
+        if [ -d "$dir" ]; then
+            if [ "$dir" != "$(pwd)" ]; then
+                cd "$dir"
+            fi
+        fi
+    fi
+}
