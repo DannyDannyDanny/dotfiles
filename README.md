@@ -75,5 +75,6 @@ Here's what I've done so far:
     * install [build-essential](https://askubuntu.com/a/753113/882709) to get `make`
       * run `make setup_locale setup_zshrc setup_tmux_a setup_nvim setup_editorconfig setup_client_mynetwork`
   * configure nvim clipboard to use system clipboard - had to setup some yank
+  * autohotkey: shift and space
 * Next steps:
   * TODO: nvim + tmux pasteboard should play with windows pasteboard
