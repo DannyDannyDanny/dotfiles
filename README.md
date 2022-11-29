@@ -67,13 +67,13 @@ Here's what I've done so far:
   * `apt install neovim` (NVIM v0.4.3) - consider
   * `apt install texlive texlive-latex-extra`
   * setup [ssh github](ubuntu.md#setup-ssh-key-for-github)
+  * install [brew](ubuntu#brew)
   * install [zsh + omz](ubuntu.md#apt-package)
   * clone this (dotfiles) repo and `cd dotfiles`
     * configure git (inspired by `make setup_git`)
       * TODO: remove email from this file
     * install [build-essential](https://askubuntu.com/a/753113/882709) to get `make`
       * run `make setup_locale setup_zshrc setup_tmux_a setup_nvim setup_editorconfig setup_client_mynetwork`
-  * TODO: move up: install [brew](ubuntu#brew) (should be done before install zsh / omz)
+  * configure nvim clipboard to use system clipboard - had to setup some yank
 * Next steps:
-  * TODO: configure nvim clipboard to use system clipboard
   * TODO: nvim + tmux pasteboard should play with windows pasteboard
