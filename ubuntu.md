@@ -72,6 +72,7 @@ copy their public keys to this machine.
 * disable password authentication
 
 ## stterm
+> :bomb: remove stterm - it'll never work on a windows machine
 * install requirements
   * `sudo apt install libfontconfig1-dev`
   * `sudo apt install libx11-dev`
@@ -108,6 +109,7 @@ sudo apt install gnome-tweaks -y  # tool to remap caps to ctrl
 # sudo apt install alacritty -y     # add alacritty repo first
 # replace alacritty with stterm
 sudo apt install tmux -y          # terminal multiplexer
+sudo apt install jq -y            # lightweight and flexible command-line JSON processor
 sudo apt install make -y          # utility to maintain shell program groups
 sudo apt install curl -y          # file transfer helper
 sudo apt install ffmpeg -y        # audio/video converter

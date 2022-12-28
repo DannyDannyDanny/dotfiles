@@ -7,7 +7,7 @@ $Space::
 #InputLevel  ;set it back to default value of 0 for any remaining code
 now := A_TickCount
 while GetKeyState("Space", "P") ; to find out whether space-bar is held
-    if (A_TickCount-now > 100) ; this time is tested on asker's computer
+    if (A_TickCount-now > 120) ; this time is tested on asker's computer
     {
         SendInput {Shift Down}
         KeyWait, Space
