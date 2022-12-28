@@ -79,3 +79,4 @@ Here's what I've done so far:
     * add script: shift and space + caps and escape: `sas-cae.ahk`
 * Next steps:
   * TODO: tmux pasteboard should play with windows pasteboard
+* install node 18 and npm

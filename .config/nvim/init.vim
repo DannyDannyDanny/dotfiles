@@ -13,7 +13,7 @@ call plug#begin(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/plugged"
 Plug 'tpope/vim-surround'     " surround for parentheses, brackets, quotes, XML tags etc
 Plug 'tpope/vim-fugitive'     " git helper
 Plug 'preservim/nerdtree'     " file tree
-" Plug 'jreybert/vimagit'       " git diffing with :Magit
+Plug 'jreybert/vimagit'       " git diffing with :Magit
 Plug 'lukesmithxyz/vimling'   " toggle deadkeys, IPA, prose-mode
 Plug 'junegunn/goyo.vim'      " prose mode but better
 Plug 'vimwiki/vimwiki'        " take notes in vimwiki
