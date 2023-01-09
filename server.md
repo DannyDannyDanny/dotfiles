@@ -1,7 +1,7 @@
 # HOME SERVERS
 
 ## Roadmap
-
+* [ ] read [HN: What'ts on your home server](https://news.ycombinator.com/item?id=34271167)
 * [.] auto-setup ssh + ngrok on all machines
   * [X] client machines automation
     * [X] read ssh commands in [ubuntu](ubuntu.md)
