@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# https://github.com/mzavoloka/gitls
+
+dirs=${@:-$PWD}
+gitls_script=$(realpath "${0}-cwd");
+
+cd $PWD
+
+bold=$(tput bold)
+reset=$(tput sgr0)
+
+for dir in $dirs
+do
+  echo "$bold$dir:$reset"
+  if [ ! -e $dir ]; then
+    echo "$dir doesn't exist"
+  elif [ -d $dir ]; then
+    ( cd $dir && bash $gitls_script )
+  else
+    echo "$dir is not a directory"
+  fi
+done
