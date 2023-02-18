@@ -72,6 +72,7 @@ copy their public keys to this machine.
 * disable password authentication
 
 ## stterm
+> :bomb: remove stterm - it'll never work on a windows machine
 * install requirements
   * `sudo apt install libfontconfig1-dev`
   * `sudo apt install libx11-dev`
@@ -95,13 +96,20 @@ open terminal, run one code snippet at the time and check that no errors occur:
 # replace alacritty with stterm
 
 sudo apt install git -y           # version control
-# sudo apt install neovim -y      # brew install nvim to get version 0.7
+
+# install neovim: [src](https://vi.stackexchange.com/a/38348)
+#sudo apt-get install software-properties-common
+sudo add-apt-repository ppa:neovim-ppa/stable
+sudo apt-get update
+sudo apt-get install neovim -y
+
 # sudo apt install librewolf -y   # add librewolf repo first
 sudo apt install qutebrowser -y   # minimal vim-binding browser
 sudo apt install gnome-tweaks -y  # tool to remap caps to ctrl
 # sudo apt install alacritty -y     # add alacritty repo first
 # replace alacritty with stterm
 sudo apt install tmux -y          # terminal multiplexer
+sudo apt install jq -y            # lightweight and flexible command-line JSON processor
 sudo apt install make -y          # utility to maintain shell program groups
 sudo apt install curl -y          # file transfer helper
 sudo apt install ffmpeg -y        # audio/video converter

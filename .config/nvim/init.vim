@@ -1,5 +1,7 @@
 let mapleader =","
 
+" set termguicolors
+
 if ! filereadable(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autoload/plug.vim"'))
 	echo "Downloading junegunn/vim-plug to manage plugins..."
 	silent !mkdir -p ${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autoload/
@@ -22,11 +24,14 @@ Plug 'tpope/vim-commentary'   " comment out word / line with 'gc'
 Plug 'ap/vim-css-color'       " show css colors
 Plug 'editorconfig/editorconfig-vim'    " editor-config extension for vim
 Plug 'scrooloose/syntastic'		" syntax checker
-Plug 'airblade/vim-gitgutter'		" show git diff insertions / deletions
-Plug 'junegunn/vim-emoji'       " emoji autocomplete + emojis in gitgutter
+" Plug 'airblade/vim-gitgutter'		" show git diff insertions / deletions
+" Plug 'junegunn/vim-emoji'       " emoji autocomplete + emojis in gitgutter
 Plug 'rrethy/vim-illuminate'		" highlight other uses of the current word under the cursor
 " Plug 'jupyter-vim/jupyter-vim'	" one day we'll start using jupyter in vim
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " fuzzy-finder
+Plug 'ibhagwan/fzf-lua', {'branch': 'main'}
+" optional for icon support
+Plug 'kyazdani42/nvim-web-devicons'
 call plug#end()
 
 
@@ -36,11 +41,11 @@ set list
 set listchars=tab:→\ ,nbsp:␣,trail:•,precedes:«,extends:»
 
 " vim-emoji setup
-set completefunc=emoji#complete
-let g:gitgutter_sign_added = emoji#for('small_blue_diamond')
-let g:gitgutter_sign_modified = emoji#for('small_orange_diamond')
-let g:gitgutter_sign_removed = emoji#for('small_red_triangle')
-let g:gitgutter_sign_modified_removed = emoji#for('collision')
+" set completefunc=emoji#complete
+" let g:gitgutter_sign_added = emoji#for('small_blue_diamond')
+" let g:gitgutter_sign_modified = emoji#for('small_orange_diamond')
+" let g:gitgutter_sign_removed = emoji#for('small_red_triangle')
+" let g:gitgutter_sign_modified_removed = emoji#for('collision')
 
 
 " syntastic recommended settings
