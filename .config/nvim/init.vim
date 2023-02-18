@@ -32,6 +32,12 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " fuzzy-finder
 Plug 'ibhagwan/fzf-lua', {'branch': 'main'}
 " optional for icon support
 Plug 'kyazdani42/nvim-web-devicons'
+" for nvim nirvana
+Plug 'hkupty/iron.nvim'         " connect to REPLs (i.e. ipython)
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-line'
+Plug 'GCBallesteros/vim-textobj-hydrogen'
+Plug 'GCBallesteros/jupytext.vim'
 call plug#end()
 
 
@@ -59,6 +65,16 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers = ['python', 'flake8']
 let g:syntastic_python_python_exec = 'python3'
 let g:syntastic_rst_checkers=['sphinx']
+
+" nvim nirvana
+" Jupytext
+let g:jupytext_fmt = 'py'
+let g:jupytext_style = 'hydrogen'
+" Send cell to IronRepl and move to next cell.
+" Depends on the text object defined in vim-textobj-hydrogen
+" You first need to be connected to IronRepl
+nmap ]x ctrih/^# %%<CR><CR>
+luafile $HOME/.config/nvim/plugins.lua
 
 " python stuff
 let g:python3_host_prog = "$HOME/.venvs/nvim/bin/python"

@@ -39,6 +39,7 @@ setup_nvim: setup_vimwiki1 setup_vimwiki2 setup_vimwiki3
 	echo "configuring nvim"
 	mkdir -p ~/.config/nvim
 	ln -s -f ~/dotfiles/.config/nvim/init.vim ~/.config/nvim/init.vim
+	ln -s -f ~/dotfiles/.config/nvim/plugins.lua ~/.config/nvim/plugins.lua
 
 setup_music:
 	mkdir -p ~/.config/mpd/playlists/
