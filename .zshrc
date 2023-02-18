@@ -113,7 +113,9 @@ bindkey -v
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # make brew accessible
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+if [ -d "$HOME/linuxbrew/.linuxbrew" ] ; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
 
 # set PATH so it includes user's private ~/.local/bin if it exists
 # lvim is installed to this directory (at least on ubuntu)
@@ -123,3 +125,18 @@ fi
 
 alias pbpaste="powershell.exe -noprofile Get-Clipboard"
 alias pbcopy="clip.exe"
+
+# on exit from lf this function changes directory to last browser fir in lf
+lfcd () {
+    tmp="$(mktemp)"
+    lf -last-dir-path="$tmp" "$@"
+    if [ -f "$tmp" ]; then
+        dir="$(cat "$tmp")"
+        rm -f "$tmp"
+        if [ -d "$dir" ]; then
+            if [ "$dir" != "$(pwd)" ]; then
+                cd "$dir"
+            fi
+        fi
+    fi
+}
