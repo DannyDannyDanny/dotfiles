@@ -20,6 +20,13 @@ setup_git:
 	git config --global user.email "dth@taiga.ai"
 	git config --global pull.rebase false
 
+setup_fzf:
+	echo "make sure /home/linuxbrew/.linuxbrew/opt/fzf/bin exists"
+	echo "make sure /home/linuxbrew/.linuxbrew/opt/fzf/shell/completion.zsh exists"
+	echo "make sure /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh exists"
+	ln -s -f ~/dotfiles/.fzf.zsh ~/.fzf.zsh
+
+
 setup_vimwiki1:
 	rm -rf ~/.local/share/nvim/vimwiki/
 	git clone git@github.com:DannyDannyDanny/vimwiki.git ~/vimwiki/
