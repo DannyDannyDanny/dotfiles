@@ -11,6 +11,18 @@ setup_alacritty:
 	mkdir -p ~/.config/alacritty
 	ln -s -f ~/dotfiles/.config/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
 
+setup_poetry:
+	# TODO: make raget not tested properly
+	sudo apt purge python3 python3-pip python3-openssl
+	sudo apt-get update
+	sudo apt-get upgrade
+	sudo apt -y install libssl-dev libffi-dev python3 python3-pip python3-openssl
+	# poetry install via https://python-poetry.org/docs/#installation
+	curl -sSL https://install.python-poetry.org | python3 -
+	sudo add-apt-repository ppa:deadsnakes/ppa
+	sudo apt install python3.11
+
+
 setup_tmux_a:
 	echo "configuring tmux with 'a' as prefix"
 	ln -s -f ~/dotfiles/.tmux.conf ~/.tmux.conf

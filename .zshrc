@@ -122,6 +122,10 @@ if [ -d "$HOME/.local/bin" ] ; then
 	PATH="$HOME/.local/bin:$PATH"
 fi
 
+# for poetry
+fpath+=~/.zfunc
+autoload -Uz compinit && compinit
+
 alias pbpaste="powershell.exe -noprofile Get-Clipboard"
 alias pbcopy="clip.exe"
 
