@@ -28,12 +28,9 @@ setup_brew:
 	echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.profile
 
 setup_fzf:
-	# brew install fzf
+	brew install fzf
 	$(brew --prefix)/opt/fzf/install
-	test -d /home/linuxbrew/.linuxbrew/opt/fzf/bin
-	echo "make sure /home/linuxbrew/.linuxbrew/opt/fzf/shell/completion.zsh exists"
-	echo "make sure /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh exists"
-	ln -s -f ~/dotfiles/.fzf.zsh ~/.fzf.zsh
+	# ln -s -f ~/dotfiles/.fzf.zsh ~/.fzf.zsh
 
 
 setup_vimwiki1:
