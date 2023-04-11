@@ -71,20 +71,6 @@ copy their public keys to this machine.
 * ssh via key (i.e no password)
 * disable password authentication
 
-## stterm
-> :bomb: remove stterm - it'll never work on a windows machine
-* install requirements
-  * `sudo apt install libfontconfig1-dev`
-  * `sudo apt install libx11-dev`
-  * X11/Xft?
-* clone from source `git clone https://git.suckless.org/st`
-  * > Note: clone it somewhere reasonable (`$HOME/repos`)
-* run `sudo make clean install` inside `st/`
-* delete `st/config.h`
-* link `dotfiles/st/config.h --> $HOME/repos/st/config.h`
-  * remember to version control the config.h file
-
-
 ## apt package
 
 startup installation for ubuntu clients.
