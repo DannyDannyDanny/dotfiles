@@ -24,6 +24,8 @@ setup_brew:
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 	test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
 	test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+	# not too sure about this .bash_profile part
+	# slightly more sure about the ~/.profile
 	test -r ~/.bash_profile && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bash_profile
 	echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.profile
 
@@ -31,7 +33,6 @@ setup_fzf:
 	brew install fzf
 	$(brew --prefix)/opt/fzf/install --key-bindings --completion --no-bash --no-fish --all
 	ln -s -f ~/dotfiles/.fzf.zsh ~/.fzf.zsh
-
 
 setup_vimwiki1:
 	rm -rf ~/.local/share/nvim/vimwiki/
