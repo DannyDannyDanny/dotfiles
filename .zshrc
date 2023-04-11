@@ -113,15 +113,8 @@ bindkey -v
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # make brew accessible
-# OLD VERSION:
-# if [ -d "$HOME/linuxbrew/.linuxbrew" ] ; then
-#   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-# fi
-# NEW VERSION:
 test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
 test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-test -r ~/.bash_profile && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bash_profile
-echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.profile
 
 # set PATH so it includes user's private ~/.local/bin if it exists
 # lvim is installed to this directory (at least on ubuntu)

@@ -28,9 +28,9 @@ setup_brew:
 	echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.profile
 
 setup_fzf:
-	# brew install fzf
-	$(brew --prefix)/opt/fzf/install
-	# ln -s -f ~/dotfiles/.fzf.zsh ~/.fzf.zsh
+	brew install fzf
+	$(brew --prefix)/opt/fzf/install --key-bindings --completion --no-bash --no-fish --all
+	ln -s -f ~/dotfiles/.fzf.zsh ~/.fzf.zsh
 
 
 setup_vimwiki1:
