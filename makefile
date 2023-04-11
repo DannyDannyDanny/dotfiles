@@ -28,7 +28,7 @@ setup_brew:
 	echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.profile
 
 setup_fzf:
-	brew install fzf
+	# brew install fzf
 	$(brew --prefix)/opt/fzf/install
 	# ln -s -f ~/dotfiles/.fzf.zsh ~/.fzf.zsh
 
