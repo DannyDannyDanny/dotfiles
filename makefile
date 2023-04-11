@@ -20,13 +20,16 @@ setup_git:
 	git config --global user.email "dth@taiga.ai"
 	git config --global pull.rebase false
 
+setup_brew:
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+	test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+	test -r ~/.bash_profile && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bash_profile
+	echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.profile
+
 setup_fzf:
 	# brew install fzf
 	# NEXT LINES ALSO IN .ZSHRC
-	# test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-	# test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-	# test -r ~/.bash_profile && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bash_profile
-	# echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.profile
 	echo "make sure /home/linuxbrew/.linuxbrew/opt/fzf/bin exists"
 	echo "make sure /home/linuxbrew/.linuxbrew/opt/fzf/shell/completion.zsh exists"
 	echo "make sure /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh exists"
