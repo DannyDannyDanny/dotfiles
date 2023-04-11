@@ -21,6 +21,7 @@ setup_git:
 	git config --global pull.rebase false
 
 setup_brew:
+	sudo apt-get -y install build-essential procps curl file git
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 	test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
 	test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
