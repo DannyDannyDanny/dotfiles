@@ -29,8 +29,8 @@ setup_brew:
 
 setup_fzf:
 	# brew install fzf
-	# NEXT LINES ALSO IN .ZSHRC
-	echo "make sure /home/linuxbrew/.linuxbrew/opt/fzf/bin exists"
+	$(brew --prefix)/opt/fzf/install
+	test -d /home/linuxbrew/.linuxbrew/opt/fzf/bin
 	echo "make sure /home/linuxbrew/.linuxbrew/opt/fzf/shell/completion.zsh exists"
 	echo "make sure /home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh exists"
 	ln -s -f ~/dotfiles/.fzf.zsh ~/.fzf.zsh
