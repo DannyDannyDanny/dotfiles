@@ -30,6 +30,8 @@ setup_python_and_poetry:
 	# setup poetry - zsh
 	mkdir $ZSH_CUSTOM/plugins/poetry
 	poetry completions zsh > $ZSH_CUSTOM/plugins/poetry/_poetry
+	# nvim python provider
+	pip3 install --upgrade pynvim
 
 
 setup_tmux_a:
