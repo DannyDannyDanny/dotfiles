@@ -77,7 +77,8 @@ nmap ]x ctrih/^# %%<CR><CR>
 luafile $HOME/.config/nvim/plugins.lua
 
 " python stuff
-let g:python3_host_prog = "$HOME/.venvs/nvim/bin/python"
+" let g:python3_host_prog = "$HOME/.venvs/nvim/bin/python"
+let g:python4_host_prog = "$HOME/.config/nvim/python"
 
 " VimWiki setup
 let g:vimwiki_sync_branch = "main"
