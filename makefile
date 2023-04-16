@@ -12,7 +12,7 @@ setup_alacritty:
 	ln -s -f ~/dotfiles/.config/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
 
 setup_python_and_poetry:
-	# TODO: make raget not tested properly
+	# TODO: make target not tested properly
 	#
 	sudo apt purge python3 python3-pip python3-openssl
 	sudo apt-get update
@@ -30,9 +30,14 @@ setup_python_and_poetry:
 	# setup poetry - zsh
 	mkdir $ZSH_CUSTOM/plugins/poetry
 	poetry completions zsh > $ZSH_CUSTOM/plugins/poetry/_poetry
-	# nvim python provider
-	pip3 install --upgrade pynvim
-
+	#
+	# setup_nvim_python_provider
+	cd ~/dotfiles/nvim_python_provider && poetry install
+	cd ~/dotfiles/nvim_python_provider && poetry run which python > /tmp/nvim_python_provider
+	ln -s -f $$(cat /tmp/nvim_python_provider) ~/.config/nvim/python
+	rm /tmp/nvim_python_provider
+	~/config/nvim/python -m pip install pynvim
+	# "WARNING: in nvim run :checkhealth and check python provider status"
 
 setup_tmux_a:
 	echo "configuring tmux with 'a' as prefix"
