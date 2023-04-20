@@ -122,6 +122,14 @@ if [ -d "$HOME/.local/bin" ] ; then
 	PATH="$HOME/.local/bin:$PATH"
 fi
 
+# zsh auto-complete
+if type brew &>/dev/null; then
+    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+    autoload -Uz compinit
+    compinit
+  fi
+
 # for poetry
 fpath+=~/.zfunc
 autoload -Uz compinit && compinit
