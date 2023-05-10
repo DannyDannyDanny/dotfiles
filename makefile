@@ -4,6 +4,12 @@ setup_locale:
 setup_zshrc:
 	ln -s -f ~/dotfiles/.zshrc ~/.zshrc
 
+setup_zsh_completions:
+	brew install zsh-completions
+	rm -f ~/.zcompdump
+	compinit
+	# src: https://apple.stackexchange.com/a/377857/200035
+
 setup_alacritty_wsl:
 	cp ~/dotfiles/.config/alacritty/alacritty.yml /mnt/c/Users/dnth/AppData/Roaming/alacritty/alacritty.yml
 
