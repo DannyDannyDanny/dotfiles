@@ -76,12 +76,8 @@ let g:jupytext_style = 'hydrogen'
 nmap ]x ctrih/^# %%<CR><CR>
 luafile $HOME/.config/nvim/plugins.lua
 
-" gokcehan/lf
-let lfvim = "~/.config/lf/lf.vim"
-if filereadable(lfvim)
-  exec "source " . lfvim
-endif
-nnoremap <leader>l :LF<cr>
+" fzf in nvim
+set rtp+=/home/linuxbrew/.linuxbrew/opt/fzf
 
 " python stuff
 " let g:python3_host_prog = "$HOME/.venvs/nvim/bin/python"

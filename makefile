@@ -66,8 +66,8 @@ setup_brew:
 
 setup_lf:
 	brew install lf
+	mkdir -p ~/.config/lf
 	ln -s -f ~/dotfiles/.config/lf/lf.zsh ~/.config/lf/lf.zsh
-	ln -s -f ~/dotfiles/.config/lf/lf.vim ~/.config/lf/lf.vim
 
 setup_fzf:
 	brew install fzf
