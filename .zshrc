@@ -125,6 +125,8 @@ fi
 # zsh auto-complete
 if type brew &>/dev/null; then
     FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+    # zsh completions for lf
+    fpath=(~/.config/lf $fpath)
 
     autoload -Uz compinit
     compinit
