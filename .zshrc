@@ -116,17 +116,19 @@ bindkey -v
 test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
 test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+# TODO: remove lvim
 # set PATH so it includes user's private ~/.local/bin if it exists
 # lvim is installed to this directory (at least on ubuntu)
 if [ -d "$HOME/.local/bin" ] ; then
 	PATH="$HOME/.local/bin:$PATH"
 fi
 
+# zsh completions for lf
+fpath=(~/.config/lf $fpath)
+
 # zsh auto-complete
 if type brew &>/dev/null; then
     FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-    # zsh completions for lf
-    fpath=(~/.config/lf $fpath)
 
     autoload -Uz compinit
     compinit
