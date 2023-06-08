@@ -46,5 +46,6 @@ echo >&2 "====================================================================="
 echo >&2 " installing nvim"
 NVIM_VERSION=0.7.2
 sudo apt-get install -y libfuse2
+mkdir /bin/nvim
 curl -L -o /bin/nvim https://github.com/neovim/neovim/releases/download/v${NVIM_VERSION}/nvim.appimage
 chmod a+x /bin/nvim
