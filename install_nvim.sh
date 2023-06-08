@@ -3,6 +3,8 @@
 # Install neovim
 echo >&2 "====================================================================="
 echo >&2 " >> installing nvim"
+echo >&2 " >>> installing libfuse2"
+sudo apt-get install -y libfuse2
 # curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
 # NVIM_VERSION=0.9.0
 echo >&2 " >>> downloading nvim"
