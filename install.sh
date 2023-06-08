@@ -53,5 +53,3 @@ NVIM_VERSION=0.9.0
 curl -LO https://github.com/neovim/neovim/releases/tag/v{NVIM_VERSION}/download/nvim.appimage
 chmod u+x nvim.appimage
 ./nvim.appimage
-
-# sudo apt-get install -y neovim=0.7.2-3~bpo20.04.1~ppa1
