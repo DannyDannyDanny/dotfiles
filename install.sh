@@ -31,7 +31,7 @@ rm .zshrc
 
 echo >&2 "====================================================================="
 echo >&2 " installing tmux"
-sudo apt-get install -y fish
+sudo apt-get install -y tmux=0.3a
 
 # I'd like to use fish, please
 echo >&2 "====================================================================="
