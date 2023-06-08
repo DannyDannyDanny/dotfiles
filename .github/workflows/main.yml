@@ -8,7 +8,5 @@ jobs:
     name: install codespaces setup
     runs-on: ubuntu-latest
     steps:
-      - name: checkout repo
       - uses: actions/checkout@v1
-      - name: install script
       - run: ls -la && bash install.sh
