@@ -30,10 +30,12 @@ rm .zshrc
 # $HOME/.dotfiles.base/bin/dotfiles.symlink install
 
 # I'd like to use fish, please
+echo >&2 " installing fish"
 sudo apt-get install -y fish
 sudo chsh -s /usr/bin/fish $USER
 
 # Install fzf
+echo >&2 " installing fzf"
 FZF_VERSION=0.40.0
 curl -L https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${FZF_VERSION}-linux_amd64.tar.gz | tar xzC $HOME/bin
 
