@@ -37,6 +37,7 @@ sudo apt-get install -y tmux=3.0a-2ubuntu0.4
 echo >&2 "====================================================================="
 echo >&2 " >> installing fish"
 sudo apt-get install -y fish
+echo >&2 " >>> changing shell to fish"
 sudo chsh -s /usr/bin/fish $USER
 
 # Install fzf
@@ -50,8 +51,3 @@ sudo apt install fzf=0.20.0-1ubuntu0.1
 echo >&2 "====================================================================="
 echo >&2 " >> installing nvim"
 sudo apt-get install -y neovim=0.7.2-3~bpo20.04.1~ppa1
-# NVIM_VERSION=0.7.2
-# sudo apt-get install -y libfuse2
-# mkdir /bin/nvim
-# curl -L -o /bin/nvim https://github.com/neovim/neovim/releases/download/v${NVIM_VERSION}/nvim.appimage
-# chmod a+x /bin/nvim
