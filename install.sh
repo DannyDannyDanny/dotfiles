@@ -20,7 +20,6 @@ export SUDO_ASKPASS=/bin/true
 # No thank you
 rm -rf .oh-my-bash
 rm -rf .oh-my-zsh
-rm .zshrc
 
 # A bit of a hack
 # mv .gitconfig .gitconfig.private
