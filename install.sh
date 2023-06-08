@@ -42,8 +42,9 @@ sudo chsh -s /usr/bin/fish $USER
 # Install fzf
 echo >&2 "====================================================================="
 echo >&2 " >> installing fzf"
-FZF_VERSION=0.40.0
-curl -L https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${FZF_VERSION}-linux_amd64.tar.gz | tar xzC /bin
+# FZF_VERSION=0.40.0
+# curl -L https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${FZF_VERSION}-linux_amd64.tar.gz | tar xzC /bin
+sudo apt install fzf=0.20.0-1ubuntu0.1
 
 # Install neovim
 echo >&2 "====================================================================="
