@@ -29,6 +29,10 @@ rm .zshrc
 # git clone https://github.com/dcreager/dotfiles-public -b codespaces --recurse-submodules .dotfiles.public
 # $HOME/.dotfiles.base/bin/dotfiles.symlink install
 
+echo >&2 "====================================================================="
+echo >&2 " installing tmux"
+sudo apt-get install -y fish
+
 # I'd like to use fish, please
 echo >&2 "====================================================================="
 echo >&2 " installing fish"
