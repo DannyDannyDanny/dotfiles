@@ -48,4 +48,9 @@ curl -L https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${F
 # Install neovim
 echo >&2 "====================================================================="
 echo >&2 " >> installing nvim"
-sudo apt-get install -y neovim=0.7.2-3~bpo20.04.1~ppa1
+# curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+curl -LO https://github.com/neovim/neovim/releases/tag/v0.9.0/download/nvim.appimage
+chmod u+x nvim.appimage
+./nvim.appimage
+
+# sudo apt-get install -y neovim=0.7.2-3~bpo20.04.1~ppa1
