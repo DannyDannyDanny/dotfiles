@@ -30,7 +30,12 @@ rm -rf .oh-my-zsh
 
 echo >&2 "====================================================================="
 echo >&2 " >> installing tmux"
-sudo apt-get install -y tmux=3.0a-2ubuntu0.4
+TMUX_VERSION=3.3a
+curl -LO https://github.com/tmux/tmux/releases/download/${TMUX_VERSION}/tmux-${TMUX_VERSION}.tar.gz
+tar -zxf tmux-${TMUX_VERSION}.tar.gz
+cd tmux-*/
+./configure
+make && sudo make install
 
 # I'd like to use fish, please
 echo >&2 "====================================================================="
@@ -44,6 +49,7 @@ echo >&2 "====================================================================="
 echo >&2 " >> installing fzf"
 FZF_VERSION=0.40.0
 curl -L https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${FZF_VERSION}-linux_amd64.tar.gz | tar xzC /bin
+
 
 # Install neovim
 echo >&2 "====================================================================="
