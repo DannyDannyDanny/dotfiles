@@ -28,14 +28,7 @@ rm -rf .oh-my-zsh
 # git clone https://github.com/dcreager/dotfiles-public -b codespaces --recurse-submodules .dotfiles.public
 # $HOME/.dotfiles.base/bin/dotfiles.symlink install
 
-echo >&2 "====================================================================="
-echo >&2 " >> installing tmux"
-TMUX_VERSION=3.3a
-curl -LO https://github.com/tmux/tmux/releases/download/${TMUX_VERSION}/tmux-${TMUX_VERSION}.tar.gz
-tar -zxf tmux-${TMUX_VERSION}.tar.gz
-cd tmux-*/
-./configure
-make && sudo make install
+/bin/bash install_tmux.sh
 
 # I'd like to use fish, please
 echo >&2 "====================================================================="
