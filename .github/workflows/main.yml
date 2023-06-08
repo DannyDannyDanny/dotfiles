@@ -4,9 +4,37 @@ on:
       - main
 
 jobs:
+  install_nvim:
+    name: install nvim
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: bash install_nvim.sh
+
+  install_fish:
+    name: install fish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: bash install_fish.sh
+
+  install_tmux:
+    name: install tmux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: bash install_tmux.sh
+
+  install_fzf:
+    name: install fzf
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: bash install_fzf.sh
+
   install_codespaces_setup:
     name: install codespaces setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - run: ls -la && bash install.sh
+      - run: bash install.sh
