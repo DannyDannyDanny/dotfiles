@@ -3,6 +3,8 @@
 echo >&2 "====================================================================="
 echo >&2 " >> installing tmux"
 TMUX_VERSION=3.3a
+echo >&2 " >>> install tmux dependencies"
+sudo apt install -y libevent-dev
 echo >&2 " >>> downloading file"
 curl -LO https://github.com/tmux/tmux/releases/download/${TMUX_VERSION}/tmux-${TMUX_VERSION}.tar.gz
 echo >&2 " >>> decompressing"
