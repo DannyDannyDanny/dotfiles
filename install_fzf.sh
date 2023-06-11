@@ -1,22 +1,15 @@
 #!/bin/bash
 
+FZF_VERSION=0.40.0
+
 # Install fzf
 echo >&2 "====================================================================="
 echo >&2 " >> installing fzf"
-FZF_VERSION=0.40.0
-# curl -L https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${FZF_VERSION}-linux_amd64.tar.gz | tar xzC /bin
-
 echo >&2 " >>> downloading"
 curl -LO https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${FZF_VERSION}-linux_amd64.tar.gz
-
-echo >&2 " >>> files before untar $(ls -la)"
 
 echo >&2 " >>> extracting"
 tar xfv fzf-${FZF_VERSION}-linux_amd64.tar.gz
 
-echo >&2 " >>> files after untar $(ls -la)"
-# tar xzC /bin
-
 echo >&2 " >>> moving fzf to /bin"
 sudo mv fzf /bin
-# mv fzf /bin
