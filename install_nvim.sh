@@ -23,4 +23,5 @@ echo >&2 " >>> moving squashfs-root"
 sudo mv squashfs-root /
 
 echo >&2 " >>> exposing nvim globally"
-sudo ln -s /squashfs-root/AppRun /usr/bin/nvim
+# sudo ln -s /squashfs-root/AppRun /usr/bin/nvim
+sudo ln -s /squashfs-root/AppRun /bin/nvim
