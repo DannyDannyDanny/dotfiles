@@ -1,0 +1,11 @@
+on:
+  push:
+    paths: install_fzf.sh
+
+jobs:
+  install_fzf:
+    name: install fzf
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: bash install_fzf.sh

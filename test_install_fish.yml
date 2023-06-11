@@ -1,0 +1,11 @@
+on:
+  push:
+    paths: install_fish.sh
+
+jobs:
+  install_fish:
+    name: install fish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: bash install_fish.sh
