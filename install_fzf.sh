@@ -18,4 +18,5 @@ echo >&2 " >>> files after untar $(ls -la)"
 # tar xzC /bin
 
 echo >&2 " >>> moving fzf to /bin"
-mv fzf /bin
+sudo mv fzf /bin
+# mv fzf /bin
