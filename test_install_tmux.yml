@@ -1,0 +1,11 @@
+on:
+  push:
+    paths: install_tmux.sh
+
+jobs:
+  install_tmux:
+    name: install tmux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: bash install_tmux.sh

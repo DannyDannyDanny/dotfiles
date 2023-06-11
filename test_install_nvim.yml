@@ -1,0 +1,11 @@
+on:
+  push:
+    paths: install_nvim.sh
+
+jobs:
+  install_nvim:
+    name: install nvim
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: bash install_nvim.sh
