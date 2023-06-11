@@ -10,7 +10,19 @@ sudo apt-get install -y libfuse2
 echo >&2 " >>> downloading nvim"
 # curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
 curl -LO https://github.com/neovim/neovim/releases/download/v0.9.0/nvim.appimage
-echo >&2 " >>> examine"
-# cat nvim.appimage
+
+echo >&2 " >>> changing nvim.appimage mode bits (u+x)"
 chmod u+x nvim.appimage
-./nvim.appimage
+
+echo >&2 " >>> extracting from ./nvim.appimage"
+./nvim.appimage --appimage-extract
+
+echo >&2 " >>> extracted images version"
+./squashfs-root/AppRun --version
+
+echo >&2 " >>> moving squashfs-root"
+sudo mv squashfs-root /
+
+echo >&2 " >>> exposing nvim globally"
+sudo ln -s /squashfs-root/AppRun /usr/bin/nvim
+echo $(nvim --version)
