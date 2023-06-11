@@ -16,9 +16,9 @@ echo >&2 "====================================================================="
 export SUDO_ASKPASS=/bin/true
 
 /bin/bash ./install_tmux.sh
-/bin/bash ./install_fish.sh
 /bin/bash ./install_fzf.sh
 /bin/bash ./install_nvim.sh
+/bin/bash ./install_fish.sh
 
 cd $HOME
 
