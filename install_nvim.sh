@@ -7,8 +7,10 @@ echo >&2 " >> installing nvim"
 echo >&2 " >>> installing libfuse2"
 sudo apt-get install -y libfuse2
 echo >&2 " >>> downloading nvim"
+# TODO: remove test urls and use NVIM_VERSION variable
 # curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
-curl -LO https://github.com/neovim/neovim/releases/download/v$(NVIM_VERSION)/nvim.appimage
+# curl -LO https://github.com/neovim/neovim/releases/download/v$(NVIM_VERSION)/nvim.appimage
+curl -LO https://github.com/neovim/neovim/releases/download/v0.9.0/nvim.appimage
 
 echo >&2 " >>> changing nvim.appimage mode bits (u+x)"
 chmod u+x nvim.appimage
