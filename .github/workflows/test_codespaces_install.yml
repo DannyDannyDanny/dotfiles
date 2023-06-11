@@ -18,3 +18,4 @@ jobs:
       - run: nvim --version
       - run: fzf --version
       - run: fish --version
+      - run: echo $0
