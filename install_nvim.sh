@@ -18,11 +18,13 @@ echo >&2 " >>> extracting from ./nvim.appimage"
 ./nvim.appimage --appimage-extract
 
 echo >&2 " >>> extracted images version"
-./squashfs-root/AppRun --version
+# ./squashfs-root/AppRun --version
+echo >&2 $(./squashfs-root/AppRun --version)
 
 echo >&2 " >>> moving squashfs-root"
 sudo mv squashfs-root /
 
 echo >&2 " >>> exposing nvim globally"
 sudo ln -s /squashfs-root/AppRun /usr/bin/nvim
-echo $(nvim --version)
+
+echo >&2 $(nvim --version)
