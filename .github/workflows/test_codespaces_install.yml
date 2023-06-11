@@ -14,3 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: bash install.sh
+      - run: tmux -V
+      - run: nvim --version
+      - run: fzf --version
+      - run: fish --version
