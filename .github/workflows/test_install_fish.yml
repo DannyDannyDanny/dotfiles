@@ -9,3 +9,4 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: bash install_fish.sh
+      - run: fish --version
