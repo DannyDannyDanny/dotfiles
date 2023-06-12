@@ -10,7 +10,7 @@ on:
 jobs:
   install_codespaces_setup:
     name: install codespaces setup
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v1
       - run: bash install.sh
