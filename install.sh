@@ -7,10 +7,8 @@ fi
 
 echo >&2 "====================================================================="
 echo >&2 " Setting up codespaces environment"
-echo >&2 ""
 echo >&2 " USER        $USER"
 echo >&2 " HOME        $HOME"
-echo >&2 "====================================================================="
 
 # Make passwordless sudo work
 export SUDO_ASKPASS=/bin/true
@@ -22,7 +20,6 @@ export SUDO_ASKPASS=/bin/true
 
 cd $HOME
 
-# No thank you
 rm -rf .oh-my-bash
 rm -rf .oh-my-zsh
 
