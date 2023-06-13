@@ -7,6 +7,8 @@ FISH_VERSION=3.1.0-1.2
 
 # I'd like to use fish, please
 echo >&2 "====================================================================="
+echo >&2 " >> apt updating"
+sudo apt update
 echo >&2 " >> installing fish"
 sudo apt-get install -y fish=${FISH_VERSION}
 
