@@ -3,7 +3,7 @@ on:
 
 jobs:
   manual_worflow:
-    name: deploy to staging
+    name: manual workflow
     runs-on: ubuntu-20.04
     steps:
       - name: Run `lsb_release -a`
