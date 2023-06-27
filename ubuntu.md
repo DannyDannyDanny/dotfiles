@@ -131,7 +131,8 @@ brew install lf
 
 Use thunderbird to attach to just about any mail + cal clients
 
-To get reasonably formatted dates in thunderbird set `sudo update-locale LC_TIME=en_DK.UTF-8`
+To get reasonably formatted dates in thunderbird set the locale environment variable `LC_TIME`:
+```sudo update-locale LC_TIME=en_DK.UTF-8```
 
 
 ## Password Manager
