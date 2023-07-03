@@ -27,6 +27,7 @@ rm -rf .oh-my-zsh
 # mv .gitconfig .gitconfig.private
 
 git clone https://github.com/dannydannydanny/dotfiles ~/dotfiles
+git clone https://github.com/dannydannydanny/methodology ~/methodology
 # git clone https://github.com/dcreager/dotfiles-base .dotfiles.base
 # git clone https://github.com/dcreager/dotfiles-public -b codespaces --recurse-submodules .dotfiles.public
 # $HOME/.dotfiles.base/bin/dotfiles.symlink install
