@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 NVIM_VERSION=0.9.0
 
 # Install neovim

@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 FZF_VERSION=0.40.0
 
 # Install fzf
