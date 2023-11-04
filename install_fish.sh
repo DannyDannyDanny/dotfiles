@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # fish version on ubuntu 22.04
 # FISH_VERSION=3.3.1+ds-3

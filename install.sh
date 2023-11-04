@@ -1,5 +1,6 @@
 #!/bin/sh
 # setup script for codespaces inspired by dcreager/dotfiles
+set -e
 
 if [ -z "$USER" ]; then
     USER=$(id -un)
