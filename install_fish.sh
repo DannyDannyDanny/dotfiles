@@ -6,6 +6,7 @@ set -e
 # probably works on ubuntu 20.04 but couldn't be found in codespaces apt
 # FISH_VERSION=3.1.0-1.2
 # fish version on ubuntu 20.04 (codespaces ubuntu version)
+# TODO: add if statement to make github workflows test to succeed
 FISH_VERSION=3.1.2-3+deb11u1
 
 # I'd like to use fish, please
@@ -17,5 +18,8 @@ sudo apt-get install -y fish=${FISH_VERSION}
 
 echo >&2 " >>> changing shell to fish"
 sudo chsh -s /usr/bin/fish $USER
+
+echo >&2 " >>> link config.fish from dotfiles"
+ln -s -f /tmp/dotfiles/.config/config.fish ~/.config/config.fish
 
 echo >&2 " >>> echo $0"
