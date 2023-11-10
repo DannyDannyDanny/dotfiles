@@ -45,10 +45,6 @@ setup_python_and_poetry:
 	~/config/nvim/python -m pip install pynvim
 	# "WARNING: in nvim run :checkhealth and check python provider status"
 
-setup_tmux_a:
-	echo "configuring tmux with 'a' as prefix"
-	ln -s -f ~/dotfiles/.tmux.conf ~/.tmux.conf
-
 setup_git:
 	git config --global user.name "DannyDannyDanny"
 	git config --global user.email "dth@taiga.ai"
