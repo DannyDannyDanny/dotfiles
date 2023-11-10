@@ -60,11 +60,6 @@ setup_brew:
 	test -r ~/.bash_profile && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bash_profile
 	echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.profile
 
-setup_lf:
-	brew install lf
-	mkdir -p ~/.config/lf
-	ln -s -f ~/dotfiles/.config/lf/lf.zsh ~/.config/lf/lf.zsh
-
 setup_fzf:
 	brew install fzf
 	$(brew --prefix)/opt/fzf/install --key-bindings --completion --no-bash --no-fish --all
