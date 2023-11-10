@@ -20,6 +20,7 @@ echo >&2 " >>> changing shell to fish"
 sudo chsh -s /usr/bin/fish $USER
 
 echo >&2 " >>> link config.fish from dotfiles"
-ln -s -f /tmp/dotfiles/.config/config.fish ~/.config/config.fish
+mkdir -p ~/.config/fish
+ln -s -f /tmp/dotfiles/.config/fish/config.fish ~/.config/fish/config.fish
 
 echo >&2 " >>> echo $0"
