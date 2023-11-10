@@ -28,3 +28,10 @@ sudo mv squashfs-root /
 echo >&2 " >>> exposing nvim globally"
 # sudo ln -s /squashfs-root/AppRun /usr/bin/nvim
 sudo ln -s /squashfs-root/AppRun /bin/nvim
+
+echo >&2 " >>> linking nvim config files"
+mkdir -p ~/.config/nvim
+ln -s -f ~/dotfiles/.config/nvim/init.vim ~/.config/nvim/init.vim
+ln -s -f ~/dotfiles/.config/nvim/plugins.lua ~/.config/nvim/plugins.lua
+
+# TODO: move vimwiki setup from makefile to here
