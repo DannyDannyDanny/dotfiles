@@ -1,12 +1,5 @@
 ## Document Roadmap
 
-* oh-my-zsh install
-* ssh setup from vimwiki
-* git clone dotfiles
-* cd dotfiles and run makefile
-  * (make toplevel rules, i.e `setup_nerdfonts` is a sub of `setup_alacritty`)
-  * replace alacritty with stterm
-
 ## Intro
 
 This post-install script is intended to be run directly after ~Uubuntu 22.05~~ Pop_OS installion.
