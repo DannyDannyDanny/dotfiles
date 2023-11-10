@@ -19,3 +19,6 @@ echo >&2 $(ls -la)
 
 echo >&2 " >>> running .configure"
 make && sudo make install
+
+echo >&2 " >>> link tmux config from dotfiles"
+ln -s -f /tmp/dotfiles/.tmux.conf ~/.tmux.conf
