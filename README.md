@@ -24,6 +24,7 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
     * [config guide for mac](https://computingforgeeks.com/install-configure-mpd-ncmpcpp-macos/)
   * test on new machine with music dir
   * [fonts](https://www.programmingfonts.org/)
+    * how does this relate to nerdfonts?
 
 ***
 
@@ -41,6 +42,10 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 * install basic miktex (for LaTeX)
   * `apt install texlive texlive-latex-extra` (?)
 * install [alacritty](https://alacritty.org/) (use the installer, not portable)
+  * add alacritty config: `/mnt/c/Users/<winuser>/AppData/Roaming/alacritty/alacritty.yml`
+
+### WSL
+
 * install [wsl](https://docs.microsoft.com/en-us/windows/wsl/install#install-wsl-command) + WSL specifics
   * fix wsl dns issue via [stackoverflow](https://askubuntu.com/questions/91543/apt-get-update-fails-to-fetch-files-temporary-failure-resolving-error/91595#comment1911934_91595)
     * write wsl.conf:
@@ -49,8 +54,80 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
       * `echo "generateResolvConf = false" | sudo tee -a /etc/wsl.conf > /dev/null`
     * overwrite resolv.conf:
       * add content `echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null`
-  * add alacritty config: `/mnt/c/Users/<winuser>/AppData/Roaming/alacritty/alacritty.yml`
   * add private folder symlink: `ln -s -f /mnt/c/Users/<winuser>/Private ~/Private`
+
+```
+wsl --install --web-download -d Debian
+# <set username>
+# <set password
+
+# debian launches automatically
+sudo apt update && sudo apt upgrade -y
+
+# launch debian next time
+wsl -d Debian
+
+# the following installs aren't necessary in codespace 🤔
+sudo apt install -y git curl # dotfiles deps
+sudo apt install -y build-essential ncurses-dev  #  tmux dep
+
+# ssh cloning is available after dotfiles installation - clone to /tmp/ for now
+git clone https://github.com/DannyDannyDanny/dotfiles.git /tmp/dotfiles && cd /tmp/dotfiles/
+bash install.sh
+```
+
+* To restart: `wsl --unregister Debian`
+* Inside WSL:
+  * config alacritty windows side: `vi /mnt/c/Users/xxxx/AppData/Roaming/alacritty/alacritty.yml`
+  * `sudo apt install lsb-release -y` to enable `lsb_release -a`
+  * `echo 'nameserver 8.8.8.8' | sudo tee -a /etc/resolv.conf` fix DNS issues
+
+### setup github
+
+```
+ssh-keygen -q -t ed25519 -N '' -f ~/.ssh/id_ed25519_github <<<y >/dev/null 2>&1
+
+echo 'older machines might not support ed25519, then use RSA with 4096 bit key'
+echo  'ssh-keygen -q -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa_github <<<y >/dev/null 2>&1'
+
+echo 'add ssh to key to github'
+echo 'cat ~/.ssh/id_*_github.pub'
+echo 'https://github.com/settings/ssh/new'
+
+echo 'adding key to ssh-agent'
+eval `ssh-agent -s`  # not  just ssh-agent -s
+ssh-add ~/.ssh/id_*_github
+echo 'dotfiles can now be clones via ssh to home dir'
+```
+
+
+
+### dotfiles repo via ssh
+
+```
+echo 'clone and git config dotfiles repo'
+git clone git@github.com:DannyDannyDanny/dotfiles.git
+
+cd dotfiles
+git config user.name "DannyDannyDanny"
+git config user.email "dth@taiga.ai"
+git config pull.rebase false
+cd ..
+
+```
+* remove section from ubuntu.md
+* change install script(s) to download file to `/tmp/` instead of working directory
+* consider adding [more error handling](https://tecadmin.net/bash-error-detection-and-handling-tips-and-tricks/) to install scripts
+
+### add sshd persistency
+
+* for bash use github docs: [auto-launching-ssh-agent-on-git-for-windows](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/working-with-ssh-key-passphrases#auto-launching-ssh-agent-on-git-for-windows)
+* fish version ([src](https://gist.github.com/josh-padnick/c90183be3d0e1feb89afd7573505cab3?permalink_comment_id=3570155#gistcomment-3570155))
+* also run: `ssh-add ~/.ssh/id_*_github`
+
+***
+
+* sort thse notes
   * setup [ssh github](ubuntu.md#setup-ssh-key-for-github)
   * configure git (inspired by `make setup_git`)
     * TODO: remove email from makefile
