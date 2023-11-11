@@ -60,12 +60,26 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 wsl --install --web-download -d Debian
 # <set username>
 # <set password
-
 # debian launches automatically
-sudo apt update && sudo apt upgrade -y
 
 # launch debian next time
 wsl -d Debian
+```
+
+* To restart: `wsl --unregister Debian`
+* Inside WSL:
+  * config alacritty windows side: `vi /mnt/c/Users/xxxx/AppData/Roaming/alacritty/alacritty.yml`
+  * `sudo apt install lsb-release -y` to enable `lsb_release -a`
+  * `echo 'nameserver 8.8.8.8' | sudo tee -a /etc/resolv.conf` fix DNS issues
+
+
+### Debian
+
+Once debian is running:
+
+```
+# as soon debian is running
+sudo apt update && sudo apt upgrade -y
 
 # the following installs aren't necessary in codespace 🤔
 sudo apt install -y git curl # dotfiles deps
@@ -76,13 +90,7 @@ git clone https://github.com/DannyDannyDanny/dotfiles.git /tmp/dotfiles && cd /t
 bash install.sh
 ```
 
-* To restart: `wsl --unregister Debian`
-* Inside WSL:
-  * config alacritty windows side: `vi /mnt/c/Users/xxxx/AppData/Roaming/alacritty/alacritty.yml`
-  * `sudo apt install lsb-release -y` to enable `lsb_release -a`
-  * `echo 'nameserver 8.8.8.8' | sudo tee -a /etc/resolv.conf` fix DNS issues
-
-### setup github
+#### setup github
 
 ```
 ssh-keygen -q -t ed25519 -N '' -f ~/.ssh/id_ed25519_github <<<y >/dev/null 2>&1
@@ -100,9 +108,7 @@ ssh-add ~/.ssh/id_*_github
 echo 'dotfiles can now be clones via ssh to home dir'
 ```
 
-
-
-### dotfiles repo via ssh
+#### dotfiles repo via ssh
 
 ```
 echo 'clone and git config dotfiles repo'
