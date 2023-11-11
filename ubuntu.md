@@ -2,7 +2,7 @@
 
 ## Intro
 
-This post-install script is intended to be run directly after ~Uubuntu 22.05~~ Pop_OS installion.
+This post-install script is intended to be run directly after ~Uubuntu 22.05~~ ~Pop\_OS installion~ Debian.
 The scipt assumes device is encrypted and user account is protected.
 With a strong passphrasses for both.
 
@@ -15,27 +15,6 @@ Generate an ssh key for github
 >
 > no-prompt ssh keys
 > https://stackoverflow.com/a/43235320
-
-
-### Setup ssh key for github
-
-> :construction: This needs to be turned into a little script or something
-
-The first ssh key is generated for github:
-
-```
-ssh-keygen -q -t ed25519 -N '' -f ~/.ssh/id_ed25519_github <<<y >/dev/null 2>&1
-
-# older machines might not support ed25519, then use RSA with 4096 bit key
-# ssh-keygen -q -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa_github <<<y >/dev/null 2>&1
-```
-
-Log in to github.
-Go to [github.com/settings/ssh/new](https://github.com/settings/ssh/new).
-Enter a title format in the format `2022-homeserver`.
-Enter the key returned by `cat ~/.ssh/id_*_github.pub`.
-Now you can clone your private repos and make changes to your public repos.
-
 
 ### Setup ssh key for connecting to other servers
 
@@ -70,12 +49,6 @@ startup installation for ubuntu clients.
 open terminal, run one code snippet at the time and check that no errors occur:
 
 ```
-# add external repos
-# sudo add-apt-repository ppa:aslatter/ppa    # for alacritty
-# replace alacritty with stterm
-
-sudo apt install git -y           # version control
-
 # install neovim: [src](https://vi.stackexchange.com/a/38348)
 #sudo apt-get install software-properties-common
 sudo add-apt-repository ppa:neovim-ppa/stable
@@ -102,163 +75,17 @@ sudo apt install ncmpcpp -y       # ncurses music player controller plus plus
 
 Now **[install oh-my-zsh](https://ohmyz.sh/#install) and `reboot`**.
 
-
-
-## Snap packages
-```
-snap install codium --classic
-```
-
 ## brew
-
-Install [brew](https://brew.sh/) and brew install:
-
-```
-brew install yt-dlp
-brew install neovim
-brew install lf
-```
-
+Install [brew](https://brew.sh/) and `brew install yt-dlp`
 
 ## Mail & Calendar
-
 Use thunderbird to attach to just about any mail + cal clients
 
 To get reasonably formatted dates in thunderbird set the locale environment variable `LC_TIME`:
-```sudo update-locale LC_TIME=en_DK.UTF-8```
-
+`sudo update-locale LC_TIME=en_DK.UTF-8`
 
 ## Password Manager
-
-use keepass :key: with secret file
+use keepass :key: (with secret file)
 
 ## emojis
 use emote: `sudo snap install emote`
-
-## LunarVim
-
-List all plugins
-
-```lua
-  { "folke/tokyonight.nvim" },
-  {
-    "folke/trouble.nvim",
-    cmd = "TroubleToggle",
-  },
-
-  -- Minimap
-  {
-    'wfxr/minimap.vim',
-    run = "cargo install --locked code-minimap",
-    -- cmd = {"Minimap", "MinimapClose", "MinimapToggle", "MinimapRefresh", "MinimapUpdateHighlight"},
-    config = function()
-      vim.cmd("let g:minimap_width = 10")
-      vim.cmd("let g:minimap_auto_start = 1")
-      vim.cmd("let g:minimap_auto_start_win_enter = 1")
-    end,
-  },
-
-  -- Git helper
-  {
-    "tpope/vim-fugitive",
-    cmd = {
-      "G",
-      "Git",
-      "Gdiffsplit",
-      "Gread",
-      "Gwrite",
-      "Ggrep",
-      "GMove",
-      "GDelete",
-      "GBrowse",
-      "GRemove",
-      "GRename",
-      "Glgrep",
-      "Gedit"
-    },
-    ft = { "fugitive" }
-  },
-
-  -- extend surround
-  {
-    "tpope/vim-surround",
-    keys = { "c", "d", "y" }
-    -- make sure to change the value of `timeoutlen` if it's not triggering correctly, see https://github.com/tpope/vim-surround/issues/117
-    -- setup = function()
-    --  vim.o.timeoutlen = 500
-    -- end
-  },
-
-  -- autosave
-  {
-    "Pocco81/AutoSave.nvim",
-    config = function()
-      require("autosave").setup()
-    end,
-  },
-
-  -- show indentation verticals
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    event = "BufRead",
-    setup = function()
-      vim.g.indentLine_enabled = 1
-      vim.g.indent_blankline_char = "▏"
-      vim.g.indent_blankline_filetype_exclude = { "help", "terminal", "dashboard" }
-      vim.g.indent_blankline_buftype_exclude = { "terminal" }
-      vim.g.indent_blankline_show_trailing_blankline_indent = false
-      vim.g.indent_blankline_show_first_indent_level = false
-    end
-  },
-
-  -- lastplace: pick up where you left off
-  {
-    "ethanholz/nvim-lastplace",
-    event = "BufRead",
-    config = function()
-      require("nvim-lastplace").setup({
-        lastplace_ignore_buftype = { "quickfix", "nofile", "help" },
-        lastplace_ignore_filetype = {
-          "gitcommit", "gitrebase", "svn", "hgcommit",
-        },
-        lastplace_open_folds = true,
-      })
-    end,
-  },
-
-  -- highlight words under cursor
-  {
-    "itchyny/vim-cursorword",
-    event = { "BufEnter", "BufNewFile" },
-    config = function()
-      vim.api.nvim_command("augroup user_plugin_cursorword")
-      vim.api.nvim_command("autocmd!")
-      vim.api.nvim_command("autocmd FileType NvimTree,lspsagafinder,dashboard,vista let b:cursorword = 0")
-      vim.api.nvim_command("autocmd WinEnter * if &diff || &pvw | let b:cursorword = 0 | endif")
-      vim.api.nvim_command("autocmd InsertEnter * let b:cursorword = 0")
-      vim.api.nvim_command("autocmd InsertLeave * let b:cursorword = 1")
-      vim.api.nvim_command("augroup END")
-    end
-  },
-
-  -- smooth scrolling
-  {
-    "karb94/neoscroll.nvim",
-    event = "WinScrolled",
-    config = function()
-      require('neoscroll').setup({
-        -- All these keys will be mapped to their corresponding default scrolling animation
-        mappings = { '<C-u>', '<C-d>', '<C-b>', '<C-f>',
-          '<C-y>', '<C-e>', 'zt', 'zz', 'zb' },
-        hide_cursor = true, -- Hide cursor while scrolling
-        stop_eof = true, -- Stop at <EOF> when scrolling downwards
-        use_local_scrolloff = false, -- Use the local scope of scrolloff instead of the global scope
-        respect_scrolloff = false, -- Stop scrolling when the cursor reaches the scrolloff margin of the file
-        cursor_scrolls_alone = true, -- The cursor will keep on scrolling even if the window cannot scroll further
-        easing_function = nil, -- Default easing function
-        pre_hook = nil, -- Function to run before the scrolling animation starts
-        post_hook = nil, -- Function to run after the scrolling animation ends
-      })
-    end
-  },
-```
