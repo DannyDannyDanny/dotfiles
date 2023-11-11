@@ -4,7 +4,7 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 
 ## Roadmap:
 
-* post OS install: [ubuntu](ubuntu.md)
+* ~post OS install~ remove [ubuntu.md](ubuntu.md)
 * post post OS install: [firefox-scrolling](firefox-scrolling.md)
 * repurpose [server-ip-sync](server-ip-sync.md)
 * server cluster roadmap: [server](server.md)
@@ -14,19 +14,16 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
   * config tmux-local vs tmux-remote
     * remote nested sessions
     * change tmux:pane-switching bindings from arrow keys to vim bindings
-* **specific machine level config:**
-  * ~config mac local machine~
-  * debian local machine
-  * debian server
+* **specific machine level debian config:**
+  * codespaces
+  * github actions
+  * local machine
+  * server
 * music config:
   * mpd, mpc, ncmpcpp
-    * [Mac guide](https://killtheyak.com/install-mpd-mpc-ncmpcpp/)
-    * [config guide for mac](https://computingforgeeks.com/install-configure-mpd-ncmpcpp-macos/)
   * test on new machine with music dir
   * [fonts](https://www.programmingfonts.org/)
     * how does this relate to nerdfonts?
-
-***
 
 ## Windows
 
@@ -78,7 +75,7 @@ wsl -d Debian
 Once debian is running:
 
 ```
-# as soon debian is running
+# upgdate + upgrade packages
 sudo apt update && sudo apt upgrade -y
 
 # the following installs aren't necessary in codespace 🤔
@@ -100,7 +97,7 @@ echo  'ssh-keygen -q -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa_github <<<y >/dev/nul
 
 echo 'add ssh to key to github'
 echo 'cat ~/.ssh/id_*_github.pub'
-echo 'https://github.com/settings/ssh/new'
+echo 'go to https://github.com/settings/ssh/new and add key as <year>-<machine-name>'
 
 # pause because user needs to add key before we continue
 read -rsp $'Press any key to continue...\n' -n1 key
@@ -108,7 +105,8 @@ read -rsp $'Press any key to continue...\n' -n1 key
 echo 'adding key to ssh-agent'
 eval `ssh-agent -s`  # not  just ssh-agent -s
 ssh-add ~/.ssh/id_*_github
-echo 'dotfiles can now be clones via ssh to home dir'
+echo 'private repos can now be cloned via ssh'
+echo 'repos can now be pushed to via ssh'
 ```
 
 #### dotfiles repo via ssh
@@ -137,7 +135,6 @@ cd ..
 ***
 
 * sort thse notes
-  * setup [ssh github](ubuntu.md#setup-ssh-key-for-github)
   * configure git (inspired by `make setup_git`)
     * TODO: remove email from makefile
     * install [build-essential](https://askubuntu.com/a/753113/882709) to get `make`
