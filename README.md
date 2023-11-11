@@ -102,6 +102,9 @@ echo 'add ssh to key to github'
 echo 'cat ~/.ssh/id_*_github.pub'
 echo 'https://github.com/settings/ssh/new'
 
+# pause because user needs to add key before we continue
+read -rsp $'Press any key to continue...\n' -n1 key
+
 echo 'adding key to ssh-agent'
 eval `ssh-agent -s`  # not  just ssh-agent -s
 ssh-add ~/.ssh/id_*_github
