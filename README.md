@@ -44,14 +44,6 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 ### WSL
 
 * install [wsl](https://docs.microsoft.com/en-us/windows/wsl/install#install-wsl-command) + WSL specifics
-  * fix wsl dns issue via [stackoverflow](https://askubuntu.com/questions/91543/apt-get-update-fails-to-fetch-files-temporary-failure-resolving-error/91595#comment1911934_91595)
-    * write wsl.conf:
-      * `sudo touch /etc/wsl.conf`
-      * `echo "[network]" | sudo tee /etc/wsl.conf > /dev/null`
-      * `echo "generateResolvConf = false" | sudo tee -a /etc/wsl.conf > /dev/null`
-    * overwrite resolv.conf:
-      * add content `echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null`
-  * add private folder symlink: `ln -s -f /mnt/c/Users/<winuser>/Private ~/Private`
 
 ```
 wsl --install --web-download -d Debian
@@ -63,11 +55,24 @@ wsl --install --web-download -d Debian
 wsl -d Debian
 ```
 
-* To restart: `wsl --unregister Debian`
-* Inside WSL:
+* wsl commands
+  * delete wsl distribution (to restart): `wsl --unregister Debian`
+  * terminate: `wsl --terminate`
+  * shutdown: `wsl --shutdown`
+  * check status: `wsl --list --verbose`
+* inside WSL:
   * config alacritty windows side: `vi /mnt/c/Users/xxxx/AppData/Roaming/alacritty/alacritty.yml`
   * `sudo apt install lsb-release -y` to enable `lsb_release -a`
   * `echo 'nameserver 8.8.8.8' | sudo tee -a /etc/resolv.conf` fix DNS issues
+  * config wsl: `sudo -e /etc/wsl.conf'
+  * fix wsl dns issue via [stackoverflow](https://askubuntu.com/questions/91543/apt-get-update-fails-to-fetch-files-temporary-failure-resolving-error/91595#comment1911934_91595)
+    * write wsl.conf:
+      * `sudo touch /etc/wsl.conf`
+      * `echo "[network]" | sudo tee /etc/wsl.conf > /dev/null`
+      * `echo "generateResolvConf = false" | sudo tee -a /etc/wsl.conf > /dev/null`
+    * overwrite resolv.conf:
+      * add content `echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null`
+  * add private folder symlink: `ln -s -f /mnt/c/Users/<winuser>/Private ~/Private`
 
 
 ### Debian
@@ -87,7 +92,8 @@ git clone https://github.com/DannyDannyDanny/dotfiles.git /tmp/dotfiles && cd /t
 bash install.sh
 ```
 
-#### setup github
+
+### setup github
 
 ```
 ssh-keygen -q -t ed25519 -N '' -f ~/.ssh/id_ed25519_github <<<y >/dev/null 2>&1
