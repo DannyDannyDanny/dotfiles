@@ -1,21 +1,3 @@
-## Document Roadmap
-
-## Intro
-
-This post-install script is intended to be run directly after ~Uubuntu 22.05~~ ~Pop\_OS installion~ Debian.
-The scipt assumes device is encrypted and user account is protected.
-With a strong passphrasses for both.
-
-Generate an ssh key for github
-
-## ssh setup
-
-> :construction: under construction
->
->
-> no-prompt ssh keys
-> https://stackoverflow.com/a/43235320
-
 ### Setup ssh key for connecting to other servers
 
 This next ssh key is generated for internal servers:
@@ -49,9 +31,7 @@ startup installation for ubuntu clients.
 open terminal, run one code snippet at the time and check that no errors occur:
 
 ```
-# install neovim: [src](https://vi.stackexchange.com/a/38348)
 #sudo apt-get install software-properties-common
-sudo add-apt-repository ppa:neovim-ppa/stable
 sudo apt-get update
 sudo apt-get install neovim -y
 
@@ -60,10 +40,9 @@ sudo apt install qutebrowser -y   # minimal vim-binding browser
 sudo apt install gnome-tweaks -y  # tool to remap caps to ctrl
 # sudo apt install alacritty -y     # add alacritty repo first
 # replace alacritty with stterm
-sudo apt install tmux -y          # terminal multiplexer
 sudo apt install jq -y            # lightweight and flexible command-line JSON processor
 sudo apt install make -y          # utility to maintain shell program groups
-sudo apt install curl -y          # file transfer helper
+sudo apt install curl -y          # file transfer helper (also see wget)
 sudo apt install ffmpeg -y        # audio/video converter
 sudo apt install keepass2 -y      # password manager
 sudo apt install zsh -y           # install oh-my-zsh to set zsh as default shell
@@ -72,8 +51,6 @@ sudo apt install zsh -y           # install oh-my-zsh to set zsh as default shel
 sudo apt install mpd -y           # music player daemon
 sudo apt install ncmpcpp -y       # ncurses music player controller plus plus
 ```
-
-Now **[install oh-my-zsh](https://ohmyz.sh/#install) and `reboot`**.
 
 ## brew
 Install [brew](https://brew.sh/) and `brew install yt-dlp`
@@ -86,6 +63,3 @@ To get reasonably formatted dates in thunderbird set the locale environment vari
 
 ## Password Manager
 use keepass :key: (with secret file)
-
-## emojis
-use emote: `sudo snap install emote`
