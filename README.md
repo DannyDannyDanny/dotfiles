@@ -2,6 +2,14 @@
 
 This repo is an extension of [dannydannydanny/methodology](https://github.com/DannyDannyDanny/methodology/)
 
+1. Debian Setup (+ customizations)
+  * pure
+  * wsl
+  * codespaces
+  * github actions
+2. Core Tool Chain (fish, tmux, nvim, fzf)
+3. Customizations (github via ssh, ...)
+
 ## Roadmap:
 
 * ~post OS install~ remove [ubuntu.md](ubuntu.md)
@@ -25,7 +33,9 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
   * [fonts](https://www.programmingfonts.org/)
     * how does this relate to nerdfonts?
 
-## Windows
+## Debian Setup
+
+### Windows
 
 * disable system sounds: `start menu search: "change system sounds" -> set profile to None`
 * change language / keyboard layout to `en_US`
