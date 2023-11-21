@@ -32,6 +32,7 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
   * test on new machine with music dir
   * [fonts](https://www.programmingfonts.org/)
     * how does this relate to nerdfonts?
+* make tmux nice: https://www.youtube.com/watch?v=DzNmUNvnB04
 
 ## Debian Setup
 
