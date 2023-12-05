@@ -3,8 +3,8 @@
 This repo is an extension of [dannydannydanny/methodology](https://github.com/DannyDannyDanny/methodology/)
 
 1. Debian Setup (+ customizations)
-  * pure
-  * wsl
+  * pure see [issue 3]([url](https://github.com/DannyDannyDanny/dotfiles/issues/3))
+  * [wsl](wsl)
   * codespaces
   * github actions
 2. Core Tool Chain (fish, tmux, nvim, fzf)
@@ -13,11 +13,17 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 ## Roadmap:
 
 * ~post OS install~ remove [ubuntu.md](ubuntu.md)
-* post post OS install: [firefox-scrolling](firefox-scrolling.md)
+* configure [firefox-scrolling](firefox-scrolling.md) via terminal
 * repurpose [server-ip-sync](server-ip-sync.md)
 * server cluster roadmap: [server](server.md)
   * add server-sync make-rule for ip-upload python cronjob
   * add server-sync make-rule for server ip fetching (and writing...)
+* **refine install scripts**
+  * :bug: fix `/tmp/dotfiles` being wiped (install somewhere else)
+  * :memo: redirect logging from install scripts to `/tmp/??`
+  * :goal_net: add error handling in install scripts (if one crashes, stop or print successes and fails at the end)
+  * :art: check for `nvim checkhealth` status
+  * make tmux nice: https://www.youtube.com/watch?v=DzNmUNvnB04
 * **low-level configs:**
   * config tmux-local vs tmux-remote
     * remote nested sessions
@@ -27,12 +33,11 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
   * github actions
   * local machine
   * server
-* music config:
+* **music config**
   * mpd, mpc, ncmpcpp
   * test on new machine with music dir
   * [fonts](https://www.programmingfonts.org/)
     * how does this relate to nerdfonts?
-* make tmux nice: https://www.youtube.com/watch?v=DzNmUNvnB04
 
 ## Debian Setup
 
