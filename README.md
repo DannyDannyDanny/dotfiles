@@ -4,7 +4,7 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 
 1. Debian Setup (+ customizations)
   * pure see [issue 3]([url](https://github.com/DannyDannyDanny/dotfiles/issues/3))
-  * [wsl](wsl)
+  * [wsl](#wsl)
   * codespaces
   * github actions
 2. Core Tool Chain (fish, tmux, nvim, fzf)
