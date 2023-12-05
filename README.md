@@ -154,6 +154,13 @@ cd ..
 * fish version ([src](https://gist.github.com/josh-padnick/c90183be3d0e1feb89afd7573505cab3?permalink_comment_id=3570155#gistcomment-3570155))
 * also run: `ssh-add ~/.ssh/id_*_github`
 
+
+### fisher
+```
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+fisher install jorgebucaran/nvm.fish
+```
+
 ***
 
 * sort thse notes
