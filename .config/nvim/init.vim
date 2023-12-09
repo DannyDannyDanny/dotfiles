@@ -9,6 +9,9 @@ set listchars=tab:→\ ,nbsp:␣,trail:•,precedes:«,extends:»
 let g:calendar_first_day = 'monday'   " set monday as first day of week
 let g:calendar_week_number = 1        " add weeknumber
 
+" leader
+map <leader>w :write<CR>
+
 " configs below are from LukeSmithxyz/LARBS
 set title
 set bg=light
