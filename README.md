@@ -32,6 +32,7 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
   * codespaces
   * github actions
   * local machine
+    * [debian swap space](https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-debian-11)
   * server
 * **music config**
   * mpd, mpc, ncmpcpp
