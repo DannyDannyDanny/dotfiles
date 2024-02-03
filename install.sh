@@ -18,8 +18,3 @@ export SUDO_ASKPASS=/bin/true
 /bin/bash ./install_fzf.sh
 /bin/bash ./install_nvim.sh
 /bin/bash ./install_fish.sh
-
-cd $HOME
-
-rm -rf .oh-my-bash
-rm -rf .oh-my-zsh
