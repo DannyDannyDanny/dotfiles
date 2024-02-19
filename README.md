@@ -19,9 +19,9 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
   * add server-sync make-rule for ip-upload python cronjob
   * add server-sync make-rule for server ip fetching (and writing...)
 * **refine install scripts**
-  * :bug: fix `/tmp/dotfiles` being wiped (install somewhere else)
-  * :memo: redirect logging from install scripts to `/tmp/??`
-  * :goal_net: add error handling in install scripts (if one crashes, stop or print successes and fails at the end)
+  * :memo: add logging (to `/tmp/??`)
+  * :goal_net: add [error handling](https://tecadmin.net/bash-error-detection-and-handling-tips-and-tricks/)
+    (if one crashes, stop or continue print summary at the end)
   * :art: check for `nvim checkhealth` status
   * make tmux nice: https://www.youtube.com/watch?v=DzNmUNvnB04
 * **low-level configs:**
@@ -60,94 +60,75 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 
 ### WSL
 
-* install [wsl](https://docs.microsoft.com/en-us/windows/wsl/install#install-wsl-command) + WSL specifics
-
 ```
 wsl --install --web-download -d Debian
 # <set username>
 # <set password
 # debian launches automatically
 
-# launch debian next time
-wsl -d Debian
-```
+# set Debian as default (equivalent to `wsl -s Debian`)
+wsl --set-default Debian
 
-* wsl commands
-  * delete wsl distribution (to restart): `wsl --unregister Debian`
-  * terminate: `wsl --terminate`
-  * shutdown: `wsl --shutdown`
-  * check status: `wsl --list --verbose`
-* inside WSL:
-  * config alacritty windows side: `vi /mnt/c/Users/xxxx/AppData/Roaming/alacritty/alacritty.yml`
-  * `sudo apt install lsb-release -y` to enable `lsb_release -a`
-  * `echo 'nameserver 8.8.8.8' | sudo tee -a /etc/resolv.conf` fix DNS issues
-  * config wsl: `sudo -e /etc/wsl.conf'
-  * fix wsl dns issue via [stackoverflow](https://askubuntu.com/questions/91543/apt-get-update-fails-to-fetch-files-temporary-failure-resolving-error/91595#comment1911934_91595)
-    * write wsl.conf:
-      * `sudo touch /etc/wsl.conf`
-      * `echo "[network]" | sudo tee /etc/wsl.conf > /dev/null`
-      * `echo "generateResolvConf = false" | sudo tee -a /etc/wsl.conf > /dev/null`
-    * overwrite resolv.conf:
-      * add content `echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null`
-  * add private folder symlink: `ln -s -f /mnt/c/Users/<winuser>/Private ~/Private`
+# update wsl
+wsl --update --web-download
 
+# launch debian in the home directory
+wsl ~
 
-### Debian
+# stabilize wsl.conf (so it doesn't overwrite `resolv.conf` in next step)
+sudo touch /etc/wsl.conf
+echo [network] | sudo tee -a /etc/wsl.conf > /dev/null
+echo generateResolvConf = false | sudo tee -a /etc/wsl.conf > /dev/null
 
-Once debian is running:
-
-```
-# upgdate + upgrade packages
+# fix WSL nameserver
+echo 'nameserver 8.8.8.8' | sudo tee -a /etc/resolv.conf > /dev/null
 sudo apt update && sudo apt upgrade -y
 
-# the following installs aren't necessary in codespace 🤔
-sudo apt install -y git curl # dotfiles deps
-sudo apt install -y build-essential ncurses-dev  #  tmux dep
+# install dependencies for dotfiles installation
+sudo apt install -y git curl
 
-# ssh cloning is available after dotfiles installation - clone to /tmp/ for now
-git clone https://github.com/DannyDannyDanny/dotfiles.git /tmp/dotfiles && cd /tmp/dotfiles/
-bash install.sh
+# install dependencies for tmux
+sudo apt install -y build-essential ncurses-dev
 ```
 
-
-### setup github
-
+### Clone repo SSH method
+Skip this if you don't plan on getting SSH access to github repos and clone with HTTP instead
+#### generate ssh
 ```
 ssh-keygen -q -t ed25519 -N '' -f ~/.ssh/id_ed25519_github <<<y >/dev/null 2>&1
 
-echo 'older machines might not support ed25519, then use RSA with 4096 bit key'
-echo  'ssh-keygen -q -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa_github <<<y >/dev/null 2>&1'
+# echo 'older machines might not support ed25519, then use RSA with 4096 bit key'
+# echo  'ssh-keygen -q -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa_github <<<y >/dev/null 2>&1'
 
-echo 'add ssh to key to github'
-echo 'cat ~/.ssh/id_*_github.pub'
-echo 'go to https://github.com/settings/ssh/new and add key as <year>-<machine-name>'
+# add the output to https://github.com/settings/ssh/new
+cat ~/.ssh/id_*_github.pub
+# add to https://github.com/settings/ssh/new
+```
 
-# pause because user needs to add key before we continue
-read -rsp $'Press any key to continue...\n' -n1 key
-
+#### activate ssh
+```
 echo 'adding key to ssh-agent'
 eval `ssh-agent -s`  # not  just ssh-agent -s
 ssh-add ~/.ssh/id_*_github
-echo 'private repos can now be cloned via ssh'
-echo 'repos can now be pushed to via ssh'
-```
 
-#### dotfiles repo via ssh
-
-```
-echo 'clone and git config dotfiles repo'
+# download dotfiles repo
 git clone git@github.com:DannyDannyDanny/dotfiles.git
 
+# config git
 cd dotfiles
 git config user.name "DannyDannyDanny"
 git config user.email "dth@taiga.ai"
 git config pull.rebase false
 cd ..
 
+# install dotfiles
+bash install.sh
 ```
-* remove section from ubuntu.md
-* change install script(s) to download file to `/tmp/` instead of working directory
-* consider adding [more error handling](https://tecadmin.net/bash-error-detection-and-handling-tips-and-tricks/) to install scripts
+
+### Clone repo HTTP method
+```
+git clone https://github.com/DannyDannyDanny/dotfiles.git
+```
 
 ### add sshd persistency
 
