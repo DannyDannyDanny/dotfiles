@@ -120,6 +120,9 @@ git config user.name "DannyDannyDanny"
 git config user.email "dth@taiga.ai"
 git config pull.rebase false
 cd ..
+
+# install dotfiles
+bash install.sh
 ```
 
 ### Clone repo HTTP method
