@@ -108,7 +108,7 @@ cat ~/.ssh/id_*_github.pub
 #### activate ssh
 ```
 echo 'adding key to ssh-agent'
-eval `ssh-agent -s`  # not  just ssh-agent -s
+eval `ssh-agent -s`  # if using fish shell run: eval "$(ssh-agent -c)"
 ssh-add ~/.ssh/id_*_github
 
 # download dotfiles repo
