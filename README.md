@@ -153,3 +153,4 @@ fisher install jorgebucaran/nvm.fish
     * install [build-essential](https://askubuntu.com/a/753113/882709) to get `make`
   * install autohotkey
     * add script: shift and space + caps and escape: `sas-cae.ahk`
+  * [neofetch](https://github.com/dylanaraps/neofetch/)
