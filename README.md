@@ -154,3 +154,11 @@ fisher install jorgebucaran/nvm.fish
   * install autohotkey
     * add script: shift and space + caps and escape: `sas-cae.ahk`
   * [neofetch](https://github.com/dylanaraps/neofetch/)
+* linux main drive config:
+  * **desktop environment** journal:
+     I have been comfortly (but numbly) been running GNOME 43.9 for the past couple years.
+     Xfce 4.18 is a bit janky and requires significant customization (e.g. keyboard bindings)
+     to be usable. It is super lightweight and customizable and I can see myself going back
+     when it matures - or when limited by hardware.
+     Going to try KDE Plasma. I've been recommended it several times and KDE is also behind
+     Krita (painting program) and kdenlive (video editing program).
