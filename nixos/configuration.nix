@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./tmux.nix
     ];
 
   # Bootloader.
@@ -99,32 +100,46 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-     git			# version control
+     pkgs.git			# version control
 
-     tmux			# terminal multiplexer
-     fzf			# fuzzy matcher
+     pkgs.tmux			# terminal multiplexer
+     pkgs.fzf			# fuzzy matcher
 
-     vim 			# text editor: choose this
-     neovim			# or this
+     pkgs.vim 			# text editor: choose this
+     pkgs.neovim		# or this
 
-     neofetch			# system profile: choose this
-     fastfetch			# or this
+     pkgs.neofetch		# system profile: choose this
+     pkgs.fastfetch		# or this
 
-     thunderbird		# email / calendar
-     telegram-desktop		# instant messager
+     pkgs.tldr			# community driven manpage alternative
 
-     gimp			# image editor
-     libsForQt5.kdenlive	# video editor
+     pkgs.thunderbird		# email / calendar
+     pkgs.telegram-desktop	# instant messager
+
+     pkgs.gimp			# image editor
+     pkgs.libsForQt5.kdenlive	# video editor
 
 
-     pyenv			# python environment manager
-     poetry			# python package manager
+     pkgs.pyenv			# python environment manager
+     pkgs.poetry		# python package manager
+     pkgs.python3		# trusty old python
+
+     gcc 			# gnu compiler collection (necessary for python)
+     pkg-config			# allows packages to find information about other packages (necessary for python)
+     gnumake			# python
+     zlib			# python
+
 
      # misc
      cowsay
      lolcat
      wget
   ];
+
+  # firefox smooth scrolling
+  environment.sessionVariables = {
+    MOZ_USE_XINPUT2 = "1";
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
