@@ -34,20 +34,21 @@
   };
 
   environment.systemPackages = with pkgs; [
-    tmux
-
-    vim
-    # neovim
+    # tmux    # activated in tmux.nix
+    # vim     # using neovim in stead
+    # neovim  # activated in neovim.nix
 
     git
-    pyenv
-    poetry
+    ripgrep
+
+    # make default.nix in python project folders instead of using a top-level python environment manager
+    # pyenv
+    # poetry
     
     fastfetch
     neofetch
 
-    gimp
-
+    # gimp	# bloat
     cowsay
     lolcat
   ];
