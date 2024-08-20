@@ -13,6 +13,7 @@
     <nixos-wsl/modules>
     ./tmux.nix
     ./neovim.nix
+    ./fish.nix
   ];
 
   wsl.enable = true;
