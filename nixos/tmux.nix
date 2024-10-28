@@ -4,19 +4,20 @@
   programs.tmux = {
     enable = true;
     clock24 = true;
+    escapeTime = 20;
     extraConfig = ''
-      # remap prefix from ^+A to ^+B (for nested tmux sessions)
+      # remap prefix from ^+B to alt-f
       unbind C-b
       set -g prefix M-f
       bind M-f send-prefix
 
       # nvim 'checkhealth' advice
       set-option -g focus-events on
-      set-option -g default-terminal "screen-256color"
       set-option -sa terminal-overrides ',xterm-256color:RGB'
+      set-option -g default-terminal "screen-256color"
 
       # enable mouse support for switching panes/windows
-      # set -g mouse on
+      set -g mouse on
 
       # extend history
       set -g history-limit 100000
