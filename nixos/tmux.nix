@@ -4,7 +4,7 @@
   programs.tmux = {
     enable = true;
     clock24 = true;
-    escapeTime = 20;
+    # escapeTime = 20;
     extraConfig = ''
       # remap prefix from ^+B to alt-f
       unbind C-b
@@ -27,7 +27,7 @@
       bind -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "xsel -i --clipboard"
 
       # reduce escape time
-      set-option -sg escape-time 20
+      set -sg escape-time 20
 
       # pane movement shortcuts
       bind h select-pane -L

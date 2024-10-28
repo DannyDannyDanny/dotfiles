@@ -20,18 +20,34 @@
   wsl.defaultUser = "nixos";
   wsl.nativeSystemd = false;
 
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];  # for vscode remote server
+
+  # TODO: move to home manager (?)
+  programs = {
+    direnv = {
+      enable = true;
+      # enableFishIntegration = true;
+      nix-direnv.enable = true;
+    };
+  };
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It's perfectly fine and recommended to leave
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "24.05"; # Did you read the comment?
 
   users.users.dth = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     initialPassword = "test";
+  };
+
+  nixpkgs.config.allowUnfree = true;
+  environment.variables = {
+    DBT_USER = "DNTH";
   };
 
   environment.systemPackages = with pkgs; [
@@ -41,19 +57,21 @@
 
     git
     ripgrep
+    wget      # for vscode-server
+    busybox   # useful programs e.g. tree, unzip etc
 
     # make default.nix in python project folders instead of using a top-level python environment manager
     # pyenv
     # poetry
     
-    fastfetch
-    neofetch
+    neofetch    # system info
 
     # gimp	# bloat
+    # blender   # bloat
+    # inkscape  # bloat
+
     cowsay
     lolcat
   ];
-
-
 
 }
