@@ -18,7 +18,7 @@
 
   wsl.enable = true;
   wsl.defaultUser = "nixos";
-  wsl.nativeSystemd = false;
+  # wsl.nativeSystemd = false; # This (old) method of running systemd in a container (syschdemd) is deprecated.
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];  # for vscode remote server
 
