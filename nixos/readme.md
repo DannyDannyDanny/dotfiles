@@ -1,8 +1,11 @@
-Make edits in dotfiles repo and copy changes to config folders:
+Rebuild nixos and points to dotfiles dir:
 
 ```
-sudo cp ~/dotfiles/nixos/uxplay.nix /etc/nixos/
-sudo cp ~/dotfiles/nixos/tmux.nix /etc/nixos/
-sudo cp ~/dotfiles/nixos/neovim.nix /etc/nixos/
-sudo cp ~/dotfiles/nixos/fish.nix /etc/nixos/
+sudo nixos-rebuild switch --flake ~/dotfiles/nixos
+```
+
+Overwrite wsl `resolv.conf`:
+
+```
+cp ~/dotfiles/nixos/resolv.conf /etc/
 ```
