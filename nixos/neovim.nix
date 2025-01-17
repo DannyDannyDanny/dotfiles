@@ -4,13 +4,31 @@
   programs.neovim = {
     enable = true;
     defaultEditor = true;
+    # package = pkgs.neovim;
     configure = {
       customRC = ''
         set title
-        set bg=light
         set go=a
         set mouse=a
         set nohlsearch
+
+        lua << EOF
+          local hkey_current_user_path = 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize'
+          local ps_cmd = 'Get-ItemProperty -Path ' .. hkey_current_user_path .. ' -Name AppsUseLightTheme'
+          local parent_cmd = 'powershell.exe -Command "' .. ps_cmd .. '"'
+          local handle = io.popen(parent_cmd)
+          local result = handle:read("*a")
+          handle:close()
+          local apps_use_light_theme = string.match(result, "AppsUseLightTheme%s*:%s*(%d+)")
+          local use_dark_bg = apps_use_light_theme == '0'
+          print('use dark:', use_dark_bg)
+
+          if use_dark_bg then
+            vim.cmd("set bg=dark")
+          else
+            vim.cmd("set bg=light")
+          end
+        EOF
 
         colorscheme gruvbox
 
