@@ -43,10 +43,10 @@
         let g:netrw_browse_split = 3
         let g:netrw_winsize = 25  " % of page
 
-	set listchars=tab:→\ ,space:·,nbsp:␣,trail:•,eol:¶,precedes:«,extends:»
-	set clipboard+=unnamedplus
+        set listchars=tab:→\ ,space:·,nbsp:␣,trail:•,eol:¶,precedes:«,extends:»
+        set clipboard+=unnamedplus
 
-	" Replace-all is aliased to S.
+        " Replace-all is aliased to S.
         nnoremap S :%s//g<Left><Left>
 
         " spellcheck
@@ -64,7 +64,7 @@
           fzf-vim       # fuzzy finder through vim
           nerdtree      # file structure inside nvim
           rainbow       # color parenthesis
-	  gruvbox-nvim  # theme
+          gruvbox-nvim  # theme
           goyo-vim      # write prose
           limelight-vim # prose paragraph highlighter
         ];
