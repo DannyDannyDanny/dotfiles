@@ -9,8 +9,6 @@
 
 {
   imports = [
-    # include NixOS-WSL modules
-    <nixos-wsl/modules>
     ./tmux.nix
     ./neovim.nix
     ./fish.nix
@@ -18,10 +16,10 @@
 
   wsl.enable = true;
   wsl.defaultUser = "nixos";
-  # wsl.nativeSystemd = false; # This (old) method of running systemd in a container (syschdemd) is deprecated.
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];  # for vscode remote server
 
+  programs.nix-ld.enable = true;
   # TODO: move to home manager (?)
   programs = {
     direnv = {
@@ -45,6 +43,7 @@
     initialPassword = "test";
   };
 
+  nixpkgs.hostPlatform = "x86_64-linux";
   nixpkgs.config.allowUnfree = true;
   environment.variables = {
     DBT_USER = "DNTH";
@@ -55,18 +54,23 @@
     # vim     # using neovim in stead
     # neovim  # activated in neovim.nix
 
-    git
-    ripgrep
+    git       # version control
+    gh        # github cli tool
+
+    ripgrep   # faster grep
     wget      # for vscode-server
     busybox   # useful programs e.g. tree, unzip etc
+    openssl   # cryptography swiss army knife
+    xdg-utils # terminal desktop intergrations (i.e. allow terminal to open browser)
 
     # make default.nix in python project folders instead of using a top-level python environment manager
     # pyenv
     # poetry
     
     neofetch    # system info
+    btop        # resource monitor
 
-    # gimp	# bloat
+    # gimp	    # bloat
     # blender   # bloat
     # inkscape  # bloat
 
@@ -74,4 +78,14 @@
     lolcat
   ];
 
+  services.vscode-server.enable = true;
+  security.rtkit.enable = true; # realtime kit hands out realtime scheduling priority
+  services.pipewire = {
+    enable = true; # if not already enabled
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment this
+    #jack.enable = true;
+  };
 }
