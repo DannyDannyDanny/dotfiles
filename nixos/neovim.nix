@@ -13,20 +13,24 @@
         set nohlsearch
 
         lua << EOF
-          local hkey_current_user_path = 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize'
-          local ps_cmd = 'Get-ItemProperty -Path ' .. hkey_current_user_path .. ' -Name AppsUseLightTheme'
-          local parent_cmd = 'powershell.exe -Command "' .. ps_cmd .. '"'
-          local handle = io.popen(parent_cmd)
-          local result = handle:read("*a")
-          handle:close()
-          local apps_use_light_theme = string.match(result, "AppsUseLightTheme%s*:%s*(%d+)")
-          local use_dark_bg = apps_use_light_theme == '0'
-          print('use dark:', use_dark_bg)
-
-          if use_dark_bg then
-            vim.cmd("set bg=dark")
-          else
-            vim.cmd("set bg=light")
+          local config_file = os.getenv("HOME")..'/.local/share/nvim_color_scheme'
+          local f=io.open(config_file, "r")
+          if f~=nil then 
+              local system_theme = f:read()
+              -- f:close()
+              io.close(f)
+              if system_theme == 'dark' then
+                  vim.cmd("set bg=dark")
+              elseif system_theme == 'light' then
+                  vim.cmd("set bg=light")
+              else
+                  print('warning: expected value "light" or "dark"')
+                  print('  got:', system_theme)
+                  print('  expected path:', file)
+              end
+          else 
+              print('warning: nvim color scheme not found')
+              print('  expected path:', file)
           end
         EOF
 
