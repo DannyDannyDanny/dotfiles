@@ -11,6 +11,7 @@
         set go=a
         set mouse=a
         set nohlsearch
+        let mapleader=","
 
         lua << EOF
           local config_file = os.getenv("HOME")..'/.local/share/nvim_color_scheme'
@@ -52,6 +53,9 @@
 
         " Replace-all is aliased to S.
         nnoremap S :%s//g<Left><Left>
+
+        " save file with ,w
+        map <leader>w :w<cr><Space>
 
         " spellcheck
         set spell spelllang=en_us
