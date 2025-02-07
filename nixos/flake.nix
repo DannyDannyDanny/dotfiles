@@ -9,6 +9,7 @@
         ./configuration.nix
         ./hardware-configuration.nix
         # ./uxplay.nix
+        ./fish.nix
       ];
     };
   };

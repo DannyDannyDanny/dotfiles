@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
       ./tmux.nix
       # ./uxplay.nix
+      ./fish.nix
     ];
 
   # Bootloader.
