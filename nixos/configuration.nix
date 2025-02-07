@@ -88,8 +88,11 @@
     description = "dth";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-      kate
-    #  thunderbird
+      vlc     # video player
+      kate    # editor
+      ripgrep # faster grep
+
+      # thunderbird # bloat
     ];
   };
 
@@ -121,8 +124,8 @@
      pkgs.thunderbird		# email / calendar
      pkgs.telegram-desktop	# instant messager
 
-     pkgs.gimp			# image editor
-     pkgs.libsForQt5.kdenlive	# video editor
+     # pkgs.gimp			# image editor
+     # pkgs.libsForQt5.kdenlive	# video editor
 
 
      pkgs.pyenv			# python environment manager
