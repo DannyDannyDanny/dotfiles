@@ -11,6 +11,7 @@
       ./tmux.nix
       # ./uxplay.nix
       ./fish.nix
+      ./neovim.nix
     ];
 
   # Bootloader.
@@ -113,9 +114,6 @@
 
      pkgs.tmux			# terminal multiplexer
      pkgs.fzf			# fuzzy matcher
-
-     pkgs.vim 			# text editor: choose this
-     pkgs.neovim		# or this
 
      pkgs.neofetch		# system profile: choose this
      pkgs.fastfetch		# or this
