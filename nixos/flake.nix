@@ -10,6 +10,7 @@
         ./hardware-configuration.nix
         # ./uxplay.nix
         ./fish.nix
+        ./neovim.nix
       ];
     };
   };
