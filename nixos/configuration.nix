@@ -14,10 +14,21 @@
     ./fish.nix
   ];
 
-  wsl.enable = true;
-  wsl.defaultUser = "nixos";
+  wsl = {
+    enable = true;
+    defaultUser = "nixos";
+    # TODO: check that this actually works, if it does, remove this comment and resolv.conf
+    # if not, remove this part and add URLs below to resolv.conf
+    wslConf.network.generateResolvConf = false;
+  };
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];  # for vscode remote server
+  networking = {
+    useDHCP = true;
+    # nameserver sources: https://dnsmap.io/articles/most-popular-dns-servers
+    nameservers = [ "84.200.69.80" "8.26.56.26" "1.1.1.1" "8.8.8.8" "64.6.65.6" "208.67.222.222" "209.244.0.3" ];
+  };
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   programs.nix-ld.enable = true;
   # TODO: move to home manager (?)
@@ -88,4 +99,5 @@
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
   };
+
 }
