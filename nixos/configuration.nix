@@ -80,6 +80,7 @@
     
     neofetch    # system info
     btop        # resource monitor
+    tldr        # community alternative to man
 
     # gimp	    # bloat
     # blender   # bloat
