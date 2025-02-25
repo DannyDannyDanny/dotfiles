@@ -120,6 +120,7 @@ git config user.name "DannyDannyDanny"
 git config user.email "dth@taiga.ai"
 git config pull.rebase false
 git config push.autoSetupRemote true
+# more git config: https://blog.gitbutler.com/how-git-core-devs-configure-git/
 
 # install dotfiles
 bash install.sh
