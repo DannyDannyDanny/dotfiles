@@ -10,6 +10,14 @@
       fish_vi_key_bindings
       set fish_greeting 🐟: (set_color yellow; date +%T; set_color green; date --iso-8601; set_color normal)
 
+      # Start SSH agent if not already running
+      if not pgrep -u (id -u) ssh-agent > /dev/null
+        eval (ssh-agent -c)
+      end
+
+      # Add SSH keys to the agent
+      ssh-add ~/.ssh/id_*_github 2>/dev/null
+
 
       # name: Default
       # author: Lily Ballard
