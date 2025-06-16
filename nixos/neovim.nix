@@ -66,6 +66,8 @@
       packages.nix = with pkgs.vimPlugins; {
         start = [
           vim-surround  # shortcuts for setting () {} etc.
+          vim-gitgutter # git diff in sign column
+          # vim-airline   # nice and light status bar # doesn't work nicely with tmux
           # coc-nvim coc-git coc-highlight coc-python coc-rls coc-vetur coc-vimtex coc-yaml coc-html coc-json # auto completion
           vim-nix       # nix highlight
           vimtex        # latex stuff
