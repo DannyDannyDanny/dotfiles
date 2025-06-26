@@ -60,6 +60,7 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 
 ### WSL
 
+Installation: [nix-community/NixOS-WSL Quickstart](https://github.com/nix-community/NixOS-WSL?tab=readme-ov-file#quick-start).
 ```
 wsl --install --web-download -d Debian
 # <set username>
