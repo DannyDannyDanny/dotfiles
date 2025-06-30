@@ -60,35 +60,19 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 
 ### WSL
 
-```
-wsl --install --web-download -d Debian
-# <set username>
-# <set password
-# debian launches automatically
-
-# set Debian as default (equivalent to `wsl -s Debian`)
-wsl --set-default Debian
-
-# update wsl
-wsl --update --web-download
-
-# launch debian in the home directory
-wsl ~
-
-# stabilize wsl.conf (so it doesn't overwrite `resolv.conf` in next step)
-sudo touch /etc/wsl.conf
-echo [network] | sudo tee -a /etc/wsl.conf > /dev/null
-echo generateResolvConf = false | sudo tee -a /etc/wsl.conf > /dev/null
-
-# fix WSL nameserver
-echo 'nameserver 8.8.8.8' | sudo tee -a /etc/resolv.conf > /dev/null
-sudo apt update && sudo apt upgrade -y
-
-# install dependencies for dotfiles installation
-sudo apt install -y git curl
-
-# install dependencies for tmux
-sudo apt install -y build-essential ncurses-dev
+Install via [nix-community/NixOS-WSL Quickstart](https://github.com/nix-community/NixOS-WSL?tab=readme-ov-file#quick-start) :white_check_mark:
+Setup dotfiles / config via github:
+```bash
+# git and github CLI tool in a temp shell
+nix-shell -p gh git
+# authenticate
+gh auth login
+# clone dotfiles
+gh repo clone dannydannydanny/dotfiles
+# checkout the appropriate branch
+git checkout feat/wsl-neovim-update
+# rebuild system with
+sudo nixos-rebuild switch --flake ~/dotfiles/nixos/
 ```
 
 ### Clone repo SSH method
