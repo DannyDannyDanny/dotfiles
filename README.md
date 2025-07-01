@@ -1,14 +1,8 @@
 # dotfiles
 
-This repo is an extension of [dannydannydanny/methodology](https://github.com/DannyDannyDanny/methodology/)
+[`nixos`](https://nixos.org/) + [`tmux`](https://github.com/tmux/tmux/?tab=readme-ov-file#welcome-to-tmux) + [`fish`](https://fishshell.com/) + [`neovim`](https://neovim.io/)
 
-1. Debian Setup (+ customizations)
-  * pure see [issue 3]([url](https://github.com/DannyDannyDanny/dotfiles/issues/3))
-  * [wsl](#wsl)
-  * codespaces
-  * github actions
-2. Core Tool Chain (fish, tmux, nvim, fzf)
-3. Customizations (github via ssh, ...)
+This repo is an extension of [dannydannydanny/methodology](https://github.com/DannyDannyDanny/methodology/)
 
 ## Roadmap:
 
