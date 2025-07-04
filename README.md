@@ -11,6 +11,9 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 * :art: check for `nvim checkhealth` status
 * make tmux nice: https://www.youtube.com/watch?v=DzNmUNvnB04
 * [fonts](https://www.programmingfonts.org/) - how does this relate to nerdfonts?
+* [HN: What's on your home server](https://news.ycombinator.com/item?id=34271167)
+* Jetson Nano Developer Kit SD Card Image [link](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit)
+* Raspberry Pi OS Lite (32-bit) [link](https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-32-bit)
 
 
 ## Windows
