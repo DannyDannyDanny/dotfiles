@@ -35,7 +35,7 @@
           end
         EOF
 
-        colorscheme gruvbox
+        colorscheme catppuccin " catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
 
         " relative line numbering when leaving insert mode
         set relativenumber
@@ -74,7 +74,8 @@
           fzf-vim       # fuzzy finder through vim
           nerdtree      # file structure inside nvim
           rainbow       # color parenthesis
-          gruvbox-nvim  # theme
+          # gruvbox-nvim  # theme
+          catppuccin-nvim # theme
           goyo-vim      # write prose
           limelight-vim # prose paragraph highlighter
         ];
