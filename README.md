@@ -7,7 +7,6 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 ## Roadmap:
 
 * configure [firefox-scrolling](firefox-scrolling.md) via terminal
-* repurpose [server-ip-sync](server-ip-sync.md)
 * server cluster roadmap: [server](server.md)
   * add server-sync make-rule for ip-upload python cronjob
   * add server-sync make-rule for server ip fetching (and writing...)
