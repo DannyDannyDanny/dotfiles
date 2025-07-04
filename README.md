@@ -6,7 +6,6 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 
 ## Roadmap:
 
-* ~post OS install~ remove [ubuntu.md](ubuntu.md)
 * configure [firefox-scrolling](firefox-scrolling.md) via terminal
 * repurpose [server-ip-sync](server-ip-sync.md)
 * server cluster roadmap: [server](server.md)
