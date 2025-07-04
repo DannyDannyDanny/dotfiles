@@ -4,7 +4,6 @@
   programs.neovim = {
     enable = true;
     defaultEditor = true;
-    # package = pkgs.neovim;
     configure = {
       customRC = ''
         set title
