@@ -53,5 +53,9 @@
       # fix ssh agent when tmux is detached
       # setenv -g SSH_AUTH_SOCK $HOME/.ssh/ssh_auth_sock
     '';
+    plugins = [
+      #pkgs.tmuxPlugins.
+      pkgs.tmuxPlugins.catppuccin
+    ];
   };
 }
