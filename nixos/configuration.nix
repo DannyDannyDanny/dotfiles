@@ -81,6 +81,7 @@
     neofetch    # system info
     btop        # resource monitor
     tldr        # community alternative to man
+    fzf         # fuzzy finder
 
     # gimp	    # bloat
     # blender   # bloat

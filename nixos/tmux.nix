@@ -48,7 +48,10 @@
       # setenv -g SSH_AUTH_SOCK $HOME/.ssh/ssh_auth_sock
     '';
     plugins = [
+      # pkgs.tmuxPlugins.tmux-powerline # status bar
       pkgs.tmuxPlugins.catppuccin
+      pkgs.tmuxPlugins.tmux-fzf       # search tmux commands (prefix + F)
+      pkgs.tmuxPlugins.extrakto       # fuzzyfind text history (prefix + tab)
     ];
   };
 }
