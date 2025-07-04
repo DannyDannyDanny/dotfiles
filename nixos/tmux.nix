@@ -4,7 +4,11 @@
   programs.tmux = {
     enable = true;
     clock24 = true;
-    # escapeTime = 20;
+    escapeTime = 20;
+    keyMode = "vi";
+    historyLimit = 100000;
+    baseIndex = 1;
+
     extraConfig = ''
       # remap prefix from ^+B to alt-f
       unbind C-b
@@ -18,16 +22,6 @@
 
       # enable mouse support for switching panes/windows
       set -g mouse on
-
-      # extend history
-      set -g history-limit 100000
-
-      # set vi keybindings
-      setw -g mode-keys vi
-      bind -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "xsel -i --clipboard"
-
-      # reduce escape time
-      set -sg escape-time 20
 
       # pane movement shortcuts
       bind h select-pane -L
@@ -54,7 +48,6 @@
       # setenv -g SSH_AUTH_SOCK $HOME/.ssh/ssh_auth_sock
     '';
     plugins = [
-      #pkgs.tmuxPlugins.
       pkgs.tmuxPlugins.catppuccin
     ];
   };
