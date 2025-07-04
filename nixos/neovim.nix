@@ -37,11 +37,6 @@
 
         colorscheme catppuccin " catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
 
-        " relative line numbering when leaving insert mode
-        set relativenumber
-        autocmd InsertEnter * :set number norelativenumber
-        autocmd InsertLeave * :set nonumber relativenumber
-
         " netrw (dir listing) settings
         let g:netrw_liststyle = 3
         let g:netrw_banner = 0
