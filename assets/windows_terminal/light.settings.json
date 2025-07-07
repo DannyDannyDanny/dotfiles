@@ -23,7 +23,7 @@
     ],
     "profiles": {
         "defaults": {
-            "colorScheme": "Catpuccin Mocha"
+            "colorScheme": "Catppuccin Latte"
         },
         "list": [
             {
@@ -51,7 +51,7 @@
                 "source": "Microsoft.WSL"
             },
             {
-                "colorScheme": "Catppuccin Latte",
+                "colorScheme": "Catppuccin Mocha",
                 "guid": "{6a21a588-bf98-5ca4-a52a-c3ad3f190b1d}",
                 "hidden": false,
                 "name": "NixOS",
