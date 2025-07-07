@@ -11,6 +11,7 @@
         set go=a
         set mouse=a
         set nohlsearch
+        set number
         let mapleader=","
 
         lua << EOF
