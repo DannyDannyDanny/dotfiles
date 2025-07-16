@@ -19,22 +19,31 @@
     nixosConfigurations = {
 
       wsl = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
         modules = [
           nixos-wsl.nixosModules.default
           vscode-server.nixosModules.default
-          ./configuration.nix
+          ./hosts/wsl.nix # previously configuration.nix
+          ./tmux.nix
+          ./neovim.nix
+          ./fish.nix
           # home-manager.nixosModules.default
         ];
       };
 
       macbookair = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
         modules = [
           nixos-wsl.nixosModules.default
           vscode-server.nixosModules.default
-          ./configuration.nix
+          # ./hosts/macbookair.nix # previously configuration.nix
+          ./tmux.nix
+          ./neovim.nix
+          ./fish.nix
           # home-manager.nixosModules.default
         ];
       };
+
     };
   };
 }

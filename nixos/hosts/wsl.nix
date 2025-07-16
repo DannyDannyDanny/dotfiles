@@ -8,12 +8,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [
-    ./tmux.nix
-    ./neovim.nix
-    ./fish.nix
-  ];
-
   wsl = {
     enable = true;
     defaultUser = "nixos";
@@ -54,7 +48,6 @@
     initialPassword = "test";
   };
 
-  nixpkgs.hostPlatform = "x86_64-linux";
   nixpkgs.config.allowUnfree = true;
   environment.variables = {
     DBT_USER = "DNTH";
