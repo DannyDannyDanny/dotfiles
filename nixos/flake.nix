@@ -17,7 +17,17 @@
     ...
   }: {
     nixosConfigurations = {
-      nixos = nixpkgs.lib.nixosSystem {
+
+      wsl = nixpkgs.lib.nixosSystem {
+        modules = [
+          nixos-wsl.nixosModules.default
+          vscode-server.nixosModules.default
+          ./configuration.nix
+          # home-manager.nixosModules.default
+        ];
+      };
+
+      macbookair = nixpkgs.lib.nixosSystem {
         modules = [
           nixos-wsl.nixosModules.default
           vscode-server.nixosModules.default
