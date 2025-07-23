@@ -82,3 +82,5 @@ bash install.sh
 cd ..
 ```
 
+## Good Reads / Philosophy
+* sometimes [`TODO`s arent for doing](https://sophiebits.com/2025/07/21/todos-arent-for-doing)
