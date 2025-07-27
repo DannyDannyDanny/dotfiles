@@ -38,8 +38,10 @@ gh auth login
 gh repo clone dannydannydanny/dotfiles
 # checkout the appropriate branch
 git checkout feat/wsl-neovim-update
-# rebuild system with
-sudo nixos-rebuild switch --flake ~/dotfiles/nixos/
+# rebuild WSL nixos using
+sudo nixos-rebuild switch --flake ~/dotfiles/nixos#wsl
+# rebuild macbook nixos using
+# sudo nixos-rebuild switch --flake ~/dotfiles/nixos#macbook
 ```
 
 ### Clone repo SSH method
@@ -80,3 +82,5 @@ bash install.sh
 cd ..
 ```
 
+## Good Reads / Philosophy
+* sometimes [`TODO`s arent for doing](https://sophiebits.com/2025/07/21/todos-arent-for-doing)
