@@ -4,10 +4,9 @@
 # also see: 24_nix_uxplay for script
 
 { config, pkgs, ... }:
-
 {
   services.avahi = {
-    nssmdns = true;
+    nssmdns4 = true;
     enable = true;
     publish = {
       enable = true;
