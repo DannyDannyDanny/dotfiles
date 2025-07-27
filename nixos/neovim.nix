@@ -4,7 +4,6 @@
   programs.neovim = {
     enable = true;
     defaultEditor = true;
-    # package = pkgs.neovim;
     configure = {
       customRC = ''
         set title
@@ -36,12 +35,7 @@
           end
         EOF
 
-        colorscheme gruvbox
-
-        " relative line numbering when leaving insert mode
-        set relativenumber
-        autocmd InsertEnter * :set number norelativenumber
-        autocmd InsertLeave * :set nonumber relativenumber
+        colorscheme catppuccin " catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
 
         " netrw (dir listing) settings
         let g:netrw_liststyle = 3
@@ -75,7 +69,8 @@
           fzf-vim       # fuzzy finder through vim
           nerdtree      # file structure inside nvim
           rainbow       # color parenthesis
-          gruvbox-nvim  # theme
+          # gruvbox-nvim  # theme
+          catppuccin-nvim # theme
           goyo-vim      # write prose
           limelight-vim # prose paragraph highlighter
         ];
