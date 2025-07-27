@@ -137,6 +137,7 @@
     busybox   # useful programs e.g. tree, unzip etc
     openssl   # cryptography swiss army knife
     xdg-utils # terminal desktop intergrations (i.e. allow terminal to open browser)
+    xclip     # terminal clipboard integration (i.e. allow terminal to r/w clipboard)
 
     neofetch    # system info
     btop        # resource monitor
