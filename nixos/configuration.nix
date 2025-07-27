@@ -5,13 +5,12 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
+  imports = [
       ./hardware-configuration.nix
       ./tmux.nix
-      # ./uxplay.nix
-      ./fish.nix
       ./neovim.nix
+      ./fish.nix
+      # ./uxplay.nix
     ];
 
   # Bootloader.
@@ -22,6 +21,8 @@
   networking.hostName = "nixos"; # Define your hostname.
   # NOTE: You can not use networking.networkmanager with networking.wireless
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];  # for vscode remote server
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -61,6 +62,16 @@
     xkb.variant = "";
   };
 
+  programs.nix-ld.enable = true;
+  # TODO: move to home manager (?)
+  programs = {
+    direnv = {
+      enable = true;
+      enableFishIntegration = true;
+      nix-direnv.enable = true;
+    };
+  };
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
@@ -89,11 +100,12 @@
     isNormalUser = true;
     description = "dth";
     extraGroups = [ "networkmanager" "wheel" ];
+    # TODO: use home manager to define user packages
     packages = with pkgs; [
       vlc     # video player
       kate    # editor
       ripgrep # faster grep
-
+      nextcloud-client  # private cloud
       # thunderbird # bloat
     ];
   };
@@ -104,43 +116,49 @@
   # install kde partition manager
   programs.partition-manager.enable = true;
 
+  # TODO: install gnome disk manager
+  # programs.gnome-disks.enable = true;
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-     pkgs.git			# version control
 
-     pkgs.tmux			# terminal multiplexer
-     pkgs.fzf			# fuzzy matcher
+    # tmux    # activated in tmux.nix
+    # vim     # using neovim in stead
+    # neovim  # activated in neovim.nix
 
-     pkgs.neofetch		# system profile: choose this
-     pkgs.fastfetch		# or this
+    git       # version control
+    gh        # github cli tool
 
-     pkgs.tldr			# community driven manpage alternative
+    ripgrep   # faster grep
+    busybox   # useful programs e.g. tree, unzip etc
+    openssl   # cryptography swiss army knife
+    xdg-utils # terminal desktop intergrations (i.e. allow terminal to open browser)
 
-     pkgs.thunderbird		# email / calendar
-     pkgs.telegram-desktop	# instant messager
+    neofetch    # system info
+    btop        # resource monitor
+    wget        # downloader
+    tldr			  # community driven manpage alternative
 
-     # pkgs.gimp			# image editor
-     # pkgs.libsForQt5.kdenlive	# video editor
+    ntfs3g      # mount NTFS drives on linux
+    gptfdisk    # formatting drives - like fdisk but better
+                # this stuff runs gparted
 
+    # gimp	    # bloat image editing
+    # blender   # bloat 3D modelling
+    # inkscape  # bloat vecor graphics / drawing
+    # kdenlive  # bloat video editor
 
-     pkgs.pyenv			# python environment manager
-     pkgs.poetry		# python package manager
-     pkgs.python3		# trusty old python
+    # desktop applications
+    thunderbird		    # email / calendar
+    telegram-desktop	# instant messager
 
-     gcc 			# gnu compiler collection (necessary for python)
-     pkg-config			# allows packages to find information about other packages (necessary for python)
-     gnumake			# python
-     zlib			# python
+    cowsay
+    lolcat
 
-
-     # misc
-     cowsay
-     lolcat
-     wget
   ];
 
   # firefox smooth scrolling
