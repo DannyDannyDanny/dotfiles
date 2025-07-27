@@ -3,10 +3,12 @@
 {
   programs.fish = {
     enable = true;
+    shellAliases = {
+      theme = "bash ~/dotfiles/bashscripts/wsl_theme.sh";
+    };
     interactiveShellInit = ''
       fish_vi_key_bindings
       set fish_greeting 🐟: (set_color yellow; date +%T; set_color green; date --iso-8601; set_color normal)
-
 
       # name: Default
       # author: Lily Ballard
