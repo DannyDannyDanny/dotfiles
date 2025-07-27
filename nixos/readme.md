@@ -1,5 +1,6 @@
-Copy local config to repo:
+Rebuild nixos and points to dotfiles dir:
 
 ```
-cp -r /etc/nixos/ ~/dotfiles/nixos
+sudo nixos-rebuild switch --flake ~/dotfiles/nixos
 ```
+
