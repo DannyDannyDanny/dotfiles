@@ -1,33 +1,27 @@
 { config, pkgs, ... }:
 
 {
-
   programs.tmux = {
     enable = true;
     clock24 = true;
+    escapeTime = 20;
+    keyMode = "vi";
+    historyLimit = 100000;
+    baseIndex = 1;
+
     extraConfig = ''
-      # remap prefix from ^+A to ^+B (for nested tmux sessions)
+      # remap prefix from ^+B to alt-f
       unbind C-b
       set -g prefix M-f
       bind M-f send-prefix
 
       # nvim 'checkhealth' advice
       set-option -g focus-events on
-      set-option -g default-terminal "screen-256color"
       set-option -sa terminal-overrides ',xterm-256color:RGB'
+      set-option -g default-terminal "screen-256color"
 
       # enable mouse support for switching panes/windows
-      # set -g mouse on
-
-      # extend history
-      set -g history-limit 100000
-
-      # set vi keybindings
-      setw -g mode-keys vi
-      bind -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "xsel -i --clipboard"
-
-      # reduce escape time
-      set-option -sg escape-time 20
+      set -g mouse on
 
       # pane movement shortcuts
       bind h select-pane -L
@@ -53,5 +47,11 @@
       # fix ssh agent when tmux is detached
       # setenv -g SSH_AUTH_SOCK $HOME/.ssh/ssh_auth_sock
     '';
+    plugins = [
+      # pkgs.tmuxPlugins.tmux-powerline # status bar
+      pkgs.tmuxPlugins.catppuccin
+      pkgs.tmuxPlugins.tmux-fzf       # search tmux commands (prefix + F)
+      pkgs.tmuxPlugins.extrakto       # fuzzyfind text history (prefix + tab)
+    ];
   };
 }
