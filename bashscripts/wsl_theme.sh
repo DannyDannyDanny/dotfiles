@@ -52,5 +52,5 @@ if [ $color_scheme = 'light' ]; then
 fi
 
 echo "setting Sound Schema to None"
-powershell.exe -Command "Set-ItemProperty -Path HKCU:\AppEvents\Schemes -Name '(Default)' -Value 'No Sounds'"
+powershell.exe -Command "Set-ItemProperty -Path HKCU:\AppEvents\Schemes -Name '(Default)' -Value '.None'"
 
