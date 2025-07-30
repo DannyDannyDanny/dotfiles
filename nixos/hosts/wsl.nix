@@ -11,8 +11,6 @@
   wsl = {
     enable = true;
     defaultUser = "nixos";
-    # TODO: check that this actually works, if it does, remove this comment and resolv.conf
-    # if not, remove this part and add URLs below to resolv.conf
     wslConf.network.generateResolvConf = false;
   };
 
