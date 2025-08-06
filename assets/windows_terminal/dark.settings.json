@@ -23,7 +23,8 @@
     ],
     "profiles": {
         "defaults": {
-            "colorScheme": "Catppuccin Mocha"
+            "colorScheme": "Catppuccin Mocha",
+            "bellStyle": "none"
         },
         "list": [
             {
