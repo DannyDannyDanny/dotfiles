@@ -46,7 +46,7 @@
 
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
@@ -95,9 +95,10 @@
     # TODO: use home manager to define user packages
     packages = with pkgs; [
       vlc     # video player
-      kate    # editor
+      # kate    # editor
       ripgrep # faster grep
       nextcloud-client  # private cloud
+      # digikam   # photo / video management
       # thunderbird # bloat
     ];
   };
@@ -113,6 +114,11 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [
+    "broadcom-sta-6.30.223.271-57-6.12.40"
+  ];
+
+  boot.kernelModules = [ "wl" ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -142,8 +148,8 @@
 
     # gimp	    # bloat image editing
     # blender   # bloat 3D modelling
-    # inkscape  # bloat vecor graphics / drawing
-    # kdenlive  # bloat video editor
+    # inkscape  # bloat vector graphics / drawing
+    kdePackages.kdenlive  # bloat video editor
 
     # desktop applications
     thunderbird		    # email / calendar
