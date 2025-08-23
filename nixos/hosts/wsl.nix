@@ -74,6 +74,7 @@
     btop        # resource monitor
     tldr        # community alternative to man
     fzf         # fuzzy finder
+    jq          # parse json
 
     # gimp	    # bloat
     # blender   # bloat
