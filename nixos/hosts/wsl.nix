@@ -57,8 +57,6 @@
     # neovim  # activated in neovim.nix
     mpv       # cli music player
 
-    ollama    # LLMs locally
-
     git       # version control
     gh        # github cli tool
 
@@ -86,6 +84,7 @@
     lolcat
   ];
 
+  services.ollama.enable = true;
   services.vscode-server.enable = true;
   security.rtkit.enable = true; # realtime kit hands out realtime scheduling priority
   services.pipewire = {
