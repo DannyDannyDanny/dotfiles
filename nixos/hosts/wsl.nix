@@ -85,6 +85,8 @@
   ];
 
   services.ollama.enable = true;
+  services.open-webui = { enable = true; port = 8080; };
+
   services.vscode-server.enable = true;
   security.rtkit.enable = true; # realtime kit hands out realtime scheduling priority
   services.pipewire = {
