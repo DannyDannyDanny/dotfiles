@@ -57,6 +57,8 @@
     # neovim  # activated in neovim.nix
     mpv       # cli music player
 
+    ollama    # LLMs locally
+
     git       # version control
     gh        # github cli tool
 
