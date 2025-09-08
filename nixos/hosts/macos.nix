@@ -3,20 +3,22 @@
 {
   # Apple Silicon + nix-darwin basics
   nixpkgs.hostPlatform = "aarch64-darwin";
-  services.nix-daemon.enable = true;
+  nix.enable = true;
 
   nix = {
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
-      auto-optimise-store = true;
     };
     gc = {
       automatic = true;
       interval = { Weekday = 0; Hour = 3; Minute = 0; };
     };
+    optimise.automatic = true; # replaces auto-optimise-store
   };
 
   nixpkgs.config.allowUnfree = true;
+  
+  system.primaryUser = "danny";
 
   # Shells & dev ergonomics
   programs.fish.enable = true;
@@ -35,7 +37,7 @@
   };
 
   # macOS niceties
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   system.defaults = {
     # Keyboard
