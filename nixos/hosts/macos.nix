@@ -62,7 +62,7 @@
     gh
     ripgrep
     wget
-    busybox
+    # busybox #TODO: doesn't run on darwin
     git
     gnupg
     coreutils
