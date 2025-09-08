@@ -31,9 +31,11 @@
   system.defaults = {
     # Keyboard
     NSGlobalDomain = {
+      AppleShowAllExtensions = true;
       ApplePressAndHoldEnabled = true;
-      # InitialKeyRepeat = 15;
-      # KeyRepeat = 2;
+      "com.apple.mouse.tapBehavior" = 1;
+      "com.apple.sound.beep.volume" = 0.0;
+      "com.apple.sound.beep.feedback" = 0;
     };
 
     # Finder & Dock
