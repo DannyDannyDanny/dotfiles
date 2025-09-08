@@ -74,5 +74,7 @@
   ];
 
   # Keep for darwin as well (tracks defaults across upgrades)
-  system.stateVersion = "25.05";
+  # current max per nix-darwin; bump only if a release notes says so
+  system.stateVersion = 6;
+
 }
