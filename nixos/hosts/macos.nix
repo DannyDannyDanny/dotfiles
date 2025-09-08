@@ -62,6 +62,7 @@
     fzf
     cowsay
     lolcat
+    neovim
   ];
 
   # Keep for darwin as well (tracks defaults across upgrades)
