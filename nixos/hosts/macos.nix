@@ -5,7 +5,17 @@
   nixpkgs.hostPlatform = "aarch64-darwin";
   services.nix-daemon.enable = true;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix = {
+    settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+      auto-optimise-store = true;
+    };
+    gc = {
+      automatic = true;
+      interval = { Weekday = 0; Hour = 3; Minute = 0; };
+    };
+  };
+
   nixpkgs.config.allowUnfree = true;
 
   # Shells & dev ergonomics
@@ -22,9 +32,6 @@
     # Set if you want a specific hostname in macOS UI as well:
     hostName = "Daniel-Macbook-Air";
     knownNetworkServices = [ "Wi-Fi" "Thunderbolt Bridge" ];
-    dns = [
-      "84.200.69.80" "8.26.56.26" "1.1.1.1" "8.8.8.8" "64.6.65.6" "208.67.222.222" "209.244.0.3"
-    ];
   };
 
   # macOS niceties
@@ -54,6 +61,9 @@
     ripgrep
     wget
     busybox
+    git
+    gnupg
+    coreutils
     openssl
     neofetch
     btop
