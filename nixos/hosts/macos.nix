@@ -31,9 +31,9 @@
   system.defaults = {
     # Keyboard
     NSGlobalDomain = {
-      ApplePressAndHoldEnabled = false;
-      InitialKeyRepeat = 15;
-      KeyRepeat = 2;
+      ApplePressAndHoldEnabled = true;
+      # InitialKeyRepeat = 15;
+      # KeyRepeat = 2;
     };
 
     # Finder & Dock
