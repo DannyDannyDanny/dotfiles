@@ -56,11 +56,8 @@
     # macOS (nix-darwin) configuration
     darwinConfigurations."Daniel-Macbook-Air" = nix-darwin.lib.darwinSystem {
       modules = [
-        # Ensure Apple Silicon platform
-        { nixpkgs.hostPlatform = "aarch64-darwin"; }
-
-        # Your macOS module (you created it under nixos/hosts/macos.nix)
         ./nixos/hosts/macos.nix
+        # TODO: add tmux.nix, neovim.nix, fish.nix
       ];
     };
   };
