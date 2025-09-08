@@ -56,7 +56,7 @@
     # macOS (nix-darwin) configuration
     darwinConfigurations."Daniel-Macbook-Air" = nix-darwin.lib.darwinSystem {
       modules = [
-        ./nixos/hosts/macos.nix
+        ./hosts/macos.nix
         # TODO: add tmux.nix, neovim.nix, fish.nix
       ];
     };
