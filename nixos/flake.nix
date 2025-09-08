@@ -57,8 +57,10 @@
     darwinConfigurations."Daniel-Macbook-Air" = nix-darwin.lib.darwinSystem {
       modules = [
         ./hosts/macos.nix
-        ./tmux.nix
-        ./neovim.nix
+	# TODO: nix-darwin lacks tmux options; move to Home Manager.x
+        # ./tmux.nix
+	# TODO: add neovim via homemanager, that should work the same for NixOS as Nix-Darwin
+        # ./neovim.nix # NOTE: Option only exists on NixOS.
         ./fish.nix
       ];
     };
