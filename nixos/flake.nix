@@ -9,9 +9,8 @@
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
-    # for later
-    # home-manager.url = "github:nix-community/home-manager";
-    # home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -20,7 +19,7 @@
     vscode-server,
     nix-darwin,
     self,
-    # home-manager,
+    home-manager,
     ...
   }: {
     nixosConfigurations = {
@@ -57,11 +56,16 @@
     darwinConfigurations."Daniel-Macbook-Air" = nix-darwin.lib.darwinSystem {
       modules = [
         ./hosts/macos.nix
-        # TODO: nix-darwin lacks tmux options; move to Home Manager.x
-        # ./tmux.nix
-        # TODO: add neovim via homemanager, that should work the same for NixOS as Nix-Darwin
-        # ./neovim.nix # NOTE: Option only exists on NixOS.
         ./fish.nix
+
+        # Home Manager on macOS
+        home-manager.darwinModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          # Point HM to your user config (mac-only for now)
+          home-manager.users.danny = import ./home/danny/home.nix;
+        }
       ];
     };
   };
