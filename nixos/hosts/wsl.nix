@@ -55,7 +55,6 @@
     # tmux    # activated in tmux.nix
     # vim     # using neovim in stead
     # neovim  # activated in neovim.nix
-    mpv       # cli music player
 
     git       # version control
     gh        # github cli tool
