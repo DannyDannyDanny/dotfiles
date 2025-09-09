@@ -1,7 +1,8 @@
 { pkgs, ... }:
 {
-  home.username = "danny";
-  home.homeDirectory = "/Users/danny";
+  # TODO: remove next two lines from here or from flake.nix
+  # home.username = "danny";
+  # home.homeDirectory = "/Users/danny";
 
   programs.home-manager.enable = true;
 
@@ -121,11 +122,9 @@
     ];
   };
 
-  # Put user-installed binaries here if you want HM to own them (optional)
-  home.packages = with pkgs; [
-    neovim
-    tmux
-  ];
+  # TODO: Put user-installed binaries here if you want HM to own them (optional)
+  # home.packages = with pkgs; [
+  # ];
 
   # First HM version for this user config; bump only if you understand the migration notes.
   home.stateVersion = "24.11";
