@@ -23,7 +23,8 @@
     ],
     "profiles": {
         "defaults": {
-            "colorScheme": "Catppuccin Latte"
+            "colorScheme": "Catppuccin Latte",
+            "bellStyle": "none"
         },
         "list": [
             {

@@ -5,6 +5,7 @@
     enable = true;
     shellAliases = {
       theme = "bash ~/dotfiles/bashscripts/wsl_theme.sh";
+      music = "mpv --no-video --log-file=~/music_history.log \"$(find /mnt/c/Users/DNTH/Music/ -type f \\( -name '*.mp3' -o -name '*.wav' -o -name '*.flac' -o -name '*.m4a' -o -name '*.ogg' \\) | fzf)\"";
     };
     interactiveShellInit = ''
       fish_vi_key_bindings
