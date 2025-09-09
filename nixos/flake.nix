@@ -1,11 +1,12 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
+
+
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
 
-    # nix-darwin for macOS
-    # (follows nixpkgs so both use the same channel)
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -60,12 +61,17 @@
 
         # Home Manager on macOS
         home-manager.darwinModules.home-manager
-        {
+        ({ lib, ... }: {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          # Point HM to your user config (mac-only for now)
-          home-manager.users.danny = import ./home/danny/home.nix;
-        }
+          home-manager.users.danny = { ... }: {
+
+            # Force an absolute path even if another module sets a bad value.
+            home.username = "danny";
+            home.homeDirectory = lib.mkForce "/Users/danny";
+            imports = [ ./home/danny/home.nix ];
+          };
+        })
       ];
     };
   };
