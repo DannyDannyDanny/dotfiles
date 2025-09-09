@@ -40,6 +40,8 @@
       macbookair = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
+          nixos-wsl.nixosModules.default
+          vscode-server.nixosModules.default
           vscode-server.nixosModules.default
           ./hosts/macbookair.nix
           ./hardware-configuration.nix
@@ -47,8 +49,6 @@
           ./neovim.nix
           ./fish.nix
           # home-manager.nixosModules.default
-          # ./configuration.nix
-          # ./uxplay.nix
         ];
       };
     };
@@ -57,9 +57,9 @@
     darwinConfigurations."Daniel-Macbook-Air" = nix-darwin.lib.darwinSystem {
       modules = [
         ./hosts/macos.nix
-	# TODO: nix-darwin lacks tmux options; move to Home Manager.x
+        # TODO: nix-darwin lacks tmux options; move to Home Manager.x
         # ./tmux.nix
-	# TODO: add neovim via homemanager, that should work the same for NixOS as Nix-Darwin
+        # TODO: add neovim via homemanager, that should work the same for NixOS as Nix-Darwin
         # ./neovim.nix # NOTE: Option only exists on NixOS.
         ./fish.nix
       ];

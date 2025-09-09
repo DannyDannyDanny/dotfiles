@@ -11,8 +11,6 @@
   wsl = {
     enable = true;
     defaultUser = "nixos";
-    # TODO: check that this actually works, if it does, remove this comment and resolv.conf
-    # if not, remove this part and add URLs below to resolv.conf
     wslConf.network.generateResolvConf = false;
   };
 
@@ -75,6 +73,7 @@
     btop        # resource monitor
     tldr        # community alternative to man
     fzf         # fuzzy finder
+    jq          # parse json
 
     # gimp	    # bloat
     # blender   # bloat
@@ -83,6 +82,9 @@
     cowsay
     lolcat
   ];
+
+  services.ollama.enable = true;
+  services.open-webui = { enable = true; port = 8080; };
 
   services.vscode-server.enable = true;
   security.rtkit.enable = true; # realtime kit hands out realtime scheduling priority
