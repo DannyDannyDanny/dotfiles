@@ -13,7 +13,6 @@
     # extraLuaConfig is also available; we’ll keep your Vimscript as-is:
     extraConfig = ''
       set title
-      set go=a
       set mouse=a
       set nohlsearch
       set number
