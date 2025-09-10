@@ -12,8 +12,7 @@
   # Shells & dev ergonomics
   programs.fish.enable = true;
   environment.shells = [ pkgs.fish ];
-  # If you want fish as default shell, uncomment:
-  # users.defaultUserShell = pkgs.fish;
+  users.users.danny.shell = pkgs.fish;
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
