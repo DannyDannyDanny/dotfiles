@@ -130,6 +130,7 @@
         dynamic_padding = true;
         decorations = "buttonless";
         opacity = 0.95;
+        startup_mode = "Fullscreen";
       };
       scrolling = { history = 10000; multiplier = 3; };
       font = {
