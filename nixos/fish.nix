@@ -9,7 +9,7 @@
     };
     interactiveShellInit = ''
       fish_vi_key_bindings
-      set fish_greeting 🐟: (set_color yellow; date +%T; set_color green; date --iso-8601; set_color normal)
+      set fish_greeting 🐟: (set_color yellow; date +%T; set_color green; date --iso-8601 2>/dev/null; or date +%F; set_color normal)
 
       # name: Default
       # author: Lily Ballard
@@ -53,6 +53,12 @@
         echo -n -s (prompt_login)' ' (set_color $color_cwd) (prompt_pwd) $normal (fish_vcs_prompt) $normal " "$prompt_status $nix_shell_info $suffix " "
       end
    
+    '';
+
+    shellInit = ''
+      if test -d /opt/homebrew/bin
+        fish_add_path -g /opt/homebrew/bin /opt/homebrew/sbin
+      end
     '';
   };
 
