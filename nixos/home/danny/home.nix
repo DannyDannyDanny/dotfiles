@@ -139,8 +139,10 @@
         size = 13.0;
       };
       cursor = { style = "Block"; unfocused_hollow = true; };
-      shell = {
-        program = "${pkgs.fish}/bin/fish";
+      terminal = {
+        shell = {
+          program = "${pkgs.fish}/bin/fish";
+        };
       };
       colors = {
         # Catppuccin Mocha palette
