@@ -63,7 +63,8 @@
       # however this also means that nix-shell starts a bash shell unless you use `nix-shell [args] --run fish`
       # or run `fish` as the first command when entering nix-shell
 
-      if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
+      # Use macOS/BSD-compatible ps flags to detect parent shell
+      if [[ $(ps -p "$PPID" -o comm=) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
       then
         shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
         exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
