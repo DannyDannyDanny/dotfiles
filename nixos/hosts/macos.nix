@@ -63,6 +63,7 @@
     fzf
     cowsay
     lolcat
+    alacritty
   ];
 
   # Keep for darwin as well (tracks defaults across upgrades)
