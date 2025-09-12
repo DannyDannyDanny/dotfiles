@@ -192,8 +192,12 @@
 
 
   # TODO: Put user-installed binaries here if you want HM to own them (optional)
-  # home.packages = with pkgs; [
-  # ];
+  # Fonts
+  fonts.fontconfig.enable = true;
+  home.packages = with pkgs; [
+    # Google Fonts (includes Michroma)
+    google-fonts
+    ];
 
   # First HM version for this user config; bump only if you understand the migration notes.
   home.stateVersion = "24.11";
