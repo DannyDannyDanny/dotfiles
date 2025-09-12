@@ -1,46 +1,50 @@
-# Alacritty Theme Synchronization
+# Unified Theme Switching
 
-Simple theme switching for Alacritty that allows you to switch between Catppuccin light and dark themes.
+Unified theme switching that works across platforms (WSL and macOS) for Neovim, Alacritty, and Windows Terminal.
 
-**This solution uses Nix conditional configuration with a simple script to switch themes.**
+**This solution uses a single `theme` command that detects the platform and switches themes appropriately.**
 
 ## How It Works
 
-1. The Nix configuration has a boolean variable `isLightTheme` in `home.nix`
-2. When `isLightTheme = true` → Catppuccin Latte (light theme)
-3. When `isLightTheme = false` → Catppuccin Mocha (dark theme)
-4. A script updates this variable and rebuilds the configuration
+1. The `theme` command detects the platform (WSL vs macOS)
+2. **On WSL:** Updates Neovim, Windows Terminal, and Windows system theme
+3. **On macOS:** Updates Neovim and Alacritty themes via Nix configuration
+4. Uses the same `nvim_color_scheme` file for Neovim on both platforms
 
 ## Setup
 
-1. **The configuration is already set up!** Your Alacritty is currently using the light theme.
+1. **The configuration is already set up!** The `theme` command is available as a fish alias.
 
-2. **To switch themes, use the script:**
+2. **To switch themes, use the unified command:**
    ```bash
-   ./scripts/switch-alacritty-theme.sh light   # Switch to light theme
-   ./scripts/switch-alacritty-theme.sh dark    # Switch to dark theme
-   ./scripts/switch-alacritty-theme.sh toggle  # Toggle between themes
-   ./scripts/switch-alacritty-theme.sh status  # Show current theme
+   theme light   # Switch to light theme
+   theme dark    # Switch to dark theme
    ```
 
 ## Usage
 
-### Manual Theme Switching
+### Unified Theme Command
 ```bash
-# Switch to light theme
-./scripts/switch-alacritty-theme.sh light
+# Switch to light theme (works on WSL and macOS)
+theme light
 
-# Switch to dark theme  
-./scripts/switch-alacritty-theme.sh dark
-
-# Toggle between themes
-./scripts/switch-alacritty-theme.sh toggle
-
-# Check current theme
-./scripts/switch-alacritty-theme.sh status
+# Switch to dark theme (works on WSL and macOS)
+theme dark
 ```
 
-### Manual Configuration
+### What Gets Updated
+
+**On WSL:**
+- Neovim theme (via `~/.local/share/nvim_color_scheme`)
+- Windows Terminal settings
+- Windows system theme
+- Windows sound scheme
+
+**On macOS:**
+- Neovim theme (via `~/.local/share/nvim_color_scheme`)
+- Alacritty theme (via Nix configuration)
+
+### Manual Configuration (macOS only)
 You can also manually edit `nixos/home/danny/home.nix` and change:
 ```nix
 isLightTheme = true;   # for light theme
@@ -50,9 +54,12 @@ Then run: `cd nixos && sudo darwin-rebuild switch --flake .#Daniel-Macbook-Air`
 
 ## Files
 
-- `scripts/switch-alacritty-theme.sh` - Script to switch themes
+- `scripts/theme.sh` - **Main unified theme switching script**
+- `scripts/switch-alacritty-theme.sh` - Alacritty-specific theme switching (used by theme.sh)
 - `scripts/detect-system-theme.sh` - Detects current macOS system theme (for reference)
+- `nixos/fish.nix` - Contains the `theme` fish alias
 - `nixos/home/danny/home.nix` - Contains the conditional Alacritty configuration
+- `bashscripts/wsl_theme.sh` - Legacy WSL script (replaced by theme.sh)
 
 ## Theme Colors
 
