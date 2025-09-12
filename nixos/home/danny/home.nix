@@ -132,6 +132,7 @@
   };
 
   # Alacritty terminal configuration (managed by Home Manager)
+  # Note: Colors are managed by the theme sync script for dynamic switching
   programs.alacritty = {
     enable = true;
     settings = {
@@ -153,8 +154,8 @@
           program = "${pkgs.fish}/bin/fish";
         };
       };
+      # Default colors (Catppuccin Mocha - will be overridden by theme sync)
       colors = {
-        # Catppuccin Mocha palette
         primary = { background = "0x1e1e2e"; foreground = "0xcdd6f4"; };
         normal = {
           black = "0x45475a"; red = "0xf38ba8"; green = "0xa6e3a1"; yellow = "0xf9e2af";

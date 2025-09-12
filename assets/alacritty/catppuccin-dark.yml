@@ -1,0 +1,30 @@
+# Catppuccin Mocha (Dark) theme for Alacritty
+colors:
+  # Catppuccin Mocha palette
+  primary:
+    background: '0x1e1e2e'  # base
+    foreground: '0xcdd6f4'  # text
+
+  cursor:
+    text: '0x1e1e2e'  # base
+    cursor: '0xf5e0dc'  # rosewater
+
+  normal:
+    black:   '0x45475a'  # surface1
+    red:     '0xf38ba8'  # red
+    green:   '0xa6e3a1'  # green
+    yellow:  '0xf9e2af'  # yellow
+    blue:    '0x89b4fa'  # blue
+    magenta: '0xf5c2e7'  # pink
+    cyan:    '0x94e2d5'  # teal
+    white:   '0xbac2de'  # subtext1
+
+  bright:
+    black:   '0x585b70'  # surface2
+    red:     '0xf38ba8'  # red
+    green:   '0xa6e3a1'  # green
+    yellow:  '0xf9e2af'  # yellow
+    blue:    '0x89b4fa'  # blue
+    magenta: '0xf5c2e7'  # pink
+    cyan:    '0x94e2d5'  # teal
+    white:   '0xa6adc8'  # subtext0
