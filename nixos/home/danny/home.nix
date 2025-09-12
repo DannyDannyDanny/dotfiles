@@ -155,11 +155,9 @@
       };
       # Conditional colors based on system theme
       colors = let
-        # Read system theme from file (created by theme detection script)
-        systemThemeFile = "/Users/danny/.local/share/nvim_color_scheme";
-        # Default to dark theme if file doesn't exist
-        isLightTheme = builtins.pathExists systemThemeFile && 
-                       builtins.readFile systemThemeFile == "light\n";
+        # Set this to true for light theme, false for dark theme
+        # You can change this and run 'darwin-rebuild switch' to switch themes
+        isLightTheme = true;
         
         # Catppuccin Latte (Light) colors
         lightColors = {
