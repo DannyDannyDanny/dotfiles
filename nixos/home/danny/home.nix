@@ -121,6 +121,16 @@
     ];
   };
 
+  # Git configuration
+  programs.git = {
+    enable = true;
+    extraConfig = {
+      core = {
+        editor = "nvim";
+      };
+    };
+  };
+
   # Alacritty terminal configuration (managed by Home Manager)
   programs.alacritty = {
     enable = true;
