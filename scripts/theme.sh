@@ -5,19 +5,125 @@
 
 set -e
 
-color_scheme=$1
-
-# Validate user input
-if [[ "$color_scheme" != "dark" && "$color_scheme" != "light" ]]; then
-  echo "Usage: theme {dark|light}"
+# Helper functions
+show_usage() {
+  echo "Usage: theme {dark|light|toggle|status}"
+  echo ""
+  echo "Commands:"
+  echo "  dark    - Switch to dark theme"
+  echo "  light   - Switch to light theme"
+  echo "  toggle  - Toggle between light and dark themes"
+  echo "  status  - Show current theme status"
   echo ""
   echo "This command switches themes for:"
   echo "  - Neovim (via nvim_color_scheme file)"
   echo "  - Alacritty (via Nix configuration on macOS)"
   echo "  - Windows Terminal (via settings.json on WSL)"
   echo "  - Windows system theme (on WSL)"
-  exit 1
-fi
+}
+
+show_status() {
+  echo "Current theme status:"
+  echo ""
+  
+  # Check Neovim theme
+  nvim_color_theme_path=~/.local/share/nvim_color_scheme
+  if [ -f "$nvim_color_theme_path" ]; then
+    nvim_theme=$(cat "$nvim_color_theme_path" | tr -d '\n')
+    echo "  Neovim: $nvim_theme"
+  else
+    echo "  Neovim: no theme file found"
+  fi
+  
+  # Check platform-specific themes
+  if [[ -n "$WSL_DISTRO_NAME" ]]; then
+    echo "  Platform: WSL"
+    echo "  Windows Terminal: configured via settings.json"
+    echo "  Windows system theme: managed by theme command"
+  elif [[ "$OSTYPE" == "darwin"* ]]; then
+    echo "  Platform: macOS"
+    
+    # Check Alacritty theme from Nix config
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
+    HOME_NIX="$DOTFILES_DIR/nixos/home/danny/home.nix"
+    
+    if [ -f "$HOME_NIX" ]; then
+      if grep -q "isLightTheme = true" "$HOME_NIX"; then
+        echo "  Alacritty: light (Catppuccin Latte)"
+      else
+        echo "  Alacritty: dark (Catppuccin Mocha)"
+      fi
+    else
+      echo "  Alacritty: config file not found"
+    fi
+  else
+    echo "  Platform: other"
+  fi
+}
+
+toggle_theme() {
+  # Get current theme - prefer platform-specific detection
+  current_theme=""
+  
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    # On macOS, check the Nix config for current theme
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
+    HOME_NIX="$DOTFILES_DIR/nixos/home/danny/home.nix"
+    
+    if [ -f "$HOME_NIX" ]; then
+      if grep -q "isLightTheme = true" "$HOME_NIX"; then
+        current_theme="light"
+      else
+        current_theme="dark"
+      fi
+    fi
+  fi
+  
+  # Fallback to Neovim file if platform-specific detection didn't work
+  if [ -z "$current_theme" ]; then
+    nvim_color_theme_path=~/.local/share/nvim_color_scheme
+    if [ -f "$nvim_color_theme_path" ]; then
+      current_theme=$(cat "$nvim_color_theme_path" | tr -d '\n')
+    else
+      current_theme="light"  # Default to light if no theme file exists
+    fi
+  fi
+  
+  # Determine new theme
+  if [ "$current_theme" = "light" ]; then
+    new_theme="dark"
+  else
+    new_theme="light"
+  fi
+  
+  echo "Toggling theme from $current_theme to $new_theme"
+  
+  # Call the main script with the new theme
+  exec "$0" "$new_theme"
+}
+
+color_scheme=$1
+
+# Handle special commands
+case "$color_scheme" in
+  "status")
+    show_status
+    exit 0
+    ;;
+  "toggle")
+    toggle_theme
+    exit 0
+    ;;
+  "dark"|"light")
+    # Valid theme, continue with normal flow
+    ;;
+  *)
+    show_usage
+    exit 1
+    ;;
+esac
 
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

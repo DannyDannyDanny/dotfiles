@@ -19,6 +19,8 @@ Unified theme switching that works across platforms (WSL and macOS) for Neovim, 
    ```bash
    theme light   # Switch to light theme
    theme dark    # Switch to dark theme
+   theme toggle  # Toggle between light and dark themes
+   theme status  # Show current theme status
    ```
 
 ## Usage
@@ -30,6 +32,12 @@ theme light
 
 # Switch to dark theme (works on WSL and macOS)
 theme dark
+
+# Toggle between light and dark themes
+theme toggle
+
+# Show current theme status
+theme status
 ```
 
 ### What Gets Updated
