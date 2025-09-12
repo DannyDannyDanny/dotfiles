@@ -64,6 +64,7 @@
     cowsay
     lolcat
     alacritty
+    tree
   ];
 
   # Keep for darwin as well (tracks defaults across upgrades)
