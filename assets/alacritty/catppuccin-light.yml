@@ -1,0 +1,30 @@
+# Catppuccin Latte (Light) theme for Alacritty
+colors:
+  # Catppuccin Latte palette
+  primary:
+    background: '0xeff1f5'  # base
+    foreground: '0x4c4f69'  # text
+
+  cursor:
+    text: '0xeff1f5'  # base
+    cursor: '0xdc8a78'  # rosewater
+
+  normal:
+    black:   '0x5c5f77'  # surface1
+    red:     '0xd20f39'  # red
+    green:   '0x40a02b'  # green
+    yellow:  '0xdf8e1d'  # yellow
+    blue:    '0x1e40af'  # blue
+    magenta: '0xea76cb'  # pink
+    cyan:    '0x179299'  # teal
+    white:   '0xacb0be'  # subtext1
+
+  bright:
+    black:   '0x6c6f85'  # surface2
+    red:     '0xd20f39'  # red
+    green:   '0x40a02b'  # green
+    yellow:  '0xdf8e1d'  # yellow
+    blue:    '0x1e40af'  # blue
+    magenta: '0xea76cb'  # pink
+    cyan:    '0x179299'  # teal
+    white:   '0xbcc0cc'  # subtext0
