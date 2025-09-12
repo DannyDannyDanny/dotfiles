@@ -131,6 +131,7 @@
         decorations = "buttonless";
         opacity = 0.95;
         startup_mode = "Fullscreen";
+        option_as_alt = "Both";
       };
       scrolling = { history = 10000; multiplier = 3; };
       font = {
