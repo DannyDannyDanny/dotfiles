@@ -64,6 +64,7 @@
     cowsay
     lolcat
     alacritty
+    cursor-cli
     tree
   ];
 
