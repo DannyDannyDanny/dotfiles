@@ -131,8 +131,7 @@
     };
   };
 
-  # Alacritty terminal configuration (managed by Home Manager)
-  # Note: Colors are managed by the theme sync script for dynamic switching
+  # Alacritty terminal configuration with conditional theme switching
   programs.alacritty = {
     enable = true;
     settings = {
@@ -154,20 +153,45 @@
           program = "${pkgs.fish}/bin/fish";
         };
       };
-      # Default colors (Catppuccin Mocha - will be overridden by theme sync)
-      colors = {
-        primary = { background = "0x1e1e2e"; foreground = "0xcdd6f4"; };
-        normal = {
-          black = "0x45475a"; red = "0xf38ba8"; green = "0xa6e3a1"; yellow = "0xf9e2af";
-          blue = "0x89b4fa"; magenta = "0xf5c2e7"; cyan = "0x94e2d5"; white = "0xbac2de";
+      # Conditional colors based on system theme
+      colors = let
+        # Read system theme from file (created by theme detection script)
+        systemThemeFile = "/Users/danny/.local/share/nvim_color_scheme";
+        # Default to dark theme if file doesn't exist
+        isLightTheme = builtins.pathExists systemThemeFile && 
+                       builtins.readFile systemThemeFile == "light\n";
+        
+        # Catppuccin Latte (Light) colors
+        lightColors = {
+          primary = { background = "0xeff1f5"; foreground = "0x4c4f69"; };
+          cursor = { text = "0xeff1f5"; cursor = "0xdc8a78"; };
+          normal = {
+            black = "0x5c5f77"; red = "0xd20f39"; green = "0x40a02b"; yellow = "0xdf8e1d";
+            blue = "0x1e40af"; magenta = "0xea76cb"; cyan = "0x179299"; white = "0xacb0be";
+          };
+          bright = {
+            black = "0x6c6f85"; red = "0xd20f39"; green = "0x40a02b"; yellow = "0xdf8e1d";
+            blue = "0x1e40af"; magenta = "0xea76cb"; cyan = "0x179299"; white = "0xbcc0cc";
+          };
         };
-        bright = {
-          black = "0x585b70"; red = "0xf38ba8"; green = "0xa6e3a1"; yellow = "0xf9e2af";
-          blue = "0x89b4fa"; magenta = "0xf5c2e7"; cyan = "0x94e2d5"; white = "0xa6adc8";
+        
+        # Catppuccin Mocha (Dark) colors
+        darkColors = {
+          primary = { background = "0x1e1e2e"; foreground = "0xcdd6f4"; };
+          cursor = { text = "0x1e1e2e"; cursor = "0xf5e0dc"; };
+          normal = {
+            black = "0x45475a"; red = "0xf38ba8"; green = "0xa6e3a1"; yellow = "0xf9e2af";
+            blue = "0x89b4fa"; magenta = "0xf5c2e7"; cyan = "0x94e2d5"; white = "0xbac2de";
+          };
+          bright = {
+            black = "0x585b70"; red = "0xf38ba8"; green = "0xa6e3a1"; yellow = "0xf9e2af";
+            blue = "0x89b4fa"; magenta = "0xf5c2e7"; cyan = "0x94e2d5"; white = "0xa6adc8";
+          };
         };
-      };
+      in if isLightTheme then lightColors else darkColors;
     };
   };
+
 
   # TODO: Put user-installed binaries here if you want HM to own them (optional)
   # home.packages = with pkgs; [
