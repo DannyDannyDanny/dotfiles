@@ -46,6 +46,8 @@
   # Environment
   environment.variables = {
     DBT_USER = "DNTH";
+    EDITOR = "nvim";
+    VISUAL = "nvim";
   };
 
   environment.systemPackages = with pkgs; [
