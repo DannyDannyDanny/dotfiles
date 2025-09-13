@@ -152,7 +152,7 @@
         dynamic_padding = true;
         decorations = "buttonless";
         opacity = 0.95;
-        startup_mode = "Fullscreen";
+        startup_mode = "Maximized";
         option_as_alt = "Both";
       };
       scrolling = { history = 10000; multiplier = 1; };
