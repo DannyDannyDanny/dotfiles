@@ -95,7 +95,6 @@
       set -g pane-base-index 1
 
       # sensible defaults
-      set -g mouse on
       setw -g mode-keys vi
       set -g history-limit 100000
       set -g escape-time 20
@@ -113,6 +112,19 @@
       # split with dash and vbar
       bind | split-window -h -c "#{pane_current_path}"
       bind - split-window -v -c "#{pane_current_path}"
+
+      # Enable mouse with smooth scrolling
+      set -g mouse on
+      # Override the default wheel bindings that cause 5-line jumps
+      unbind -T copy-mode WheelUpPane
+      unbind -T copy-mode WheelDownPane
+      unbind -T copy-mode-vi WheelUpPane
+      unbind -T copy-mode-vi WheelDownPane
+      # Bind smooth scrolling (1 line at a time)
+      bind -T copy-mode WheelUpPane send-keys -X scroll-up
+      bind -T copy-mode WheelDownPane send-keys -X scroll-down
+      bind -T copy-mode-vi WheelUpPane send-keys -X scroll-up
+      bind -T copy-mode-vi WheelDownPane send-keys -X scroll-down
     '';
     plugins = with pkgs.tmuxPlugins; [
       catppuccin
@@ -143,7 +155,7 @@
         startup_mode = "Fullscreen";
         option_as_alt = "Both";
       };
-      scrolling = { history = 10000; multiplier = 3; };
+      scrolling = { history = 10000; multiplier = 1; };
       font = {
         size = 13.0;
       };
