@@ -59,6 +59,10 @@
       if test -d /opt/homebrew/bin
         fish_add_path -g /opt/homebrew/bin /opt/homebrew/sbin
       end
+      
+      # Set default editor
+      set -gx EDITOR nvim
+      set -gx VISUAL nvim
     '';
   };
 
