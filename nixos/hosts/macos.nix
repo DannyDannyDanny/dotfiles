@@ -65,6 +65,7 @@
     lolcat
     alacritty
     code-cursor
+    cursor-cli
     tree
   ];
 
