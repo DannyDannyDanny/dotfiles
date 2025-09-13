@@ -25,7 +25,7 @@ show_usage() {
 show_status() {
   echo "Current theme status:"
   echo ""
-  
+
   # Check Neovim theme
   nvim_color_theme_path=~/.local/share/nvim_color_scheme
   if [ -f "$nvim_color_theme_path" ]; then
@@ -34,7 +34,7 @@ show_status() {
   else
     echo "  Neovim: no theme file found"
   fi
-  
+
   # Check platform-specific themes
   if [[ -n "$WSL_DISTRO_NAME" ]]; then
     echo "  Platform: WSL"
@@ -42,12 +42,12 @@ show_status() {
     echo "  Windows system theme: managed by theme command"
   elif [[ "$OSTYPE" == "darwin"* ]]; then
     echo "  Platform: macOS"
-    
+
     # Check Alacritty theme from Nix config
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
     HOME_NIX="$DOTFILES_DIR/nixos/home/danny/home.nix"
-    
+
     if [ -f "$HOME_NIX" ]; then
       if grep -q "isLightTheme = true" "$HOME_NIX"; then
         echo "  Alacritty: light (Catppuccin Latte)"
@@ -65,13 +65,13 @@ show_status() {
 toggle_theme() {
   # Get current theme - prefer platform-specific detection
   current_theme=""
-  
+
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # On macOS, check the Nix config for current theme
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
     HOME_NIX="$DOTFILES_DIR/nixos/home/danny/home.nix"
-    
+
     if [ -f "$HOME_NIX" ]; then
       if grep -q "isLightTheme = true" "$HOME_NIX"; then
         current_theme="light"
@@ -80,7 +80,7 @@ toggle_theme() {
       fi
     fi
   fi
-  
+
   # Fallback to Neovim file if platform-specific detection didn't work
   if [ -z "$current_theme" ]; then
     nvim_color_theme_path=~/.local/share/nvim_color_scheme
@@ -90,16 +90,16 @@ toggle_theme() {
       current_theme="light"  # Default to light if no theme file exists
     fi
   fi
-  
+
   # Determine new theme
   if [ "$current_theme" = "light" ]; then
     new_theme="dark"
   else
     new_theme="light"
   fi
-  
+
   echo "Toggling theme from $current_theme to $new_theme"
-  
+
   # Call the main script with the new theme
   exec "$0" "$new_theme"
 }
@@ -139,7 +139,7 @@ echo "Updated Neovim theme: $color_scheme"
 if [[ -n "$WSL_DISTRO_NAME" ]]; then
   # WSL platform - handle Windows Terminal and system theme
   echo "Detected WSL platform"
-  
+
   # Check that all relevant files exist
   windows_username=$(powershell.exe '$env:UserName' | tr -d '\r\n')
   windows_terminal_settings_path="/mnt/c/Users/${windows_username}/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
@@ -185,7 +185,7 @@ if [[ -n "$WSL_DISTRO_NAME" ]]; then
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   # macOS platform - handle Alacritty theme
   echo "Detected macOS platform"
-  
+
   # Use the existing Alacritty theme switching script
   alacritty_script="$DOTFILES_DIR/scripts/switch-alacritty-theme.sh"
   if [ -f "$alacritty_script" ]; then

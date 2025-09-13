@@ -16,7 +16,7 @@
         lua << EOF
           local config_file = os.getenv("HOME")..'/.local/share/nvim_color_scheme'
           local f=io.open(config_file, "r")
-          if f~=nil then 
+          if f~=nil then
               local system_theme = f:read()
               -- f:close()
               io.close(f)
@@ -29,7 +29,7 @@
                   print('  got:', system_theme)
                   print('  expected path:', file)
               end
-          else 
+          else
               print('warning: nvim color scheme not found')
               print('  expected path:', file)
           end
