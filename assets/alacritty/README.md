@@ -88,7 +88,7 @@ The solution uses Nix's conditional configuration in `home.nix`:
 ```nix
 colors = let
   isLightTheme = true;  # Change this to switch themes
-  
+
   lightColors = { /* Catppuccin Latte colors */ };
   darkColors = { /* Catppuccin Mocha colors */ };
 in if isLightTheme then lightColors else darkColors;

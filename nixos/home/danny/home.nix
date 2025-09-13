@@ -158,7 +158,7 @@
         # Set this to true for light theme, false for dark theme
         # You can change this and run 'darwin-rebuild switch' to switch themes
         isLightTheme = true;
-        
+
         # Catppuccin Latte (Light) colors
         lightColors = {
           primary = { background = "0xeff1f5"; foreground = "0x4c4f69"; };
@@ -172,7 +172,7 @@
             blue = "0x1e40af"; magenta = "0xea76cb"; cyan = "0x179299"; white = "0xbcc0cc";
           };
         };
-        
+
         # Catppuccin Mocha (Dark) colors
         darkColors = {
           primary = { background = "0x1e1e2e"; foreground = "0xcdd6f4"; };

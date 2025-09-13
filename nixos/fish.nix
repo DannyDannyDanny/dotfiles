@@ -15,14 +15,14 @@
       # author: Lily Ballard
       # edits: DannyDannyDanny
       # ref: stackoverflow.com/a/61262358/5684214
-      
+
       function fish_prompt --description 'Write out the prompt'
         set -l last_pipestatus $pipestatus
         set -lx __fish_last_status $status # Export for __fish_print_pipestatus.
         set -l normal (set_color normal)
         set -q fish_color_status
         or set -g fish_color_status red
-      
+
         # Color the prompt differently when we're root
         set -l color_cwd $fish_color_cwd
         set -l suffix '>'
@@ -32,7 +32,7 @@
             end
             set suffix '#'
         end
-    
+
         # Write pipestatus
         # If the status was carried over (if no command is issued or if `set` leaves the status untouched), don't bold it.
         set -l bold_flag --bold
@@ -49,17 +49,17 @@
             echo -n "🐚 "
           end
         )
-      
+
         echo -n -s (prompt_login)' ' (set_color $color_cwd) (prompt_pwd) $normal (fish_vcs_prompt) $normal " "$prompt_status $nix_shell_info $suffix " "
       end
-   
+
     '';
 
     shellInit = ''
       if test -d /opt/homebrew/bin
         fish_add_path -g /opt/homebrew/bin /opt/homebrew/sbin
       end
-      
+
       # Set default editor
       set -gx EDITOR nvim
       set -gx VISUAL nvim

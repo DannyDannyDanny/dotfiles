@@ -6,7 +6,7 @@
   nix.enable = false; # Determinate manages Nix
 
   nixpkgs.config.allowUnfree = true;
-  
+
   system.primaryUser = "danny";
 
   # Shells & dev ergonomics

@@ -70,7 +70,7 @@
     # make default.nix in python project folders instead of using a top-level python environment manager
     # pyenv
     # poetry
-    
+
     neofetch    # system info
     btop        # resource monitor
     tldr        # community alternative to man
