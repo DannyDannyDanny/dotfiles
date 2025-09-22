@@ -68,6 +68,7 @@
     alacritty
     code-cursor
     cursor-cli
+    discord
     tree
   ];
 
