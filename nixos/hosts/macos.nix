@@ -51,11 +51,14 @@
   };
 
   environment.systemPackages = with pkgs; [
-    gh
     ripgrep
     wget
     # busybox #TODO: doesn't run on darwin
+
+    azure-cli
+    gh
     git
+
     gnupg
     coreutils
     openssl
@@ -66,8 +69,12 @@
     cowsay
     lolcat
     alacritty
+
+    vscodium
     code-cursor
     cursor-cli
+    warp-terminal
+
     discord
     tree
   ];
