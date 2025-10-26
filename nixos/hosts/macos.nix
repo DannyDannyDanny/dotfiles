@@ -71,6 +71,7 @@
     alacritty
 
     vscodium
+    zed-editor
     code-cursor
     cursor-cli
     warp-terminal
