@@ -17,6 +17,12 @@
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
 
+  # ollama
+  imports = [../ollama.nix];
+  services.ollama = {
+    enable = true;
+  };
+
   # Networking (macOS-safe)
   networking = {
     # Set if you want a specific hostname in macOS UI as well:
