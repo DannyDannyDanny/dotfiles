@@ -84,6 +84,8 @@
 
     discord
     tree
+
+    mapscii
   ];
 
   # Keep for darwin as well (tracks defaults across upgrades)
