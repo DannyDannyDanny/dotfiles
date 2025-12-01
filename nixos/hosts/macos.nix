@@ -71,8 +71,10 @@
     openssl
     neofetch
     btop
+    zoxide
     tldr
     fzf
+
     cowsay
     lolcat
     alacritty
