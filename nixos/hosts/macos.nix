@@ -64,6 +64,7 @@
     azure-cli
     gh
     git
+    jujutsu
 
     gnupg
     coreutils
