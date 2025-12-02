@@ -212,6 +212,6 @@
     ];
 
   # First HM version for this user config; bump only if you understand the migration notes.
-  home.stateVersion = "24.11";
+  home.stateVersion = "25.11";
 }
 
