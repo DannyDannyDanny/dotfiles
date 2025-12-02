@@ -7,6 +7,8 @@
       theme = "bash ~/dotfiles/scripts/theme.sh";
       music = "mpv --no-video --log-file=~/music_history.log \"$(find /mnt/c/Users/DNTH/Music/ -type f \\( -name '*.mp3' -o -name '*.wav' -o -name '*.flac' -o -name '*.m4a' -o -name '*.ogg' \\) | fzf)\"";
       weather = "curl wttr.in/?T";
+      # TODO: rename and move 25_flakes into dotfiles
+      nide = "nix develop ~/python-projects/25_flakes/$(basename (pwd)) -c $(which fish)";
     };
     interactiveShellInit = ''
       fish_vi_key_bindings
