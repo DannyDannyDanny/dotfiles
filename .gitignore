@@ -6,3 +6,5 @@ env/
 
 # env file associated with server-ip-sync.py / SIS.py
 .env
+
+**/.DS_Store
