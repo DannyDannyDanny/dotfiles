@@ -57,7 +57,8 @@
   };
 
   environment.systemPackages = with pkgs; [
-    ripgrep
+    ripgrep     # replacement for grep
+    fd          # replacement for find
     wget
     # busybox #TODO: doesn't run on darwin
 
