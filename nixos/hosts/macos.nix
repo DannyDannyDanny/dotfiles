@@ -90,6 +90,7 @@
     tree
 
     mapscii
+    mpv
   ];
 
   # Keep for darwin as well (tracks defaults across upgrades)
