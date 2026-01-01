@@ -91,6 +91,7 @@
 
     mapscii
     mpv
+    ffmpeg
   ];
 
   # Keep for darwin as well (tracks defaults across upgrades)
