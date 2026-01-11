@@ -145,6 +145,19 @@
     };
   };
 
+  # direnv (user-level tool)
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
+  # Environment variables (user-level)
+  home.sessionVariables = {
+    DBT_USER = "DNTH"; # TODO: remove this
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
+
   # Alacritty terminal configuration with conditional theme switching
   programs.alacritty = {
     enable = true;
@@ -211,7 +224,42 @@
   home.packages = with pkgs; [
     # Google Fonts (includes Michroma)
     google-fonts
-    ];
+
+    # Development tools
+    ripgrep       # replacement for grep
+    fd            # replacement for find
+    wget          # downloader
+    # azure-cli   # TODO: remove this Azure cli tool
+    gh            # github cli tool
+    git           # version control
+    jujutsu       # Git alternative
+    gnupg         # GNU privacy guard (GPG)
+    coreutils     # GNU core utilities
+    openssl       # cryptography swiss army knife
+    # busybox     # doesn't run on darwin
+
+    # Utilities
+    neofetch      # system info
+    btop          # resource monitor
+    zoxide        # directory jumping (cd alternative)
+    tldr          # community driven manpage alternative
+    fzf           # fuzzy finder
+    tree          # list directory contents
+    ffmpeg        # video and audio processing
+    cowsay        # ascii art cows for fun
+    lolcat        # rainbow text for fun
+
+    # Applications
+    # alacritty   # TODO: configured via programs.alacritty above, so not needed here
+    # warp-terminal # TODO: Bloat
+    # vscodium     # TODO: Bloat
+    # zed-editor   # TODO: Bloat
+    code-cursor
+    cursor-cli
+    discord
+    mapscii
+    mpv
+  ];
 
   # First HM version for this user config; bump only if you understand the migration notes.
   home.stateVersion = "25.11";
