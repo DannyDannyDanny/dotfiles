@@ -9,13 +9,9 @@
 
   system.primaryUser = "danny";
 
-  # Shells & dev ergonomics
-  programs.fish.enable = true;
+  # Shells (fish config is in fish.nix, imported via flake.nix)
   environment.shells = [ pkgs.fish ];
   users.users.danny.shell = pkgs.fish;
-
-  programs.direnv.enable = true;
-  programs.direnv.nix-direnv.enable = true;
 
   # ollama
   imports = [../ollama.nix];
@@ -49,50 +45,8 @@
     dock.mru-spaces = false;
   };
 
-  # Environment
-  environment.variables = {
-    DBT_USER = "DNTH";
-    EDITOR = "nvim";
-    VISUAL = "nvim";
-  };
-
-  environment.systemPackages = with pkgs; [
-    ripgrep     # replacement for grep
-    fd          # replacement for find
-    wget
-    # busybox #TODO: doesn't run on darwin
-
-    azure-cli
-    gh
-    git
-    jujutsu
-
-    gnupg
-    coreutils
-    openssl
-    neofetch
-    btop
-    zoxide
-    tldr
-    fzf
-
-    cowsay
-    lolcat
-    alacritty
-
-    # vscodium    # Bloat
-    # zed-editor  # Bloat
-    code-cursor
-    cursor-cli
-    # warp-terminal # Bloat
-
-    discord
-    tree
-
-    mapscii
-    mpv
-    ffmpeg
-  ];
+  # User-specific packages and environment variables are now in home-manager (home.nix)
+  # Only system-level packages should remain here if needed
 
   # Keep for darwin as well (tracks defaults across upgrades)
   # current max per nix-darwin; bump only if a release notes says so
