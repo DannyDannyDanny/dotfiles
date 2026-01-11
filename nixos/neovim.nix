@@ -65,10 +65,8 @@
           # vim-airline   # nice and light status bar # doesn't work nicely with tmux
           # coc-nvim coc-git coc-highlight coc-python coc-rls coc-vetur coc-vimtex coc-yaml coc-html coc-json # auto completion
           vim-nix       # nix highlight
-          # TODO: temporarily disabled - should be re-enabled once everything is updated
-          # vimtex        # latex stuff
-          # fzf-vim       # fuzzy finder through vim
-          # fzf-lua       # fuzzy finder through lua (needed for fzf-vim)
+          # vimtex        # latex stuff - disabled due to build check issue
+          fzf-lua       # fuzzy finder through lua
           nerdtree      # file structure inside nvim
           rainbow       # color parenthesis
           # gruvbox-nvim  # theme
