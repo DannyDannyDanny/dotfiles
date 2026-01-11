@@ -65,10 +65,9 @@
       vim-surround
       vim-gitgutter
       vim-nix
-      # TODO: temporarily disabled - should be re-enabled once everything is updated
-      # vimtex
-      # fzf-vim
-      # fzf-lua
+      # vimtex - disabled due to build check issue with fzf-lua dependency
+      # vimtex-fixed
+      fzf-lua
       nerdtree
       rainbow
       catppuccin-nvim
