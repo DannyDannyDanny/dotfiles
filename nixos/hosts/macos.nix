@@ -80,11 +80,11 @@
     lolcat
     alacritty
 
-    vscodium
-    zed-editor
+    # vscodium    # Bloat
+    # zed-editor  # Bloat
     code-cursor
     cursor-cli
-    warp-terminal
+    # warp-terminal # Bloat
 
     discord
     tree
