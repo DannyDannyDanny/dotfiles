@@ -7,7 +7,6 @@
     # TODO: refactor (some parts) to extraLuaConfig
     extraConfig = ''
       set title
-      set go=a
       set mouse=a
       set nohlsearch
       set number
