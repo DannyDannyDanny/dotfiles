@@ -93,6 +93,12 @@
     VISUAL = "nvim";
   };
 
+  # Add faf script to PATH
+  home.file.".local/bin/faf" = {
+    source = ../../scripts/f-around-firefox/faf.py;
+    executable = true;
+  };
+
   # Alacritty terminal configuration with conditional theme switching
   programs.alacritty = {
     enable = true;
