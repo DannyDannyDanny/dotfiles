@@ -1,5 +1,5 @@
 {
-  description = "Firefox tabs script environment";
+  description = "f-around-firefox (faf) script environment";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -20,9 +20,9 @@
           pkgs.lz4
         ];
         shellHook = ''
-          echo "Firefox tabs script environment ready"
+          echo "faf script environment ready"
           echo "Python: $(which python3)"
-          echo "Run: python3 firefox-tabs.py"
+          echo "Run: faf"
         '';
       };
     };

@@ -1,4 +1,4 @@
-# Firefox Tabs Script - QOL Improvements
+# f-around-firefox (faf) - QOL Improvements
 
 ## Functionality
 - Add JSON output format option (`--json`)

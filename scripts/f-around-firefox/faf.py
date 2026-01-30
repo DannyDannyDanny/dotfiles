@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Script to get information about Firefox's open tabs.
+f-around-firefox (faf) - Get information about Firefox's open tabs.
 Works with Firefox installed via Nix/Home Manager.
 
 Usage:
-    python3 firefox-tabs.py [method] [rdp_port]
+    faf [method] [rdp_port]
     
 Methods:
     session, s  - Read from Firefox session files (default)
@@ -243,7 +243,7 @@ with open('{file_path}', 'rb') as f:
                 print(f"{YELLOW}Command-line lz4 doesn't support Mozilla format.{NC}", file=sys.stderr)
                 print(f"{YELLOW}To read session files, install Python lz4 library:{NC}", file=sys.stderr)
                 print(f"{GREEN}  pip install lz4{NC}", file=sys.stderr)
-                print(f"{YELLOW}Or use RDP method (see instructions when running 'python3 scripts/firefox-tabs.py rdp'):{NC}", file=sys.stderr)
+                print(f"{YELLOW}Or use RDP method (see instructions when running 'faf rdp'):{NC}", file=sys.stderr)
                 return None
     except subprocess.CalledProcessError as e:
         print(f"{YELLOW}Error decompressing {file_path}: {e}{NC}", file=sys.stderr)
@@ -455,7 +455,7 @@ def main():
             print_tabs(tabs_info, "rdp")
     
     else:
-        print("Usage: python3 firefox-tabs.py [method] [rdp_port]")
+        print("Usage: faf [method] [rdp_port]")
         print("")
         print("Methods:")
         print("  session, s  - Read from Firefox session files (default)")
@@ -463,11 +463,11 @@ def main():
         print("  both, b     - Try both methods")
         print("")
         print("Examples:")
-        print("  python3 firefox-tabs.py                    # Use session files (default)")
-        print("  python3 firefox-tabs.py session            # Use session files")
-        print("  python3 firefox-tabs.py rdp                # Use RDP on default port 6000")
-        print("  python3 firefox-tabs.py rdp 9222           # Use RDP on port 9222")
-        print("  python3 firefox-tabs.py both              # Try both methods")
+        print("  faf                    # Use session files (default)")
+        print("  faf session            # Use session files")
+        print("  faf rdp                # Use RDP on default port 6000")
+        print("  faf rdp 9222           # Use RDP on port 9222")
+        print("  faf both               # Try both methods")
         sys.exit(1)
 
 
