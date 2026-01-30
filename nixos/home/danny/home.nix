@@ -83,6 +83,9 @@
     nix-direnv.enable = true;
   };
 
+  # Firefox
+  programs.firefox.enable = true;
+
   # Environment variables (user-level)
   home.sessionVariables = {
     DBT_USER = "DNTH"; # TODO: remove this
@@ -116,7 +119,7 @@
       colors = let
         # Set this to true for light theme, false for dark theme
         # You can change this and run 'darwin-rebuild switch' to switch themes
-        isLightTheme = true;
+        isLightTheme = false;
 
         # Catppuccin Latte (Light) colors
         lightColors = {
@@ -178,6 +181,7 @@
     fzf           # fuzzy finder
     tree          # list directory contents
     ffmpeg        # video and audio processing
+    lz4           # compression tool (needed for reading Firefox session files)
     cowsay        # ascii art cows for fun
     lolcat        # rainbow text for fun
 
