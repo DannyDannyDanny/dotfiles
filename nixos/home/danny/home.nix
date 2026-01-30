@@ -95,7 +95,7 @@
 
   # Add faf script to PATH
   home.file.".local/bin/faf" = {
-    source = ../../scripts/f-around-firefox/faf.py;
+    source = ../../../scripts/f-around-firefox/faf.py;
     executable = true;
   };
 
