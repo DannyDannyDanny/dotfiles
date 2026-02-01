@@ -11,6 +11,7 @@
       pkgs = import nixpkgs { inherit system; };
       pythonEnv = pkgs.python3.withPackages (ps: with ps; [
         lz4
+        websockets
       ]);
     in
     {
