@@ -66,6 +66,8 @@
         ({ lib, ... }: {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          # Automatically backup files before home-manager overwrites them
+          home-manager.backupFileExtension = "backup";
           home-manager.users.danny = { ... }: {
 
             # Force an absolute path even if another module sets a bad value.
