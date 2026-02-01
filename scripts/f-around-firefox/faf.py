@@ -410,7 +410,13 @@ def get_tabs_via_rdp(port=6000):
 
 def get_tab_websocket_url(tab_id, port=6000):
     """Get the WebSocket URL for a specific tab ID."""
-    tabs = get_tabs_via_rdp(port)
+    try:
+        tabs = get_tabs_via_rdp(port)
+    except Exception as e:
+        # If we can't get tabs via HTTP, we can't get WebSocket URLs
+        # This is a known issue - HTTP endpoint may not respond even when DevTools is connected
+        return None
+    
     if not tabs:
         return None
     
@@ -496,15 +502,25 @@ async def get_tab_html_async(tab_id, port=6000):
     # Get the WebSocket URL for this tab
     websocket_url = get_tab_websocket_url(tab_id, port)
     if not websocket_url:
-        # Check if tab exists but just isn't debuggable
-        tabs = get_tabs_via_rdp(port)
+        # Try to get tabs to provide better error message
+        tabs = None
+        try:
+            tabs = get_tabs_via_rdp(port)
+        except:
+            pass
+        
         if tabs:
             tab_id_str = str(tab_id)
             for tab in tabs:
                 if str(tab.get('id', '')) == tab_id_str:
                     # Tab exists but has no WebSocket URL (not debuggable)
                     raise Exception(f"Tab {tab_id} exists but is not debuggable (e.g., about: pages)")
-        raise Exception(f"Tab {tab_id} not found. Use 'faf rdp' to list available tabs.")
+            # Tab ID not found in list
+            available_ids = [str(tab.get('id', 'N/A')) for tab in tabs]
+            raise Exception(f"Tab {tab_id} not found. Available tab IDs: {', '.join(available_ids)}")
+        else:
+            # Can't get tab list - HTTP endpoint not working
+            raise Exception(f"Tab {tab_id} not found. Cannot connect to Firefox RDP HTTP endpoint on port {port}. Make sure Firefox is running with remote debugging enabled and the HTTP endpoint is accessible.")
     
     try:
         # Connect to the WebSocket
@@ -525,19 +541,16 @@ async def get_tab_html_async(tab_id, port=6000):
 def get_tab_html(tab_id, port=6000):
     """Synchronous wrapper for get_tab_html_async."""
     try:
-        # Try to get the existing event loop
-        loop = asyncio.get_event_loop()
-        if loop.is_running():
-            # If loop is running, we need to use a different approach
-            # Create a new event loop in a thread
-            import concurrent.futures
-            with concurrent.futures.ThreadPoolExecutor() as executor:
-                future = executor.submit(asyncio.run, get_tab_html_async(tab_id, port))
-                return future.result()
-        else:
-            return loop.run_until_complete(get_tab_html_async(tab_id, port))
+        # Try to get the running event loop
+        loop = asyncio.get_running_loop()
+        # If loop is running, we need to use a different approach
+        # Create a new event loop in a thread
+        import concurrent.futures
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future = executor.submit(asyncio.run, get_tab_html_async(tab_id, port))
+            return future.result()
     except RuntimeError:
-        # No event loop, create a new one
+        # No running loop, create a new one
         return asyncio.run(get_tab_html_async(tab_id, port))
 
 
