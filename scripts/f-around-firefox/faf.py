@@ -367,6 +367,16 @@ def get_tabs_via_rdp(port=6000):
         with urlopen(url, timeout=10) as response:
             data = json.loads(response.read())
             return data
+    except Exception:
+        # HTTP endpoint failed, try WebSocket fallback if available
+        if WEBSOCKETS_AVAILABLE:
+            try:
+                # Try to get tabs via WebSocket (synchronous wrapper)
+                return asyncio.run(get_tabs_via_websocket(port))
+            except:
+                pass
+        # Re-raise the original exception
+        raise
     except URLError:
         print(f"{YELLOW}Firefox remote debugging not available on port {port}{NC}", file=sys.stderr)
         if is_firefox_running():
@@ -494,6 +504,39 @@ async def execute_javascript(websocket, code, timeout=10):
         raise Exception(f"Invalid JSON response: {e}")
 
 
+async def get_tabs_via_websocket(port=6000):
+    """Try to get tab list via WebSocket when HTTP endpoint fails."""
+    if not WEBSOCKETS_AVAILABLE:
+        return None
+    
+    # Try connecting to browser WebSocket endpoint
+    # Firefox typically uses ws://localhost:PORT/devtools/browser/...
+    try:
+        browser_ws_url = f"ws://localhost:{port}/devtools/browser"
+        async with websockets.connect(browser_ws_url, timeout=5) as ws:
+            # Send a request to list targets
+            request = {"id": 1, "method": "Target.getTargets"}
+            await ws.send(json.dumps(request))
+            response_str = await asyncio.wait_for(ws.recv(), timeout=5)
+            response = json.loads(response_str)
+            if "result" in response and "targetInfos" in response["result"]:
+                # Convert to format similar to /json/list
+                tabs = []
+                for target in response["result"]["targetInfos"]:
+                    if target.get("type") == "page":
+                        tabs.append({
+                            "id": target.get("targetId", ""),
+                            "title": target.get("title", ""),
+                            "url": target.get("url", ""),
+                            "webSocketDebuggerUrl": f"ws://localhost:{port}/devtools/page/{target.get('targetId', '')}"
+                        })
+                return tabs
+    except Exception as e:
+        # WebSocket approach failed, return None to fall back to HTTP
+        return None
+    return None
+
+
 async def get_tab_html_async(tab_id, port=6000):
     """Connect to a tab via WebSocket and retrieve its HTML content."""
     if not WEBSOCKETS_AVAILABLE:
@@ -501,6 +544,20 @@ async def get_tab_html_async(tab_id, port=6000):
     
     # Get the WebSocket URL for this tab
     websocket_url = get_tab_websocket_url(tab_id, port)
+    
+    # If HTTP endpoint failed, try WebSocket approach
+    if not websocket_url:
+        try:
+            tabs = await get_tabs_via_websocket(port)
+            if tabs:
+                tab_id_str = str(tab_id)
+                for tab in tabs:
+                    if str(tab.get('id', '')) == tab_id_str:
+                        websocket_url = tab.get('webSocketDebuggerUrl')
+                        break
+        except:
+            pass
+    
     if not websocket_url:
         # Try to get tabs to provide better error message
         tabs = None
