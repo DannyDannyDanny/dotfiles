@@ -84,7 +84,17 @@
   };
 
   # Firefox
-  programs.firefox.enable = true;
+  programs.firefox = {
+    enable = true;
+    profiles.default = {
+      settings = {
+        "devtools.debugger.remote-enabled" = true;
+        "devtools.debugger.remote-port" = 6000;
+        "devtools.chrome.enabled" = true;
+        "devtools.debugger.prompt-connection" = false;
+      };
+    };
+  };
 
   # Environment variables (user-level)
   home.sessionVariables = {
@@ -125,7 +135,7 @@
       colors = let
         # Set this to true for light theme, false for dark theme
         # You can change this and run 'darwin-rebuild switch' to switch themes
-        isLightTheme = false;
+        isLightTheme = true;
 
         # Catppuccin Latte (Light) colors
         lightColors = {
