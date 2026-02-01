@@ -367,16 +367,6 @@ def get_tabs_via_rdp(port=6000):
         with urlopen(url, timeout=10) as response:
             data = json.loads(response.read())
             return data
-    except Exception:
-        # HTTP endpoint failed, try WebSocket fallback if available
-        if WEBSOCKETS_AVAILABLE:
-            try:
-                # Try to get tabs via WebSocket (synchronous wrapper)
-                return asyncio.run(get_tabs_via_websocket(port))
-            except:
-                pass
-        # Re-raise the original exception
-        raise
     except URLError:
         print(f"{YELLOW}Firefox remote debugging not available on port {port}{NC}", file=sys.stderr)
         if is_firefox_running():
@@ -412,8 +402,26 @@ def get_tabs_via_rdp(port=6000):
             print(f"{YELLOW}Or add to Firefox preferences (about:config):{NC}", file=sys.stderr)
             print(f"{GREEN}  devtools.debugger.remote-enabled = true{NC}", file=sys.stderr)
             print(f"{GREEN}  devtools.debugger.remote-port = {port}{NC}", file=sys.stderr)
+        # HTTP endpoint failed, try WebSocket fallback if available
+        if WEBSOCKETS_AVAILABLE:
+            try:
+                # Try to get tabs via WebSocket (synchronous wrapper)
+                tabs = asyncio.run(get_tabs_via_websocket(port))
+                if tabs:
+                    return tabs
+            except Exception as ws_error:
+                # WebSocket fallback also failed, continue to return None
+                pass
         return None
     except Exception as e:
+        # HTTP endpoint failed, try WebSocket fallback if available
+        if WEBSOCKETS_AVAILABLE:
+            try:
+                tabs = asyncio.run(get_tabs_via_websocket(port))
+                if tabs:
+                    return tabs
+            except:
+                pass
         print(f"{RED}Error connecting to RDP: {e}{NC}", file=sys.stderr)
         return None
 
