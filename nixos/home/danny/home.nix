@@ -200,6 +200,7 @@
     lz4           # compression tool (needed for reading Firefox session files)
     cowsay        # ascii art cows for fun
     lolcat        # rainbow text for fun
+    vlc           # video player
 
     # Applications
     # alacritty   # TODO: configured via programs.alacritty above, so not needed here
