@@ -10,6 +10,7 @@
       weather = "curl wttr.in/?T";
       # TODO: rename and move 25_flakes into dotfiles
       nide = "nix develop ~/python-projects/25_flakes/$(basename (pwd)) -c $(which fish)";
+      nixupdate = "cd ~/dotfiles/nixos && sudo nix flake update && sudo darwin-rebuild switch --flake ~/dotfiles/nixos#Daniel-Macbook-Air";
     };
     interactiveShellInit = ''
       fish_vi_key_bindings
