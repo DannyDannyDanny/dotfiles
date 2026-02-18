@@ -68,7 +68,7 @@
       set -gx EDITOR nvim
       set -gx VISUAL nvim
 
-      zoxide init fish | source
+      zoxide init --cmd cd fish | source
     '';
   };
 
