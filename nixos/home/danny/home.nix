@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, zen-browser ? null, ... }:
 {
   # TODO: remove next two lines from here or from flake.nix
   # home.username = "danny";
