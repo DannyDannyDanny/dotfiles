@@ -12,6 +12,9 @@
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    zen-browser.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -21,6 +24,7 @@
     nix-darwin,
     self,
     home-manager,
+    zen-browser,
     ...
   }: {
     nixosConfigurations = {
@@ -57,17 +61,20 @@
 
     # macOS (nix-darwin) configuration
     darwinConfigurations."Daniel-Macbook-Air" = nix-darwin.lib.darwinSystem {
+      specialArgs = { inherit zen-browser; };
       modules = [
         ./hosts/macos.nix
         ./fish.nix
 
         # Home Manager on macOS
         home-manager.darwinModules.home-manager
-        ({ lib, ... }: {
+        ({ lib, zen-browser, ... }: {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           # Automatically backup files before home-manager overwrites them
           home-manager.backupFileExtension = "backup";
+          # Pass flake inputs to home-manager modules (e.g. home.nix)
+          home-manager.extraSpecialArgs = { inherit zen-browser; };
           home-manager.users.danny = { ... }: {
 
             # Force an absolute path even if another module sets a bad value.
