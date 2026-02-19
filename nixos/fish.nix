@@ -13,7 +13,14 @@
       nixupdate = "cd ~/dotfiles/nixos && sudo nix flake update && sudo darwin-rebuild switch --flake ~/dotfiles/nixos#Daniel-Macbook-Air";
     };
     interactiveShellInit = ''
-      fish_vi_key_bindings
+      function fish_user_key_bindings
+        fish_vi_key_bindings
+        if command -s fzf-share >/dev/null
+          source (fzf-share)/key-bindings.fish
+          fzf_key_bindings
+        end
+      end
+
       set fish_greeting 🐟: (set_color yellow; date +%T; set_color green; date --iso-8601 2>/dev/null; or date +%F; set_color normal)
 
       # name: Default
