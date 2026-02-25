@@ -173,6 +173,10 @@
   # Fonts
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
+    # Zen Browser (Firefox fork; from flake, supports aarch64-darwin)
+  ] ++ (lib.optionals (zen-browser != null) [
+    zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ]) ++ (with pkgs; [
     # Google Fonts (includes Michroma)
     google-fonts
 
@@ -212,7 +216,7 @@
     discord
     mapscii
     mpv
-  ];
+  ]);
 
   # First HM version for this user config; bump only if you understand the migration notes.
   home.stateVersion = "25.11";
