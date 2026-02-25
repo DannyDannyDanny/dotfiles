@@ -75,7 +75,7 @@
         editor = "nvim";
       };
       alias = {
-        "cleanup-branches" = "!bash ~/dotfiles/scripts/git-cleanup-branches.sh";
+        "tidy" = "!bash ~/dotfiles/scripts/git-cleanup-branches.sh";
       };
     };
   };
