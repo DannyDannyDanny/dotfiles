@@ -200,7 +200,7 @@
     lz4           # compression tool (needed for reading Firefox session files)
     cowsay        # ascii art cows for fun
     lolcat        # rainbow text for fun
-    vlc           # video player
+    # vlc           # video player - doesn't build for MacOS
 
     # Applications
     # alacritty   # TODO: configured via programs.alacritty above, so not needed here
