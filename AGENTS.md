@@ -23,3 +23,9 @@ No keys, tokens, or identifying secrets in the repo. Prefer `scp` or config outs
 - Root password: console only; set danny’s password as root once for sudo.
 - SSH keys: use actual key names on the machine (e.g. `id_ed25519_github`), not assumed `id_ed25519`.
 
+## Server (nixos-server)
+
+- **Commit and push** before testing on the server; it clones/pulls from origin.
+- Bootstrap: server has no git until first rebuild. Use `nix run --extra-experimental-features "nix-command flakes" nixpkgs#git` to clone. Enable flakes in the daemon via `server-configuration-with-flakes.nix`: scp to server `/tmp/configuration.nix`, on server `sudo cp` to `/etc/nixos/configuration.nix`, then `sudo nixos-rebuild switch`. Then build flake and run `switch-to-configuration switch` (see nixos/readme.md).
+- Auto-rebuild timer (`dotfiles-rebuild`) only runs after the system has been switched to the flake config. Check with `systemctl is-active dotfiles-rebuild.timer` on the server.
+
