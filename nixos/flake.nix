@@ -56,6 +56,11 @@
           # home-manager.nixosModules.default
         ];
       };
+
+      nixos-server = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [ ./hosts/nixos-server.nix ];
+      };
     };
 
     # macOS (nix-darwin) configuration

@@ -36,6 +36,8 @@ users.users.danny.openssh.authorizedKeys.keys = [
 ];
 ```
 
+To avoid committing keys (e.g. public repo): omit `openssh.authorizedKeys` and push keys via `scp ~/.ssh/*.pub danny@server:/tmp/` then on server: `cat /tmp/*.pub >> ~/.ssh/authorized_keys`.
+
 Optional: `services.openssh.settings = { PasswordAuthentication = false; PermitRootLogin = "no"; };`
 
 ## 5. Apply and test
