@@ -2,10 +2,14 @@
 
 Get a new NixOS machine online as a server: hostname, user, SSH, and key-based login.
 
+## 0. Installer choice
+
+You can't always assume the machine has an Ethernet port (e.g. some laptops, thin clients). The **minimal** ISO has no GUI and Wi‑Fi on the live system is fiddly (wpa_supplicant, dhcpcd, no NetworkManager). For machines without Ethernet, prefer the **graphical** NixOS installer: it includes NetworkManager and a desktop, so you can join Wi‑Fi in the GUI, then open a terminal and follow the same config steps below. Download the graphical ISO from the same NixOS channel (e.g. `nixos-graphical-*-x86_64-linux.iso` instead of `nixos-minimal-*`).
+
 ## 1. Prerequisites
 
-- NixOS installed
-- Machine on the network
+- NixOS installed (minimal or graphical ISO)
+- Machine on the network (Ethernet or Wi‑Fi)
 - Console or existing SSH access
 
 ## 2. Hostname
