@@ -47,7 +47,6 @@
         modules = [
           nixos-wsl.nixosModules.default
           vscode-server.nixosModules.default
-          vscode-server.nixosModules.default
           ./hosts/macbookair.nix
           ./hardware-configuration.nix
           ./tmux.nix
