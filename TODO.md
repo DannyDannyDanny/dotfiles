@@ -10,6 +10,6 @@
    - Continue configuring the server (add more services to `hosts/nixos-server.nix` as needed).
 
 4. **Verify**
-   - After 2–4: confirm server hardware in repo, flake builds, auto-rebuild works.
+   - After 2–4: confirm server hardware in repo, flake builds, auto-rebuild works. On server, `systemctl is-active dotfiles-rebuild.timer` should be `active` once the flake config is live (see nixos/readme.md).
 
 5. Rename nixos-server to <something-cooler>

@@ -7,7 +7,7 @@ This repo is an extension of [dannydannydanny/methodology](https://github.com/Da
 ## Roadmap:
 
 * configure [firefox-scrolling](firefox-scrolling.md) via terminal
-* server cluster roadmap: [server](server.md)
+* server cluster roadmap: [server](server.md); NixOS server flake and bootstrap: [nixos/readme.md](nixos/readme.md) (nixos-server).
 * :art: check for `nvim checkhealth` status
 * make tmux nice: https://www.youtube.com/watch?v=DzNmUNvnB04
 * [fonts](https://www.programmingfonts.org/) - how does this relate to nerdfonts?
