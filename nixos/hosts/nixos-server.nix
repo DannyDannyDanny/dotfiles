@@ -16,6 +16,8 @@ in
   networking.hostName = "nixos-server";
   time.timeZone = "Europe/Copenhagen";
 
+  boot.kernelParams = [ "consoleblank=60" ];  # blank TTY after 60s to reduce burn-in
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   system.stateVersion = "24.11";
 
