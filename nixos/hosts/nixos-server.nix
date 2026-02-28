@@ -18,12 +18,28 @@ in
 
   boot.kernelParams = [ "consoleblank=60" ];  # blank TTY after 60s to reduce burn-in
 
+  # Turn off panel backlight after boot so the screen actually dims (consoleblank only blanks framebuffer).
+  # At the console, run: light -S 100  (or any 0–100) to restore brightness.
+  programs.light.enable = true;
+  systemd.services.server-backlight-off = {
+    description = "Turn off panel backlight after console idle (reduce burn-in)";
+    after = [ "multi-user.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.Type = "oneshot";
+    script = ''
+      ${pkgs.coreutils}/bin/sleep 65
+      for d in /sys/class/backlight/*; do
+        [ -f "$d/brightness" ] && echo 0 > "$d/brightness" 2>/dev/null || true
+      done
+    '';
+  };
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   system.stateVersion = "24.11";
 
   users.users.danny = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "video" ];  # video: backlight control via light(1)
     # SSH keys: push via scp, don't commit. NixOS does not manage authorized_keys so scp’d keys persist.
     # Example: scp ~/.ssh/id_*_github.pub danny@server:/tmp/ then on server: mkdir -p ~/.ssh; cat /tmp/*.pub >> ~/.ssh/authorized_keys
   };
