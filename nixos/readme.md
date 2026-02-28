@@ -40,3 +40,9 @@ Use `git@github.com:DannyDannyDanny/dotfiles.git` if the repo is private (clone 
 SSH keys for danny (not in repo): from your machine `scp ~/.ssh/*.pub danny@server:/tmp/`, then on server `mkdir -p ~/.ssh; cat /tmp/*.pub >> ~/.ssh/authorized_keys`.
 
 After that, a timer pulls and rebuilds every 15 min when `main` changes. Config lives in `hosts/nixos-server.nix` and `hosts/nixos-server-hardware.nix`.
+
+**Pull when git is not in PATH** (e.g. before first rebuild or when `sudo git` says "command not found"):
+```bash
+sudo nix run nixpkgs#git -- -C /etc/dotfiles pull origin main
+```
+Then run `sudo nixos-rebuild switch --flake /etc/dotfiles/nixos#nixos-server` as usual. After that, git is in the system profile; for manual pulls you can use `sudo /run/current-system/sw/bin/git -C /etc/dotfiles pull origin main` if `sudo git` still isn’t in PATH.
