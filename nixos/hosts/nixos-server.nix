@@ -3,6 +3,7 @@
 # One-time on server: clone repo to /etc/dotfiles (root needs git access).
 # If private repo: use SSH (ssh:// or git@) and add root's key to GitHub, or use HTTPS + token.
 # Then: sudo nixos-rebuild switch --flake /etc/dotfiles/nixos#nixos-server
+# If sudo git is not found: sudo nix run nixpkgs#git -- -C /etc/dotfiles pull origin main
 # Timer runs every 15 min: git fetch, pull if origin/main changed, rebuild.
 { config, lib, pkgs, ... }:
 
