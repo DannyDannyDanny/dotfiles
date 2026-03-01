@@ -31,7 +31,7 @@ We use **one key per purpose**, not one per machine: separate keys for server ac
 - Root password: console only; set danny’s password as root once for sudo.
 - SSH keys: use actual key names on the machine (e.g. `id_ed25519_github`), not assumed `id_ed25519`.
 
-## Server (nixos-server)
+## Server (sunken-ship)
 
 - **Commit and push** before testing on the server; it clones/pulls from origin.
 - Bootstrap: server has no git until first rebuild. Use `nix run --extra-experimental-features "nix-command flakes" nixpkgs#git` to clone. Enable flakes in the daemon via `server-configuration-with-flakes.nix`: scp to server `/tmp/configuration.nix`, on server `sudo cp` to `/etc/nixos/configuration.nix`, then `sudo nixos-rebuild switch`. Then build flake and run `switch-to-configuration switch` (see nixos/readme.md).

@@ -6,7 +6,7 @@ Strategy for SSH key management and secrets with a public NixOS/dotfiles repo an
 
 - **Repo:** Public only. No keys or tokens in the repo ([AGENTS.md](../AGENTS.md)).
 - **SSH keys:** One key per purpose (e.g. `id_ed25519_github`, `id_ed25519_servers`, `id_ed25519_forgejo`). Configure `~/.ssh/config` with `IdentityFile` and `IdentitiesOnly yes` per host. Keys live outside the repo.
-- **Server authorized_keys:** Not managed by Nix. Push public keys via `scp` and append to `~/.ssh/authorized_keys` on each server. See [server-quickstart.md](../server-quickstart.md) and comments in [nixos/hosts/nixos-server.nix](../nixos/hosts/nixos-server.nix).
+- **Server authorized_keys:** Not managed by Nix. Push public keys via `scp` and append to `~/.ssh/authorized_keys` on each server. See [server-quickstart.md](../server-quickstart.md) and comments in [nixos/hosts/sunken-ship.nix](../nixos/hosts/sunken-ship.nix).
 
 Benefits: no private repo, simple, works with public dotfiles. Trade-off: one-time (or scripted) scp step per server; authorized_keys are not declarative in Nix.
 

@@ -7,7 +7,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos-server";
+  networking.hostName = "sunken-ship";
   time.timeZone = "Europe/Copenhagen";
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

@@ -2,19 +2,19 @@
 #
 # One-time on server: clone repo to /etc/dotfiles (root needs git access).
 # If private repo: use SSH (ssh:// or git@) and add root's key to GitHub, or use HTTPS + token.
-# Then: sudo nixos-rebuild switch --flake /etc/dotfiles/nixos#nixos-server
+# Then: sudo nixos-rebuild switch --flake /etc/dotfiles/nixos#sunken-ship
 # If sudo git is not found: sudo nix run nixpkgs#git -- -C /etc/dotfiles pull origin main
 # Timer runs every 15 min: git fetch, pull if origin/main changed, rebuild.
 { config, lib, pkgs, ... }:
 
 let
   dotfilesDir = "/etc/dotfiles";
-  flakeRef = "${dotfilesDir}/nixos#nixos-server";
+  flakeRef = "${dotfilesDir}/nixos#sunken-ship";
 in
 {
-  imports = [ ./nixos-server-hardware.nix ];
+  imports = [ ./sunken-ship-hardware.nix ];
 
-  networking.hostName = "nixos-server";
+  networking.hostName = "sunken-ship";
   time.timeZone = "Europe/Copenhagen";
 
   boot.kernelParams = [ "consoleblank=60" ];  # blank TTY after 60s to reduce burn-in
@@ -41,7 +41,7 @@ in
   users.users.danny = {
     isNormalUser = true;
     extraGroups = [ "wheel" "video" ];  # video: backlight control via light(1)
-    # SSH keys: push via scp, don't commit. NixOS does not manage authorized_keys so scp’d keys persist.
+    # SSH keys: push via scp, don't commit. NixOS does not manage authorized_keys so scp'd keys persist.
     # Example: scp ~/.ssh/id_*_github.pub danny@server:/tmp/ then on server: mkdir -p ~/.ssh; cat /tmp/*.pub >> ~/.ssh/authorized_keys
   };
 
