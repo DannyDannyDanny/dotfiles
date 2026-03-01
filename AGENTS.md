@@ -16,6 +16,14 @@ Do not automatically run rebuild commands - ask the user first.
 
 No keys, tokens, or identifying secrets in the repo. Prefer `scp` or config outside the repo.
 
+## SSH keys (one key per purpose)
+
+We use **one key per purpose**, not one per machine: separate keys for server access, GitHub, Forgejo (and other forges if needed). Benefits: limit blast radius if a key is compromised; clear revocation; clear which key is for what.
+
+- **Key names:** e.g. `id_ed25519_github`, `id_ed25519_forgejo`, `id_ed25519_servers` (Ed25519 preferred).
+- **Config:** Use `~/.ssh/config` with `IdentityFile` and `IdentitiesOnly yes` per host so the right key is used. Keys and sensitive config stay outside the repo.
+- **Server / NixOS:** Use actual key names on the machine (e.g. `id_ed25519_github`), not a generic `id_ed25519` (see Learnings below).
+
 ## Learnings (NixOS server)
 
 - Minimal ISO: use Ethernet or the graphical installer (Wi‑Fi on minimal is fiddly).
