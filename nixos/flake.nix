@@ -57,9 +57,9 @@
         ];
       };
 
-      nixos-server = nixpkgs.lib.nixosSystem {
+      sunken-ship = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        modules = [ ./hosts/nixos-server.nix ];
+        modules = [ ./hosts/sunken-ship.nix ];
       };
     };
 

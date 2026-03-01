@@ -7,13 +7,13 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos-server";
+  networking.hostName = "sunken-ship";
   time.timeZone = "Europe/Copenhagen";
 
   users.users.danny = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
-    # After install, add keys via scp (see server-quickstart or nixos-server.nix comment).
+    # After install, add keys via scp (see server-quickstart or sunken-ship.nix comment).
   };
 
   services.openssh.enable = true;
