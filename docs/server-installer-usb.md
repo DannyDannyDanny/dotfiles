@@ -15,7 +15,19 @@ You **cannot** build the custom installer ISO on macOS (it is x86_64-linux only 
 
 The custom ISO adds Wi‑Fi kernel modules and optional live Wi‑Fi; it must be built on **x86_64-linux** (or with a Nix remote builder configured for that system). Building on macOS will fail.
 
-From a Linux machine (or a builder that can target x86_64-linux):
+### Build from sunken-ship (one command from your Mac)
+
+When the server is on the same network, run from the dotfiles repo:
+
+```bash
+./scripts/build-installer-iso-on-server.sh
+```
+
+This pushes the branch, SSHs to sunken-ship, clones the repo there, runs `nix build .#installer-iso`, and copies the ISO back to the current directory. Optional: `./scripts/build-installer-iso-on-server.sh sunken-ship /path/to/output`.
+
+### Build directly on a Linux machine
+
+From a Linux box (or on sunken-ship after SSH in):
 
 ```bash
 cd ~/dotfiles/nixos
