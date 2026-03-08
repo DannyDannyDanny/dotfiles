@@ -26,7 +26,7 @@ We use **one key per purpose**, not one per machine: separate keys for server ac
 
 ## Server installer USB (new machines only)
 
-- Build: `cd ~/dotfiles/nixos && nix build .#installer-iso`; write `result/iso/*.iso` to USB (e.g. `dd` or [scripts/make-ubuntu-usb.sh](scripts/make-ubuntu-usb.sh)). Boot from USB, run [scripts/nixos-server-install.sh](scripts/nixos-server-install.sh). See [docs/server-installer-usb.md](docs/server-installer-usb.md). Optional live WiFi: add `nixos/installer-wifi.nix` (gitignored) and include in flake when building ISO.
+- Build: from **Linux** `cd ~/dotfiles/nixos && nix build .#installer-iso` (ISO is x86_64-linux only; cannot build on macOS). Or use official NixOS minimal ISO, write to USB, boot server, clone repo, run [scripts/nixos-server-install.sh](scripts/nixos-server-install.sh). See [docs/server-installer-usb.md](docs/server-installer-usb.md). Optional live WiFi: add `nixos/installer-wifi.nix` (gitignored) when building custom ISO on Linux.
 
 ## Learnings (NixOS server)
 
