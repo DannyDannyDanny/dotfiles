@@ -8,7 +8,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos";  # Override with --system-config at install
+  networking.hostName = lib.mkDefault "nixos";  # Overridden by --system-config at install
   networking.wireless.enable = true;
   # networks."SSID".psk set via --system-config or imperative.conf after boot
 

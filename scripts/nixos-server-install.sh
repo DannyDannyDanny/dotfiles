@@ -1,13 +1,13 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # Run on a NixOS minimal live system (or installer ISO) to install NixOS with
 # disko (LUKS + root). Prompts for hostname and target disk; optionally use
 # INSTALLER_SYSTEM_CONFIG_FILE for WiFi etc.
 #
-# Usage:
-#   Export FLAKE_REF (e.g. github:User/dotfiles or path:/path/to/dotfiles/nixos).
-#   Or run from repo root and use: FLAKE_REF=path:$(pwd)/nixos
+# Usage (from repo root, e.g. /tmp/dotfiles):
 #   sudo ./scripts/nixos-server-install.sh
-#   # or: sudo FLAKE_REF=github:User/dotfiles ./scripts/nixos-server-install.sh
+# If you see "command not found", use: sudo bash ./scripts/nixos-server-install.sh
+#
+# Optional: FLAKE_REF=github:User/dotfiles or path:/path/to/dotfiles/nixos
 #
 # Optional: INSTALLER_SYSTEM_CONFIG_FILE=/path/to/json with full --system-config
 # (e.g. hostName + networking.wireless.networks). If unset, only hostname is passed.
@@ -65,7 +65,8 @@ if [[ "${confirm,,}" != "y" && "${confirm,,}" != "yes" ]]; then
   exit 0
 fi
 
-exec nix run github:nix-community/disko/latest#disko-install -- \
+exec nix run --extra-experimental-features "nix-command flakes" \
+  github:nix-community/disko/latest#disko-install -- \
   --flake "${FLAKE_REF}#server-install" \
   --disk main "$disk" \
   --system-config "$SYSTEM_CONFIG"

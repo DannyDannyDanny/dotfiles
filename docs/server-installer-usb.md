@@ -81,27 +81,29 @@ If you skip this, use Ethernet on the live system or the graphical NixOS install
 
 1. Boot the server from the USB.
 2. If you did not bake WiFi into the ISO, attach Ethernet or (on graphical installer) join Wi‑Fi so the machine has network.
-3. Clone this repo (or copy the install script onto the machine). For example:
+3. Run **one** of the following (shortest first).
+
+**Shortest — fetch and run (no clone step):**  
+Exact URL (watch for typos: **.com** not .con, **usb** not ush, **DannyDannyDanny** with three capital Ds):
 
 ```bash
-nix run --extra-experimental-features "nix-command flakes" nixpkgs#git -- clone https://github.com/USER/dotfiles.git /tmp/dotfiles
-cd /tmp/dotfiles
+curl -sL https://raw.githubusercontent.com/DannyDannyDanny/dotfiles/server-installer-usb/scripts/bootstrap-install.sh | sudo bash
 ```
 
-4. Run the install script (it will prompt for hostname and target disk):
+If you see `bash: 404: command not found`, the URL was wrong or the branch doesn’t exist. Check the URL, or verify first: `curl -sL "THE_URL_ABOVE" | head -1` should show `#!/bin/bash`, not HTML.
+
+To type less, create a [git.io](https://git.io) short link once (paste the raw URL above), then on the machine run: `curl -sL https://git.io/YOUR_CODE | sudo bash`.
+
+**Alternative — clone then run** (if you prefer not to pipe curl to bash):
 
 ```bash
-sudo ./scripts/nixos-server-install.sh
+nix run --extra-experimental-features "nix-command flakes" nixpkgs#git -- clone https://github.com/USER/REPO.git /tmp/dotfiles && cd /tmp/dotfiles && git checkout server-installer-usb && sudo ./scripts/nixos-server-install.sh
 ```
 
-The script uses the flake from the current repo by default (`path:$(pwd)/nixos`). To use the flake from GitHub instead:
+If you see `command not found` when running the script, use `sudo bash ./scripts/nixos-server-install.sh` instead of `sudo ./scripts/...`.
 
-```bash
-sudo FLAKE_REF=github:USER/dotfiles ./scripts/nixos-server-install.sh
-```
-
-5. When disko creates the LUKS volume, enter the encryption passphrase when prompted.
-6. When the script finishes, remove the USB and reboot. The new NixOS system will have LUKS root and the hostname you chose.
+4. When prompted: enter **hostname** (e.g. `phantom-ship`), then **target disk** (default `/dev/sda`), then **y** to proceed. When disko creates the LUKS volume, enter your encryption passphrase.
+5. When the script finishes, remove the USB and reboot. The new NixOS system will have LUKS root and the hostname you chose.
 
 ## WiFi on the installed system (optional)
 
@@ -155,6 +157,6 @@ Adjust the flake path and `--system-config` (e.g. add WiFi) as needed.
 | **From Linux** | Option B: `nix build .#installer-iso` in `nixos/`, then write `result/iso/*.iso` to USB. |
 | Optional live WiFi | (Custom ISO only) Add `installer-wifi.nix` (gitignored), include in flake, rebuild on Linux. |
 | Boot | Boot server from USB |
-| Install | Clone repo, run `sudo ./scripts/nixos-server-install.sh` (set `FLAKE_REF` if not from repo) |
+| Install | On live system: `curl -sL https://raw.githubusercontent.com/.../server-installer-usb/scripts/bootstrap-install.sh | sudo bash` (or clone then `sudo ./scripts/nixos-server-install.sh`) |
 | Optional installed WiFi | Set `INSTALLER_SYSTEM_CONFIG_FILE` to a JSON file with wireless config |
 | Reboot | Remove USB, reboot; set root password if needed, add SSH keys |
