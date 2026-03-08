@@ -2,9 +2,20 @@
 
 Bootable USB that installs NixOS on a new server with disk encryption (LUKS) and optional WiFi from first boot. Only required input is the hostname (and LUKS passphrase when disko creates the volume). Existing hosts are not modified.
 
-## Build the ISO
+## Option A: Official NixOS ISO (works from macOS)
 
-From a machine that can build NixOS (e.g. your Mac with Nix, or a Linux box):
+You **cannot** build the custom installer ISO on macOS (it is x86_64-linux only and `--system` is restricted). Use the official NixOS minimal ISO instead:
+
+1. Download the [minimal ISO](https://nixos.org/download.html#nixos-iso) (e.g. `nixos-minimal-*-x86_64-linux.iso`).
+2. Write it to your USB (on macOS: `diskutil unmountDisk diskN`, then `sudo dd if=path/to/nixos-minimal-*.iso of=/dev/rdiskN bs=4m`).
+3. Boot the server from the USB. Attach Ethernet or use the **graphical** ISO if you need Wi‑Fi on the live system.
+4. On the live system, clone this repo and run the install script (see [Install on the server](#install-on-the-server) below). The script runs `disko-install` and does LUKS + hostname; no custom ISO needed.
+
+## Option B: Custom ISO (build on Linux only)
+
+The custom ISO adds Wi‑Fi kernel modules and optional live Wi‑Fi; it must be built on **x86_64-linux** (or with a Nix remote builder configured for that system). Building on macOS will fail.
+
+From a Linux machine (or a builder that can target x86_64-linux):
 
 ```bash
 cd ~/dotfiles/nixos
@@ -128,9 +139,9 @@ Adjust the flake path and `--system-config` (e.g. add WiFi) as needed.
 
 | Step | Action |
 |------|--------|
-| Build | `nix build .#installer-iso` in `nixos/` |
-| Optional live WiFi | Add `installer-wifi.nix` (gitignored), include in flake, rebuild ISO |
-| Write USB | `dd` or script to write `result/iso/*.iso` to USB |
+| **From macOS** | Use Option A: download official NixOS minimal ISO, write to USB, boot server, clone repo, run install script. |
+| **From Linux** | Option B: `nix build .#installer-iso` in `nixos/`, then write `result/iso/*.iso` to USB. |
+| Optional live WiFi | (Custom ISO only) Add `installer-wifi.nix` (gitignored), include in flake, rebuild on Linux. |
 | Boot | Boot server from USB |
 | Install | Clone repo, run `sudo ./scripts/nixos-server-install.sh` (set `FLAKE_REF` if not from repo) |
 | Optional installed WiFi | Set `INSTALLER_SYSTEM_CONFIG_FILE` to a JSON file with wireless config |
