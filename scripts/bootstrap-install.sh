@@ -17,5 +17,6 @@ if [[ ! -f "$INSTALL_SCRIPT" ]]; then
 fi
 
 cd "$DEST"
-[[ "$EUID" -ne 0 ]] && exec sudo bash "$INSTALL_SCRIPT"
-exec bash "$INSTALL_SCRIPT"
+# Use /dev/tty for stdin so prompts work when bootstrap is run as: curl ... | sudo bash
+[[ "$EUID" -ne 0 ]] && exec sudo bash "$INSTALL_SCRIPT" < /dev/tty
+exec bash "$INSTALL_SCRIPT" < /dev/tty
