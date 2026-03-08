@@ -42,10 +42,21 @@ in
     isNormalUser = true;
     extraGroups = [ "wheel" "video" ];  # video: backlight control via light(1)
     # SSH keys: push via scp, don't commit. NixOS does not manage authorized_keys so scp'd keys persist.
-    # Example: scp ~/.ssh/id_*_github.pub danny@server:/tmp/ then on server: mkdir -p ~/.ssh; cat /tmp/*.pub >> ~/.ssh/authorized_keys
+    # Example: scp ~/.ssh/id_ed25519_sunken_ship.pub danny@server:/tmp/ then on server: mkdir -p ~/.ssh; cat /tmp/*.pub >> ~/.ssh/authorized_keys
   };
 
-  services.openssh.enable = true;
+  # Key-only auth; no password or keyboard-interactive.
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
+    # Optionally restrict to LAN: settings.ListenAddress = "10.0.0.1"; or similar.
+  };
+
+  # Passwordless sudo for wheel.
+  security.sudo.wheelNeedsPassword = false;
   environment.systemPackages = [ pkgs.git ];  # for clone/bootstrap and timer
 
   # Pull dotfiles and rebuild if the repo has new commits.
