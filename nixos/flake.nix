@@ -15,6 +15,9 @@
 
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
+
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -25,6 +28,7 @@
     self,
     home-manager,
     zen-browser,
+    disko,
     ...
   }: {
     nixosConfigurations = {
@@ -61,7 +65,27 @@
         system = "x86_64-linux";
         modules = [ ./hosts/sunken-ship.nix ];
       };
+
+      # For disko-install: LUKS + WiFi; hostname/WiFi via --system-config.
+      server-install = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          disko.nixosModules.disko
+          ./disko-server.nix
+          ./hosts/server-install.nix
+        ];
+      };
+
+      # Custom minimal installer ISO (build with: nix build .#installer-iso).
+      # Optional: add ./installer-wifi.nix (gitignored) to modules for live WiFi.
+      installer-iso = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [ ./installer-iso.nix ];
+      };
     };
+
+    packages.x86_64-linux.installer-iso =
+      self.nixosConfigurations.installer-iso.config.system.build.isoImage;
 
     # macOS (nix-darwin) configuration
     darwinConfigurations."Daniel-Macbook-Air" = nix-darwin.lib.darwinSystem {

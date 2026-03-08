@@ -8,3 +8,6 @@ env/
 .env
 
 **/.DS_Store
+
+# Installer ISO live WiFi (SSID/PSK); see docs/server-installer-usb.md
+nixos/installer-wifi.nix
