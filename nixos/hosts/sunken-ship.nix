@@ -15,6 +15,8 @@ in
   imports = [ ./sunken-ship-hardware.nix ];
 
   networking.hostName = "sunken-ship";
+  # No networks defined => uses /etc/wpa_supplicant.conf on the server
+  networking.wireless.enable = true;
   time.timeZone = "Europe/Copenhagen";
 
   boot.kernelParams = [ "consoleblank=60" ];  # blank TTY after 60s to reduce burn-in
