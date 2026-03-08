@@ -37,3 +37,13 @@ We use **one key per purpose**, not one per machine: separate keys for server ac
 - Bootstrap: server has no git until first rebuild. Use `nix run --extra-experimental-features "nix-command flakes" nixpkgs#git` to clone. Enable flakes in the daemon via `server-configuration-with-flakes.nix`: scp to server `/tmp/configuration.nix`, on server `sudo cp` to `/etc/nixos/configuration.nix`, then `sudo nixos-rebuild switch`. Then build flake and run `switch-to-configuration switch` (see nixos/readme.md).
 - Auto-rebuild timer (`dotfiles-rebuild`) only runs after the system has been switched to the flake config. Check with `systemctl is-active dotfiles-rebuild.timer` on the server.
 
+### Running commands on sunken-ship
+
+From the Mac (where the dotfiles workspace lives), agents can SSH to sunken-ship to run commands. Use the sunken-ship key and the host alias or IP the user has configured (e.g. `ssh -i ~/.ssh/id_ed25519_sunken_ship danny@sunken-ship` or `danny@192.168.1.x`). Example:
+
+```bash
+ssh -i ~/.ssh/id_ed25519_sunken_ship danny@sunken-ship 'hostname; ip addr'
+```
+
+Rebuild on the server (flake is in `nixos/`): `ssh ... 'cd /etc/dotfiles/nixos && sudo nixos-rebuild switch --flake .#sunken-ship'`. The server has WiFi (see [docs/sunken-ship-wifi.md](docs/sunken-ship-wifi.md)); it remains reachable when ethernet is unplugged.
+
