@@ -94,8 +94,39 @@ if [[ "${confirm,,}" != "y" && "${confirm,,}" != "yes" ]]; then
   exit 0
 fi
 
-exec nix run --extra-experimental-features "nix-command flakes" \
+nix run --extra-experimental-features "nix-command flakes" \
   github:nix-community/disko/latest#disko-install -- \
   --flake "${FLAKE_REF}#server-install" \
   --disk main "$disk" \
   --system-config "$SYSTEM_CONFIG"
+
+# Set danny password directly on disk (Nix merge can fail); re-open LUKS and chroot
+if [[ -n "${danny_pass:-}" ]]; then
+  echo "Setting password for danny on installed system (re-enter LUKS passphrase once)..."
+  read -s -r -p "LUKS passphrase: " luks_pass
+  echo
+  LUKS_DEV="/dev/disk/by-partlabel/disk-main-luks"
+  ESP_DEV="/dev/disk/by-partlabel/disk-main-ESP"
+  if [[ ! -b "$LUKS_DEV" ]]; then
+    LUKS_DEV="${disk}2"
+    ESP_DEV="${disk}1"
+  fi
+  if [[ -b "$LUKS_DEV" ]]; then
+    if ! echo -n "$luks_pass" | cryptsetup open "$LUKS_DEV" crypted --key-file -; then
+      echo "Wrong LUKS passphrase; set danny password after boot: passwd danny"
+    else
+      mount /dev/mapper/crypted /mnt
+      [[ -b "$ESP_DEV" ]] && mount "$ESP_DEV" /mnt/boot
+      mount --bind /dev /mnt/dev
+      mount --bind /proc /mnt/proc
+      mount --bind /sys /mnt/sys
+      echo "danny:${danny_pass}" | chroot /mnt chpasswd
+      umount -R /mnt
+      cryptsetup close crypted
+      echo "Password for danny set. Reboot and log in."
+    fi
+    unset luks_pass
+  else
+    echo "Could not find LUKS partition; set password after boot: passwd danny"
+  fi
+fi

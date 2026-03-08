@@ -2,6 +2,24 @@
 
 Bootable USB that installs NixOS on a new server with disk encryption (LUKS) and optional WiFi from first boot. Only required input is the hostname (and LUKS passphrase when disko creates the volume). Existing hosts are not modified.
 
+## Quick path: boot USB → WiFi → SSH in → run bootstrap
+
+1. Boot the target machine from the NixOS installer USB.
+2. On the live system, connect to Wi‑Fi (or plug in Ethernet). Check internet (e.g. `ping -c 2 8.8.8.8`).
+3. On the **live** system, start SSH and set a password for the `nixos` user so you can log in from your Mac:
+   ```bash
+   sudo systemctl start sshd
+   sudo passwd nixos
+   hostname -I
+   ```
+   Note the IP from `hostname -I`.
+4. From your **Mac**: `ssh nixos@<IP>` (use the password you set). Now you can paste the bootstrap command instead of typing on the machine.
+5. In that SSH session, run the bootstrap (installs NixOS with LUKS; prompts for hostname, disk, **danny password**, LUKS passphrase, then once more LUKS to set the password on disk):
+   ```bash
+   curl -sL https://raw.githubusercontent.com/DannyDannyDanny/dotfiles/server-installer-usb/scripts/bootstrap-install.sh | sudo bash
+   ```
+6. When it finishes, reboot and remove the USB. Unlock LUKS at boot, then log in as **danny** with the password you set during the install.
+
 ## Option A: Official NixOS ISO (works from macOS)
 
 You **cannot** build the custom installer ISO on macOS (it is x86_64-linux only and `--system` is restricted). Use the official NixOS minimal ISO instead:
