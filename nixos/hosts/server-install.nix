@@ -7,6 +7,7 @@
 {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot";  # Match disko ESP mountpoint so bootloader install succeeds
 
   networking.hostName = lib.mkDefault "nixos";  # Overridden by --system-config at install
   networking.wireless.enable = true;
