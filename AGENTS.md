@@ -24,6 +24,10 @@ We use **one key per purpose**, not one per machine: separate keys for server ac
 - **Config:** Use `~/.ssh/config` with `IdentityFile` and `IdentitiesOnly yes` per host so the right key is used. Keys and sensitive config stay outside the repo.
 - **Server / NixOS:** Use actual key names on the machine (e.g. `id_ed25519_github`), not a generic `id_ed25519` (see Learnings below).
 
+## Server installer USB (new machines only)
+
+- Build: `cd ~/dotfiles/nixos && nix build .#installer-iso`; write `result/iso/*.iso` to USB (e.g. `dd` or [scripts/make-ubuntu-usb.sh](scripts/make-ubuntu-usb.sh)). Boot from USB, run [scripts/nixos-server-install.sh](scripts/nixos-server-install.sh). See [docs/server-installer-usb.md](docs/server-installer-usb.md). Optional live WiFi: add `nixos/installer-wifi.nix` (gitignored) and include in flake when building ISO.
+
 ## Learnings (NixOS server)
 
 - Minimal ISO: use Ethernet or the graphical installer (Wi‑Fi on minimal is fiddly).
