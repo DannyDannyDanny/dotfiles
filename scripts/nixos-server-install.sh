@@ -55,6 +55,35 @@ else
   SYSTEM_CONFIG='{"networking":{"hostName":"'"$hostname"'"}}'
 fi
 
+# Prompt for password for danny so you can log in at console after reboot (no rescue needed)
+read -r -p "Set a password for user danny (console/SSH login)? [y/N] " set_pass
+if [[ "${set_pass,,}" == "y" || "${set_pass,,}" == "yes" ]]; then
+  read -s -r -p "Password for danny: " danny_pass
+  echo
+  read -s -r -p "Confirm password: " danny_pass2
+  echo
+  if [[ "$danny_pass" != "$danny_pass2" ]]; then
+    echo "Passwords do not match. Aborted."
+    exit 1
+  fi
+  if [[ -z "$danny_pass" ]]; then
+    echo "Password cannot be empty. Aborted."
+    exit 1
+  fi
+  HASH=$(echo -n "$danny_pass" | openssl passwd -6 -stdin 2>/dev/null) || HASH=$(mkpasswd -6 -m sha-512 "$danny_pass" 2>/dev/null)
+  if [[ -z "$HASH" ]]; then
+    echo "Could not hash password (need openssl or mkpasswd). Skipping password."
+  else
+    if command -v jq &>/dev/null; then
+      SYSTEM_CONFIG=$(echo "$SYSTEM_CONFIG" | jq --arg h "$HASH" '. + {"users":{"users":{"danny":{"hashedPassword":$h}}}}')
+    else
+      NEW_CONFIG=$(echo "$SYSTEM_CONFIG" | nix run nixpkgs#jq -- --arg h "$HASH" '. + {"users":{"users":{"danny":{"hashedPassword":$h}}}}' 2>/dev/null)
+      [[ -n "$NEW_CONFIG" ]] && SYSTEM_CONFIG="$NEW_CONFIG" || echo "Could not merge password (jq not found). Set after boot: passwd danny"
+    fi
+    [[ -n "$SYSTEM_CONFIG" ]] && echo "Password will be set for danny."
+  fi
+fi
+
 echo "Flake:      ${FLAKE_REF}#server-install"
 echo "Disk:       $disk"
 echo "Hostname:   $hostname"
