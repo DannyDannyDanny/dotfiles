@@ -20,6 +20,8 @@
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-openclaw.url = "github:openclaw/nix-openclaw";
+    # OpenClaw SOUL/TOOLS and other docs. Absolute path to local clone (no SSH under sudo).
+    openclaw-documents.url = "path:/Users/danny/dotfiles/openclaw-documents-repo";
   };
 
   outputs = {
@@ -32,6 +34,7 @@
     zen-browser,
     disko,
     nix-openclaw,
+    openclaw-documents,
     ...
   }: {
     nixosConfigurations = {
@@ -92,7 +95,7 @@
 
     # macOS (nix-darwin) configuration
     darwinConfigurations."Daniel-Macbook-Air" = nix-darwin.lib.darwinSystem {
-      specialArgs = { inherit zen-browser nix-openclaw; };
+      specialArgs = { inherit zen-browser nix-openclaw openclaw-documents; };
       modules = [
         ./hosts/macos.nix
         ./fish.nix
@@ -104,13 +107,13 @@
 
         # Home Manager on macOS
         home-manager.darwinModules.home-manager
-        ({ lib, zen-browser, nix-openclaw, ... }: {
+        ({ lib, zen-browser, nix-openclaw, openclaw-documents, ... }: {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           # Automatically backup files before home-manager overwrites them
           home-manager.backupFileExtension = "backup";
           # Pass flake inputs to home-manager modules (e.g. home.nix)
-          home-manager.extraSpecialArgs = { inherit zen-browser; };
+          home-manager.extraSpecialArgs = { inherit zen-browser openclaw-documents; };
           home-manager.users.danny = { ... }: {
 
             # Force an absolute path even if another module sets a bad value.

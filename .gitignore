@@ -15,6 +15,5 @@ nixos/installer-wifi.nix
 # OpenClaw: Telegram user ID(s), not in public repo
 nixos/home/danny/openclaw-allow-from.nix
 
-# OpenClaw: personal assistant docs, not for public repo
-nixos/home/danny/openclaw-documents/SOUL.md
-nixos/home/danny/openclaw-documents/TOOLS.md
+# OpenClaw: documents live in private repo; local clone optional
+openclaw-documents-repo/
