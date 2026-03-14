@@ -18,6 +18,8 @@
 
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
+
+    nix-openclaw.url = "github:openclaw/nix-openclaw";
   };
 
   outputs = {
@@ -29,6 +31,7 @@
     home-manager,
     zen-browser,
     disko,
+    nix-openclaw,
     ...
   }: {
     nixosConfigurations = {
@@ -89,14 +92,19 @@
 
     # macOS (nix-darwin) configuration
     darwinConfigurations."Daniel-Macbook-Air" = nix-darwin.lib.darwinSystem {
-      specialArgs = { inherit zen-browser; };
+      specialArgs = { inherit zen-browser nix-openclaw; };
       modules = [
         ./hosts/macos.nix
         ./fish.nix
 
+        # OpenClaw overlay so pkgs.openclaw etc. are available
+        ({ nix-openclaw, ... }: {
+          nixpkgs.overlays = [ nix-openclaw.overlays.default ];
+        })
+
         # Home Manager on macOS
         home-manager.darwinModules.home-manager
-        ({ lib, zen-browser, ... }: {
+        ({ lib, zen-browser, nix-openclaw, ... }: {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           # Automatically backup files before home-manager overwrites them
@@ -108,7 +116,11 @@
             # Force an absolute path even if another module sets a bad value.
             home.username = "danny";
             home.homeDirectory = lib.mkForce "/Users/danny";
-            imports = [ ./home/danny/home.nix ];
+            imports = [
+              ./home/danny/home.nix
+              nix-openclaw.homeManagerModules.openclaw
+              ./home/danny/openclaw.nix
+            ];
           };
         })
       ];

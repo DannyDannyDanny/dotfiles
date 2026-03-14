@@ -51,3 +51,7 @@ ssh -i ~/.ssh/id_ed25519_sunken_ship danny@sunken-ship 'hostname; ip addr'
 
 Rebuild on the server (flake is in `nixos/`): `ssh ... 'cd /etc/dotfiles/nixos && sudo nixos-rebuild switch --flake .#sunken-ship'`. The server has WiFi (see [docs/sunken-ship-wifi.md](docs/sunken-ship-wifi.md)); it remains reachable when ethernet is unplugged.
 
+## OpenClaw (macOS)
+
+OpenClaw (AI assistant gateway, Telegram) is integrated in the dotfiles flake. Config: [nixos/home/danny/openclaw.nix](nixos/home/danny/openclaw.nix). Documents: [nixos/home/danny/openclaw-documents/](nixos/home/danny/openclaw-documents/). Secrets (bot token, gateway token, Telegram user ID) live in the config or `~/.secrets/`. One apply: `darwin-rebuild switch --flake .` from `nixos/`.
+

@@ -11,3 +11,6 @@ env/
 
 # Installer ISO live WiFi (SSID/PSK); see docs/server-installer-usb.md
 nixos/installer-wifi.nix
+
+# OpenClaw: Telegram user ID(s), not in public repo
+nixos/home/danny/openclaw-allow-from.nix
