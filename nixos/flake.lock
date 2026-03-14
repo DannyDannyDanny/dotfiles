@@ -292,6 +292,18 @@
         "type": "indirect"
       }
     },
+    "openclaw-documents": {
+      "locked": {
+        "lastModified": 1773484599,
+        "narHash": "sha256-Dpb4erTKZqAKolD7UjXMuIBUEax21q2jNvT+1fiIFA4=",
+        "path": "/Users/danny/dotfiles/openclaw-documents-repo",
+        "type": "path"
+      },
+      "original": {
+        "path": "/Users/danny/dotfiles/openclaw-documents-repo",
+        "type": "path"
+      }
+    },
     "root": {
       "inputs": {
         "disko": "disko",
@@ -300,6 +312,7 @@
         "nix-openclaw": "nix-openclaw",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_4",
+        "openclaw-documents": "openclaw-documents",
         "vscode-server": "vscode-server",
         "zen-browser": "zen-browser"
       }
