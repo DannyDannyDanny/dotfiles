@@ -189,6 +189,7 @@
     wget          # downloader
     # azure-cli   # TODO: remove this Azure cli tool
     gh            # github cli tool
+    claude-code   # Anthropic agentic coding CLI
     forgejo-cli   # forgejo/codeberg cli (provides fj)
     git           # version control
     jujutsu       # Git alternative

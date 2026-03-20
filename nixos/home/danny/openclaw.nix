@@ -66,7 +66,8 @@ in
     config = {
       ProgramArguments = [
         (config.home.homeDirectory + "/.local/bin/openclaw-gateway-wrapper")
-        "${pkgs.openclaw}/bin/openclaw-gateway"
+        "${pkgs.openclaw}/bin/openclaw"
+        "gateway"
       ];
       RunAtLoad = true;
       KeepAlive = true;
