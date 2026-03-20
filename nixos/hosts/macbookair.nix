@@ -131,6 +131,8 @@
     git       # version control
     gh        # github cli tool
 
+    claude-code #anthropic's agentic coding cli
+
     ripgrep   # faster grep
     busybox   # useful programs e.g. tree, unzip etc
     openssl   # cryptography swiss army knife
