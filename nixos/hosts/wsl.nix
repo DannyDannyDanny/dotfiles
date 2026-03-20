@@ -71,7 +71,7 @@
     # pyenv
     # poetry
 
-    neofetch    # system info
+    fastfetch   # system info
     btop        # resource monitor
     tldr        # community alternative to man
     fzf         # fuzzy finder

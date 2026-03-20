@@ -198,7 +198,7 @@
     # busybox     # doesn't run on darwin
 
     # Utilities
-    neofetch      # system info
+    fastfetch     # system info
     btop          # resource monitor
     zoxide        # directory jumping (cd alternative)
     tldr          # community driven manpage alternative

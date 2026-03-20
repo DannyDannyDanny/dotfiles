@@ -137,7 +137,7 @@
     xdg-utils # terminal desktop intergrations (i.e. allow terminal to open browser)
     xclip     # terminal clipboard integration (i.e. allow terminal to r/w clipboard)
 
-    neofetch    # system info
+    fastfetch   # system info
     btop        # resource monitor
     wget        # downloader
     tldr			  # community driven manpage alternative
