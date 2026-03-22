@@ -26,7 +26,7 @@ cd ~/dotfiles/nixos && nix build .#installer-iso
 ## Flake architecture
 
 - **Flake:** `nixos/flake.nix` — single flake for all hosts
-- **Inputs:** nixpkgs-unstable, nix-darwin, home-manager, nixos-wsl, disko, zen-browser, nix-openclaw, openclaw-documents
+- **Inputs:** nixpkgs-unstable, nix-darwin, home-manager, nixos-wsl, disko, zen-browser
 - **Host configs** in `nixos/hosts/`:
   - `macos.nix` — Apple Silicon MacBook Air (aarch64-darwin, nix-darwin)
   - `sunken-ship.nix` — NixOS home server (x86_64-linux)
@@ -49,10 +49,6 @@ cd ~/dotfiles/nixos && nix build .#installer-iso
 - Remote rebuild: `ssh ... 'cd /etc/dotfiles/nixos && sudo nixos-rebuild switch --flake .#sunken-ship'`
 - Auto-rebuild timer: `dotfiles-rebuild` — only active after flake config switch. Check with `systemctl is-active dotfiles-rebuild.timer`.
 - Server has WiFi; stays reachable when ethernet is unplugged.
-
-## OpenClaw
-
-AI assistant gateway (Telegram), integrated in the flake. Config: `nixos/home/danny/openclaw.nix`. Documents (SOUL.md, TOOLS.md) come from a separate local repo via the `openclaw-documents` flake input (path: `/Users/danny/dotfiles/openclaw-documents-repo`). Secrets (bot token, gateway token, Telegram user ID) live in `~/.secrets/` or the config. One apply: `darwin-rebuild switch --flake .`.
 
 ## Ollama
 
