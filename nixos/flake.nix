@@ -106,7 +106,7 @@
     darwinConfigurations."Daniel-Macbook-Air" = nix-darwin.lib.darwinSystem {
       specialArgs = { inherit zen-browser; };
       modules = [
-        ./hosts/macos.nix
+        ./hosts/daniel-macbook-air.nix
         ./fish.nix
 
         # Home Manager on macOS

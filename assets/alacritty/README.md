@@ -6,7 +6,7 @@ Alacritty follows **System Settings → Appearance** automatically. No `darwin-r
 
 1. Home Manager installs Catppuccin palettes as `~/.config/alacritty/catppuccin-{latte,mocha}-colors.toml` and a generated `alacritty.toml` that sets `general.import` to `active-colors.toml`.
 2. `scripts/alacritty-sync-system-theme.sh` copies the matching palette to `active-colors.toml`. Alacritty’s `live_config_reload` picks it up immediately.
-3. **nix-darwin** runs that script from a user LaunchAgent every 30s (`nixos/hosts/macos.nix`: `launchd.user.agents.alacritty-system-theme`). It is also installed on `PATH` as `alacritty-sync-system-theme`.
+3. **nix-darwin** runs that script from a user LaunchAgent every 30s (`nixos/hosts/daniel-macbook-air.nix`: `launchd.user.agents.alacritty-system-theme`). It is also installed on `PATH` as `alacritty-sync-system-theme`.
 4. **Fish** runs the same script in the background when you open an interactive shell on Darwin, so changes apply quickly without waiting for the next poll.
 
 ## Optional manual LaunchAgent
@@ -36,7 +36,7 @@ theme status
 - `scripts/alacritty-sync-system-theme.sh` — detect macOS appearance, copy palette, refresh nvim marker
 - `scripts/sync-alacritty-theme.sh` — thin wrapper (backwards compatible)
 - `nixos/home/danny/home.nix` — `programs.alacritty` + `xdg.configFile` for palettes
-- `nixos/hosts/macos.nix` — LaunchAgent + `alacritty-sync-system-theme` in `environment.systemPackages`
+- `nixos/hosts/daniel-macbook-air.nix` — LaunchAgent + `alacritty-sync-system-theme` in `environment.systemPackages`
 - `nixos/fish.nix` — optional shell-open sync on Darwin
 
 After changing Nix config, run `darwin-rebuild switch` once (see repo `AGENTS.md`).
