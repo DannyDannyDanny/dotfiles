@@ -28,7 +28,7 @@ cd ~/dotfiles/nixos && nix build .#installer-iso
 - **Flake:** `nixos/flake.nix` — single flake for all hosts
 - **Inputs:** nixpkgs-unstable, nix-darwin, home-manager, nixos-wsl, disko, zen-browser
 - **Host configs** in `nixos/hosts/`:
-  - `macos.nix` — Apple Silicon MacBook Air (aarch64-darwin, nix-darwin)
+  - `daniel-macbook-air.nix` — hostname `Daniel-Macbook-Air` (aarch64-darwin, nix-darwin)
   - `sunken-ship.nix` — NixOS home server (x86_64-linux)
   - `wsl.nix` — WSL (x86_64-linux)
   - `macbookair.nix` — old MacBook Air NixOS/WSL config
@@ -52,7 +52,7 @@ cd ~/dotfiles/nixos && nix build .#installer-iso
 
 ## Ollama
 
-Custom nix-darwin module at `nixos/ollama.nix` (upstream PR not yet merged). Enabled on macOS via `nixos/hosts/macos.nix`. Runs as a launchd user agent with `ollama serve`.
+Custom nix-darwin module at `nixos/ollama.nix` (upstream PR not yet merged). Enabled on macOS via `nixos/hosts/daniel-macbook-air.nix`. Runs as a launchd user agent with `ollama serve`.
 
 ## Alacritty (macOS)
 
