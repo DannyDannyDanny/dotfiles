@@ -12,6 +12,8 @@ darwin-rebuild switch --flake .
 
 Do not automatically run rebuild commands - ask the user first.
 
+On macOS, Alacritty colors follow **System Settings → Appearance** (no rebuild when toggling light/dark); see **CLAUDE.md** § Alacritty and `assets/alacritty/README.md`.
+
 ## Repo is public
 
 No keys, tokens, or identifying secrets in the repo. Prefer `scp` or config outside the repo.
