@@ -1,4 +1,4 @@
-{ pkgs, lib, zen-browser ? null, ... }:
+{ pkgs, lib, config, zen-browser ? null, ... }:
 {
   # TODO: remove next two lines from here or from flake.nix
   # home.username = "danny";
@@ -112,15 +112,26 @@
     executable = true;
   };
 
-  # Alacritty terminal configuration with conditional theme switching
+  # Palette fragments: synced to system appearance (see scripts/alacritty-sync-system-theme.sh).
+  xdg.configFile."alacritty/catppuccin-latte-colors.toml".source =
+    ../../../assets/alacritty/catppuccin-latte-colors.toml;
+  xdg.configFile."alacritty/catppuccin-mocha-colors.toml".source =
+    ../../../assets/alacritty/catppuccin-mocha-colors.toml;
+
+  # Alacritty: base config + imported active-colors.toml (updated without rebuild)
   programs.alacritty = {
     enable = true;
     settings = {
+      general = {
+        live_config_reload = true;
+        import = [ "${config.xdg.configHome}/alacritty/active-colors.toml" ];
+      };
       window = {
         padding = { x = 8; y = 8; };
         dynamic_padding = true;
         decorations = "buttonless";
-        opacity = 0.95;
+        decorations_theme_variant = "None";
+        opacity = 1.0;
         startup_mode = "Maximized";
         option_as_alt = "Both";
       };
@@ -134,42 +145,18 @@
           program = "${pkgs.fish}/bin/fish";
         };
       };
-      # Conditional colors based on system theme
-      colors = let
-        # Set this to true for light theme, false for dark theme
-        # You can change this and run 'darwin-rebuild switch' to switch themes
-        isLightTheme = true;
-
-        # Catppuccin Latte (Light) colors
-        lightColors = {
-          primary = { background = "0xeff1f5"; foreground = "0x4c4f69"; };
-          cursor = { text = "0xeff1f5"; cursor = "0xdc8a78"; };
-          normal = {
-            black = "0x5c5f77"; red = "0xd20f39"; green = "0x40a02b"; yellow = "0xdf8e1d";
-            blue = "0x1e40af"; magenta = "0xea76cb"; cyan = "0x179299"; white = "0xacb0be";
-          };
-          bright = {
-            black = "0x6c6f85"; red = "0xd20f39"; green = "0x40a02b"; yellow = "0xdf8e1d";
-            blue = "0x1e40af"; magenta = "0xea76cb"; cyan = "0x179299"; white = "0xbcc0cc";
-          };
-        };
-
-        # Catppuccin Mocha (Dark) colors
-        darkColors = {
-          primary = { background = "0x1e1e2e"; foreground = "0xcdd6f4"; };
-          cursor = { text = "0x1e1e2e"; cursor = "0xf5e0dc"; };
-          normal = {
-            black = "0x45475a"; red = "0xf38ba8"; green = "0xa6e3a1"; yellow = "0xf9e2af";
-            blue = "0x89b4fa"; magenta = "0xf5c2e7"; cyan = "0x94e2d5"; white = "0xbac2de";
-          };
-          bright = {
-            black = "0x585b70"; red = "0xf38ba8"; green = "0xa6e3a1"; yellow = "0xf9e2af";
-            blue = "0x89b4fa"; magenta = "0xf5c2e7"; cyan = "0x94e2d5"; white = "0xa6adc8";
-          };
-        };
-      in if isLightTheme then lightColors else darkColors;
     };
   };
+
+  # Writable copy (not a symlink to the store — cp in the sync script must replace a real file).
+  home.activation.alacrittySystemTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    MOCHA="${config.xdg.configHome}/alacritty/catppuccin-mocha-colors.toml"
+    ACTIVE="${config.xdg.configHome}/alacritty/active-colors.toml"
+    if [ ! -f "$ACTIVE" ]; then
+      $DRY_RUN_CMD cp "$MOCHA" "$ACTIVE"
+    fi
+    $DRY_RUN_CMD ${pkgs.bash}/bin/bash "${../../../scripts/alacritty-sync-system-theme.sh}" || true
+  '';
 
 
   # TODO: Put user-installed binaries here if you want HM to own them (optional)

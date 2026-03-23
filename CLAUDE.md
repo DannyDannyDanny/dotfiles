@@ -54,6 +54,10 @@ cd ~/dotfiles/nixos && nix build .#installer-iso
 
 Custom nix-darwin module at `nixos/ollama.nix` (upstream PR not yet merged). Enabled on macOS via `nixos/hosts/macos.nix`. Runs as a launchd user agent with `ollama serve`.
 
+## Alacritty (macOS)
+
+Terminal colors follow **System Settings → Appearance**: `programs.alacritty` imports `~/.config/alacritty/active-colors.toml`; `scripts/alacritty-sync-system-theme.sh` copies Catppuccin latte/mocha there when the OS mode changes. **nix-darwin** `launchd.user.agents.alacritty-system-theme` polls every 30s; **fish** runs the same script on interactive startup. After changing Nix, one `darwin-rebuild switch`. Details: `assets/alacritty/README.md`.
+
 ## Shell
 
 Fish is the default shell. Bash auto-execs fish unless the parent process is already fish. Vi keybindings with fzf integration. Zoxide aliased to `cd`.

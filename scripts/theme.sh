@@ -17,7 +17,7 @@ show_usage() {
   echo ""
   echo "This command switches themes for:"
   echo "  - Neovim (via nvim_color_scheme file)"
-  echo "  - Alacritty (via Nix configuration on macOS)"
+  echo "  - Alacritty on macOS follows System Settings (LaunchAgent sync)"
   echo "  - Windows Terminal (via settings.json on WSL)"
   echo "  - Windows system theme (on WSL)"
 }
@@ -43,19 +43,11 @@ show_status() {
   elif [[ "$OSTYPE" == "darwin"* ]]; then
     echo "  Platform: macOS"
 
-    # Check Alacritty theme from Nix config
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
-    HOME_NIX="$DOTFILES_DIR/nixos/home/danny/home.nix"
-
-    if [ -f "$HOME_NIX" ]; then
-      if grep -q "isLightTheme = true" "$HOME_NIX"; then
-        echo "  Alacritty: light (Catppuccin Latte)"
-      else
-        echo "  Alacritty: dark (Catppuccin Mocha)"
-      fi
+    marker="$HOME/.config/alacritty/.last-system-theme"
+    if [ -f "$marker" ]; then
+      echo "  Alacritty: follows system (active palette: $(tr -d '\n' <"$marker"))"
     else
-      echo "  Alacritty: config file not found"
+      echo "  Alacritty: follows system (sync after next login or run alacritty-sync-system-theme)"
     fi
   else
     echo "  Platform: other"
@@ -67,17 +59,10 @@ toggle_theme() {
   current_theme=""
 
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    # On macOS, check the Nix config for current theme
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
-    HOME_NIX="$DOTFILES_DIR/nixos/home/danny/home.nix"
-
-    if [ -f "$HOME_NIX" ]; then
-      if grep -q "isLightTheme = true" "$HOME_NIX"; then
-        current_theme="light"
-      else
-        current_theme="dark"
-      fi
+    if [[ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" == "Dark" ]]; then
+      current_theme="dark"
+    else
+      current_theme="light"
     fi
   fi
 
@@ -183,18 +168,8 @@ if [[ -n "$WSL_DISTRO_NAME" ]]; then
   powershell.exe -Command "Set-ItemProperty -Path HKCU:\AppEvents\Schemes -Name '(Default)' -Value '.None'"
 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-  # macOS platform - handle Alacritty theme
   echo "Detected macOS platform"
-
-  # Use the existing Alacritty theme switching script
-  alacritty_script="$DOTFILES_DIR/scripts/switch-alacritty-theme.sh"
-  if [ -f "$alacritty_script" ]; then
-    echo "Switching Alacritty theme to: $color_scheme"
-    "$alacritty_script" "$color_scheme"
-  else
-    echo "Warning: Alacritty theme script not found at $alacritty_script"
-    echo "Theme file updated, but Alacritty theme not switched"
-  fi
+  echo "Alacritty follows System Settings → Appearance (no rebuild). Neovim theme file updated above."
 
 else
   # Other platforms - just update the theme file

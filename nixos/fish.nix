@@ -24,6 +24,11 @@
 
       set fish_greeting 🐟: (set_color yellow; date +%T; set_color green; date --iso-8601 2>/dev/null; or date +%F; set_color normal)
 
+      # Alacritty palette follows macOS appearance; refresh when opening a shell (LaunchAgent also polls).
+      if test (uname -s) = Darwin
+        bash ~/dotfiles/scripts/alacritty-sync-system-theme.sh >/dev/null 2>&1 &
+      end
+
       # name: Default
       # author: Lily Ballard
       # edits: DannyDannyDanny

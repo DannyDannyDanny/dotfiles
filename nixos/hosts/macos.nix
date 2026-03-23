@@ -1,6 +1,9 @@
 { config, lib, pkgs, ... }:
 
-{
+let
+  alacrittySyncSystemTheme = pkgs.writeShellScriptBin "alacritty-sync-system-theme"
+    (builtins.readFile ../../scripts/alacritty-sync-system-theme.sh);
+in {
   # Apple Silicon + nix-darwin basics
   nixpkgs.hostPlatform = "aarch64-darwin";
   nix.enable = false; # Determinate manages Nix
@@ -47,6 +50,19 @@
 
   # User-specific packages and environment variables are now in home-manager (home.nix)
   # Only system-level packages should remain here if needed
+
+  environment.systemPackages = [ alacrittySyncSystemTheme ];
+
+  # Poll macOS appearance; updates ~/.config/alacritty/active-colors.toml (Alacritty live_config_reload).
+  launchd.user.agents.alacritty-system-theme = {
+    serviceConfig = {
+      RunAtLoad = true;
+      StartInterval = 30;
+      ProgramArguments = [ "${alacrittySyncSystemTheme}/bin/alacritty-sync-system-theme" ];
+      StandardOutPath = "/tmp/alacritty-theme-sync.log";
+      StandardErrorPath = "/tmp/alacritty-theme-sync-error.log";
+    };
+  };
 
   # Keep for darwin as well (tracks defaults across upgrades)
   # current max per nix-darwin; bump only if a release notes says so
