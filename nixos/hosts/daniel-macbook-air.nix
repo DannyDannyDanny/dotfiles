@@ -29,6 +29,14 @@ in {
     knownNetworkServices = [ "Wi-Fi" "Thunderbolt Bridge" ];
   };
 
+  homebrew = {
+    enable = true;
+    casks = [
+      "google-chrome"
+    ];
+    onActivation.cleanup = "zap";
+  };
+
   # macOS niceties
   security.pam.services.sudo_local.touchIdAuth = true;
 
