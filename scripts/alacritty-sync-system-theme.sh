@@ -26,15 +26,16 @@ else
   want="light"
 fi
 
-if [[ -f "$MARKER" ]] && [[ "$(tr -d '\n' <"$MARKER")" == "$want" ]]; then
-  exit 0
-fi
-
 mkdir -p "$ALACRITTY_DIR"
 printf '%s' "$want" >"$MARKER"
 
 if [[ "$want" == "light" ]]; then
-  cp "$LIGHT" "$ACTIVE"
+  tmp="$(mktemp "$ALACRITTY_DIR/active-colors.toml.XXXXXX")"
+  cp "$LIGHT" "$tmp"
 else
-  cp "$DARK" "$ACTIVE"
+  tmp="$(mktemp "$ALACRITTY_DIR/active-colors.toml.XXXXXX")"
+  cp "$DARK" "$tmp"
 fi
+
+chmod 0644 "$tmp"
+mv -f "$tmp" "$ACTIVE"

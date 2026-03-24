@@ -150,10 +150,12 @@
 
   # Writable copy (not a symlink to the store — cp in the sync script must replace a real file).
   home.activation.alacrittySystemTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    MOCHA="${config.xdg.configHome}/alacritty/catppuccin-mocha-colors.toml"
+    MOCHA="${../../../assets/alacritty/catppuccin-mocha-colors.toml}"
     ACTIVE="${config.xdg.configHome}/alacritty/active-colors.toml"
+    $DRY_RUN_CMD mkdir -p "${config.xdg.configHome}/alacritty"
     if [ ! -f "$ACTIVE" ]; then
       $DRY_RUN_CMD cp "$MOCHA" "$ACTIVE"
+      $DRY_RUN_CMD chmod 0644 "$ACTIVE"
     fi
     $DRY_RUN_CMD ${pkgs.bash}/bin/bash "${../../../scripts/alacritty-sync-system-theme.sh}" || true
   '';
