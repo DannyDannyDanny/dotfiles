@@ -7,7 +7,7 @@ Extension of [dannydannydanny/methodology](https://github.com/DannyDannyDanny/me
 ## Roadmap
 
 - [firefox-scrolling](firefox-scrolling.md) via terminal
-- Server: [server](server.md); NixOS flake and bootstrap [nixos/readme.md](nixos/readme.md). SSH and secrets: [docs/ssh-and-secrets.md](docs/ssh-and-secrets.md). New server install (USB, LUKS, WiFi): [docs/server-installer-usb.md](docs/server-installer-usb.md).
+- Server: [server-quickstart](server-quickstart.md); NixOS flake and bootstrap [nixos/readme.md](nixos/readme.md). SSH and secrets: [docs/ssh-and-secrets.md](docs/ssh-and-secrets.md). New server install (USB, LUKS, WiFi): [docs/server-installer-usb.md](docs/server-installer-usb.md).
 - nvim checkhealth; tmux setup; [fonts](https://www.programmingfonts.org/) / nerdfonts; [HN: home server](https://news.ycombinator.com/item?id=34271167)
 
 ## Windows
@@ -40,8 +40,9 @@ ssh-add ~/.ssh/id_ed25519_github
 git clone git@github.com:DannyDannyDanny/dotfiles.git && cd dotfiles
 git config user.name "DannyDannyDanny"
 git config user.email "dth@taiga.ai"
-bash install.sh
 ```
+
+Apply machine config from `nixos/` (see [CLAUDE.md](CLAUDE.md) for macOS rebuild commands or [nixos/readme.md](nixos/readme.md) for NixOS).
 
 ## Good reads
 
