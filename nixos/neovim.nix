@@ -16,8 +16,11 @@
         local config_file = os.getenv("HOME")..'/.local/share/nvim_color_scheme'
         local f = io.open(config_file, "r")
         if f ~= nil then
-            local system_theme = f:read()
+            local system_theme = f:read("*l")
             io.close(f)
+            if system_theme then
+                system_theme = system_theme:gsub("^%s+", ""):gsub("%s+$", "")
+            end
             if system_theme == 'dark' then
                 vim.cmd("set bg=dark")
             elseif system_theme == 'light' then
