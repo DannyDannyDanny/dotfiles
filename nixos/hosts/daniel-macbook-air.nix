@@ -3,6 +3,11 @@
 let
   alacrittySyncSystemTheme = pkgs.writeShellScriptBin "alacritty-sync-system-theme"
     (builtins.readFile ../../scripts/alacritty-sync-system-theme.sh);
+
+  # nix-darwin's nix.gc / nix.optimise require nix.enable; with Determinate (nix.enable = false)
+  # we schedule the same commands via launchd using nixpkgs' nix CLI (same defaults as upstream modules).
+  nixGcInterval = [{ Weekday = 7; Hour = 3; Minute = 15; }];
+  nixOptimiseInterval = [{ Weekday = 7; Hour = 4; Minute = 15; }];
 in {
   # Apple Silicon + nix-darwin basics
   nixpkgs.hostPlatform = "aarch64-darwin";
@@ -69,6 +74,24 @@ in {
       ProgramArguments = [ "${alacrittySyncSystemTheme}/bin/alacritty-sync-system-theme" ];
       StandardOutPath = "/tmp/alacritty-theme-sync.log";
       StandardErrorPath = "/tmp/alacritty-theme-sync-error.log";
+    };
+  };
+
+  launchd.daemons = {
+    nix-gc-determ = {
+      command =
+        "${lib.getExe' pkgs.nix "nix-collect-garbage"} --delete-older-than 14d";
+      serviceConfig = {
+        RunAtLoad = false;
+        StartCalendarInterval = nixGcInterval;
+      };
+    };
+    nix-store-optimise-determ = {
+      command = "${lib.getExe' pkgs.nix "nix-store"} --optimise";
+      serviceConfig = {
+        RunAtLoad = false;
+        StartCalendarInterval = nixOptimiseInterval;
+      };
     };
   };
 
