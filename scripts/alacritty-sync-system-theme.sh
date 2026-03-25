@@ -29,6 +29,11 @@ fi
 mkdir -p "$ALACRITTY_DIR"
 printf '%s' "$want" >"$MARKER"
 
+# Neovim (see nixos/neovim.nix): same file as `theme` on WSL; keep in sync with Appearance.
+NVIM_THEME="${XDG_DATA_HOME:-$HOME/.local/share}/nvim_color_scheme"
+mkdir -p "$(dirname "$NVIM_THEME")"
+printf '%s\n' "$want" >"$NVIM_THEME"
+
 if [[ "$want" == "light" ]]; then
   tmp="$(mktemp "$ALACRITTY_DIR/active-colors.toml.XXXXXX")"
   cp "$LIGHT" "$tmp"
