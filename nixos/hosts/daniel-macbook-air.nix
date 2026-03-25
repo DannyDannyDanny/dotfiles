@@ -38,6 +38,7 @@ in {
     enable = true;
     casks = [
       "google-chrome"
+      "disk-inventory-x" # Apple Silicon uses Homebrew; nixpkgs package is x86_64-darwin only.
     ];
     onActivation.cleanup = "zap";
   };
