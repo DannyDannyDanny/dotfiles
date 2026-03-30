@@ -31,10 +31,9 @@ cd ~/dotfiles/nixos && nix build .#installer-iso
   - `daniel-macbook-air.nix` — hostname `Daniel-Macbook-Air` (aarch64-darwin, nix-darwin)
   - `sunken-ship.nix` — NixOS home server (x86_64-linux)
   - `wsl.nix` — WSL (x86_64-linux)
-  - `macbookair.nix` — old MacBook Air NixOS/WSL config
   - `server-install.nix` — disko-install target (LUKS + WiFi)
-- **Home Manager:** integrated via `home-manager.darwinModules.home-manager` on macOS; user config in `nixos/home/danny/home.nix`
-- **Shared modules:** `nixos/fish.nix` (fish + bash), `nixos/tmux.nix`, `nixos/ollama.nix`
+- **Home Manager:** integrated on macOS, WSL, and sunken-ship; user config in `nixos/home/danny/home.nix`
+- **Shared modules:** `nixos/fish.nix` (fish + bash), `nixos/ollama.nix`
 - **Darwin config name:** `Daniel-Macbook-Air` (must match in rebuild commands)
 
 ## Repo rules
