@@ -43,21 +43,6 @@
         ];
       };
 
-      macbookair = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          nixos-wsl.nixosModules.default
-          vscode-server.nixosModules.default
-          ./hosts/macbookair.nix
-          ./hardware-configuration.nix
-          ./tmux.nix
-          # TODO: handle all user-level programs via home-manager
-          # ./neovim.nix  # Now handled via home-manager
-          ./fish.nix
-          # home-manager.nixosModules.default
-        ];
-      };
-
       sunken-ship = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
