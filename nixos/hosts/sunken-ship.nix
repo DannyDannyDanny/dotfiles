@@ -65,16 +65,6 @@ in
     alsa-utils # aplay, amixer, arecord for audio debugging
   ];
 
-  # PipeWire — sound server for UxPlay / GStreamer.
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    pulse.enable = true;  # PulseAudio compat for GStreamer pulsesink
-  };
-  # PipeWire runs as a user service; ensure it starts for danny even without a login session.
-  systemd.user.services.pipewire.wantedBy = [ "default.target" ];
-  systemd.user.services.pipewire-pulse.wantedBy = [ "default.target" ];
-
   # Avahi (mDNS) — required for AirPlay discovery.
   services.avahi = {
     enable = true;
@@ -88,21 +78,21 @@ in
     allowedUDPPorts = [ 5353 6000 6001 7011 ];
   };
 
-  # UxPlay AirPlay receiver — audio-only, runs as a user service under danny.
-  # Runs inside danny's user session so it can reach PipeWire/PulseAudio.
-  systemd.user.services.uxplay = {
+  # UxPlay AirPlay receiver — audio-only, outputs directly to Scarlett Solo via ALSA.
+  # Runs as a system service (no PipeWire needed on a headless server).
+  systemd.services.uxplay = {
     description = "UxPlay AirPlay receiver";
-    after = [ "pipewire-pulse.service" ];
-    wants = [ "pipewire-pulse.service" ];
-    wantedBy = [ "default.target" ];
+    after = [ "network-online.target" "avahi-daemon.service" ];
+    wants = [ "network-online.target" "avahi-daemon.service" ];
+    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
-      ExecStart = "${pkgs.uxplay}/bin/uxplay -n sunken-ship -p -vs 0";
+      ExecStart = "${pkgs.uxplay}/bin/uxplay -n sunken-ship -p -vs 0 -as alsasink device=plughw:USB,0";
       Restart = "on-failure";
       RestartSec = 5;
+      User = "danny";
+      SupplementaryGroups = [ "audio" ];
     };
   };
-  # Ensure danny's user services start at boot (not just on login).
-  users.users.danny.linger = true;
 
   # Pull dotfiles and rebuild if the repo has new commits.
   systemd.services.dotfiles-rebuild = {
