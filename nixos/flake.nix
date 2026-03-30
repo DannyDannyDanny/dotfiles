@@ -35,7 +35,6 @@
           nixos-wsl.nixosModules.default
           vscode-server.nixosModules.default
           ./hosts/wsl.nix
-          ./tmux.nix
           ./fish.nix
 
           # Home Manager on WSL

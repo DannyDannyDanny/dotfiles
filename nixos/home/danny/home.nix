@@ -43,6 +43,12 @@
       bind -r C-h select-window -t :-
       bind -r C-l select-window -t :+
 
+      # Resize pane shortcuts
+      bind -r H resize-pane -L 10
+      bind -r J resize-pane -D 10
+      bind -r K resize-pane -U 10
+      bind -r L resize-pane -R 10
+
       # split with dash and vbar
       bind | split-window -h -c "#{pane_current_path}"
       bind - split-window -v -c "#{pane_current_path}"
