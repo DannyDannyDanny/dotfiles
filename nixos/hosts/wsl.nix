@@ -23,14 +23,7 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   programs.nix-ld.enable = true;
-  # TODO: move to home manager (?)
-  programs = {
-    direnv = {
-      enable = true;
-      # enableFishIntegration = true;
-      nix-direnv.enable = true;
-    };
-  };
+  # direnv is now managed by home-manager (home/danny/home.nix)
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -47,42 +40,14 @@
   };
 
   nixpkgs.config.allowUnfree = true;
-  environment.variables = {
-    DBT_USER = "DNTH";
-    EDITOR = "nvim";
-    VISUAL = "nvim";
-  };
 
+  # User-level packages (git, ripgrep, fzf, etc.) are managed by
+  # home-manager via home/danny/home.nix.  Only system-wide deps here.
   environment.systemPackages = with pkgs; [
-    # tmux    # activated in tmux.nix
-    # vim     # using neovim in stead
-    # neovim  # activated in neovim.nix
-
-    git       # version control
-    gh        # github cli tool
-
-    ripgrep   # faster grep
-    wget      # for vscode-server
-    busybox   # useful programs e.g. tree, unzip etc
-    openssl   # cryptography swiss army knife
-    xdg-utils # terminal desktop intergrations (i.e. allow terminal to open browser)
-
-    # make default.nix in python project folders instead of using a top-level python environment manager
-    # pyenv
-    # poetry
-
-    fastfetch   # system info
-    btop        # resource monitor
-    tldr        # community alternative to man
-    fzf         # fuzzy finder
-    jq          # parse json
-
-    # gimp	    # bloat
-    # blender   # bloat
-    # inkscape  # bloat
-
-    cowsay
-    lolcat
+    wget      # needed by vscode-server
+    busybox   # useful system utilities (tree, unzip, etc.)
+    xdg-utils # terminal desktop integrations
+    jq        # parse json
   ];
 
   services.ollama.enable = true;
