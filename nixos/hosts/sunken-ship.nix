@@ -37,6 +37,7 @@ in
   };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  programs.nix-ld.enable = true;  # run dynamically linked binaries (e.g. Claude Code remote CLI)
   system.stateVersion = "24.11";
 
   users.users.danny = {
