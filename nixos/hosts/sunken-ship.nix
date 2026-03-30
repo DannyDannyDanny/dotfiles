@@ -67,6 +67,9 @@ in
   systemd.services.dotfiles-rebuild = {
     description = "Pull dotfiles and run nixos-rebuild if repo changed";
     path = with pkgs; [ git nix ];
+    environment.GIT_CONFIG_COUNT = "1";
+    environment.GIT_CONFIG_KEY_0 = "safe.directory";
+    environment.GIT_CONFIG_VALUE_0 = dotfilesDir;
     script = ''
       set -euo pipefail
       cd ${dotfilesDir}
