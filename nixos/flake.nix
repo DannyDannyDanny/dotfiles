@@ -36,10 +36,20 @@
           vscode-server.nixosModules.default
           ./hosts/wsl.nix
           ./tmux.nix
-          # TODO: handle all user-level programs via home-manager
-          # ./neovim.nix  # Now handled via home-manager
           ./fish.nix
-          # home-manager.nixosModules.default
+
+          # Home Manager on WSL
+          home-manager.nixosModules.home-manager
+          ({ lib, ... }: {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.users.dth = { ... }: {
+              home.username = "dth";
+              home.homeDirectory = lib.mkForce "/home/dth";
+              imports = [ ./home/danny/home.nix ];
+            };
+          })
         ];
       };
 
