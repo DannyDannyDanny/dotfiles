@@ -86,7 +86,7 @@ in
     wants = [ "network-online.target" "avahi-daemon.service" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
-      ExecStart = "${pkgs.uxplay}/bin/uxplay -n sunken-ship -p -vs 0 -as alsasink device=plughw:USB,0";
+      ExecStart = ''${pkgs.uxplay}/bin/uxplay -n sunken-ship -p -vs 0 -as "alsasink device=plughw:USB,0"'';
       Restart = "on-failure";
       RestartSec = 5;
       User = "danny";
