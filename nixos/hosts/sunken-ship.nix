@@ -41,7 +41,7 @@ in
 
   users.users.danny = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" ];  # video: backlight control via sysfs / brightnessctl
+    extraGroups = [ "wheel" "video" "audio" ];  # video: backlight; audio: sound devices
     # SSH keys: push via scp, don't commit. NixOS does not manage authorized_keys so scp'd keys persist.
     # Example: scp ~/.ssh/id_ed25519_sunken_ship.pub danny@server:/tmp/ then on server: mkdir -p ~/.ssh; cat /tmp/*.pub >> ~/.ssh/authorized_keys
   };
@@ -62,7 +62,18 @@ in
     git # clone/bootstrap and dotfiles-rebuild timer
     brightnessctl # manual backlight; replaces removed `light` from nixpkgs
     uxplay # AirPlay mirroring receiver
+    alsa-utils # aplay, amixer, arecord for audio debugging
   ];
+
+  # PipeWire — sound server for UxPlay / GStreamer.
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    pulse.enable = true;  # PulseAudio compat for GStreamer pulsesink
+  };
+  # PipeWire runs as a user service; ensure it starts for danny even without a login session.
+  systemd.user.services.pipewire.wantedBy = [ "default.target" ];
+  systemd.user.services.pipewire-pulse.wantedBy = [ "default.target" ];
 
   # Avahi (mDNS) — required for AirPlay discovery.
   services.avahi = {
@@ -77,19 +88,21 @@ in
     allowedUDPPorts = [ 5353 6000 6001 7011 ];
   };
 
-  # UxPlay AirPlay receiver — audio-only, runs as a persistent service.
-  systemd.services.uxplay = {
+  # UxPlay AirPlay receiver — audio-only, runs as a user service under danny.
+  # Runs inside danny's user session so it can reach PipeWire/PulseAudio.
+  systemd.user.services.uxplay = {
     description = "UxPlay AirPlay receiver";
-    after = [ "network-online.target" "avahi-daemon.service" ];
-    wants = [ "network-online.target" "avahi-daemon.service" ];
-    wantedBy = [ "multi-user.target" ];
+    after = [ "pipewire-pulse.service" ];
+    wants = [ "pipewire-pulse.service" ];
+    wantedBy = [ "default.target" ];
     serviceConfig = {
       ExecStart = "${pkgs.uxplay}/bin/uxplay -n sunken-ship -p -vs 0";
       Restart = "on-failure";
       RestartSec = 5;
-      User = "danny";
     };
   };
+  # Ensure danny's user services start at boot (not just on login).
+  users.users.danny.linger = true;
 
   # Pull dotfiles and rebuild if the repo has new commits.
   systemd.services.dotfiles-rebuild = {
