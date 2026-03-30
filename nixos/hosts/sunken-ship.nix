@@ -61,7 +61,21 @@ in
   environment.systemPackages = with pkgs; [
     git # clone/bootstrap and dotfiles-rebuild timer
     brightnessctl # manual backlight; replaces removed `light` from nixpkgs
+    uxplay # AirPlay mirroring receiver
   ];
+
+  # Avahi (mDNS) — required for AirPlay discovery.
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    publish = { enable = true; userServices = true; };
+  };
+
+  # Open firewall for AirPlay (mDNS + UxPlay default ports).
+  networking.firewall = {
+    allowedTCPPorts = [ 7000 7001 7100 ];
+    allowedUDPPorts = [ 5353 6000 6001 7011 ];
+  };
 
   # Pull dotfiles and rebuild if the repo has new commits.
   systemd.services.dotfiles-rebuild = {
