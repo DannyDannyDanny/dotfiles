@@ -77,6 +77,20 @@ in
     allowedUDPPorts = [ 5353 6000 6001 7011 ];
   };
 
+  # UxPlay AirPlay receiver — audio-only, runs as a persistent service.
+  systemd.services.uxplay = {
+    description = "UxPlay AirPlay receiver";
+    after = [ "network-online.target" "avahi-daemon.service" ];
+    wants = [ "network-online.target" "avahi-daemon.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.uxplay}/bin/uxplay -n sunken-ship -p -vs 0";
+      Restart = "on-failure";
+      RestartSec = 5;
+      User = "danny";
+    };
+  };
+
   # Pull dotfiles and rebuild if the repo has new commits.
   systemd.services.dotfiles-rebuild = {
     description = "Pull dotfiles and run nixos-rebuild if repo changed";
