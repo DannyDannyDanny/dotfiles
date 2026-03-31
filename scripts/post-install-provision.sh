@@ -14,10 +14,10 @@ mount /dev/mapper/crypted /mnt
 mount /dev/disk/by-partlabel/disk-main-ESP /mnt/boot 2>/dev/null || true
 for d in dev proc sys; do mount --bind /$d /mnt/$d; done
 
-# Clone dotfiles
+# Clone dotfiles (run git from live system, clone directly into /mnt)
 if [[ ! -d /mnt/etc/dotfiles ]]; then
-  chroot /mnt nix run --extra-experimental-features "nix-command flakes" nixpkgs#git -- \
-    clone "$REPO" /etc/dotfiles
+  nix run --extra-experimental-features "nix-command flakes" nixpkgs#git -- \
+    clone "$REPO" /mnt/etc/dotfiles
   echo "[ok] dotfiles cloned"
 else
   echo "[skip] dotfiles already present"
