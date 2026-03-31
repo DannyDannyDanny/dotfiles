@@ -135,12 +135,16 @@ if [[ ! -b "$LUKS_DEV" ]]; then
   exit 0
 fi
 
-if ! echo -n "$luks_pass" | cryptsetup open "$LUKS_DEV" crypted --key-file -; then
+if [[ -e /dev/mapper/crypted ]]; then
+  echo "  [ok] LUKS device already open (left open by disko-install)"
+  unset luks_pass
+elif ! echo -n "$luks_pass" | cryptsetup open "$LUKS_DEV" crypted --key-file -; then
   echo "Wrong LUKS passphrase. Complete provisioning manually after boot."
   unset luks_pass
   exit 0
+else
+  unset luks_pass
 fi
-unset luks_pass
 
 mount /dev/mapper/crypted /mnt
 [[ -b "$ESP_DEV" ]] && mount "$ESP_DEV" /mnt/boot
