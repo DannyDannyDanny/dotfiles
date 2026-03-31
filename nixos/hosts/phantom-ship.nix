@@ -10,7 +10,8 @@ in
   imports = [ ./phantom-ship-hardware.nix ];
 
   networking.hostName = "phantom-ship";
-  networking.useDHCP = lib.mkDefault true;  # Ethernet; no wireless
+  networking.useDHCP = lib.mkDefault true;
+  networking.wireless.enable = true;  # credentials in /etc/wpa_supplicant.conf (outside repo)
   time.timeZone = "Europe/Copenhagen";
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
