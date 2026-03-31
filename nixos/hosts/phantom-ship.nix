@@ -12,6 +12,8 @@ in
   networking.hostName = "phantom-ship";
   networking.useDHCP = lib.mkDefault true;
   networking.wireless.enable = true;  # credentials in /etc/wpa_supplicant.conf (outside repo)
+
+  hardware.enableRedistributableFirmware = true;  # iwlwifi (Intel 8260) + GPU + BT firmware
   time.timeZone = "Europe/Copenhagen";
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
