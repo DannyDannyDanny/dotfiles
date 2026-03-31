@@ -6,8 +6,9 @@
 # macOS (from ~/dotfiles/nixos)
 darwin-rebuild switch --flake .
 
-# NixOS server (SSH from mac, or on server)
+# NixOS servers (SSH from mac, or on server)
 sudo nixos-rebuild switch --flake .#sunken-ship
+sudo nixos-rebuild switch --flake .#phantom-ship
 
 # WSL
 sudo nixos-rebuild switch --flake ~/dotfiles/nixos#wsl
@@ -29,9 +30,10 @@ cd ~/dotfiles/nixos && nix build .#installer-iso
 - **Inputs:** nixpkgs-unstable, nix-darwin, home-manager, nixos-wsl, disko, zen-browser
 - **Host configs** in `nixos/hosts/`:
   - `daniel-macbook-air.nix` — hostname `Daniel-Macbook-Air` (aarch64-darwin, nix-darwin)
-  - `sunken-ship.nix` — NixOS home server (x86_64-linux)
+  - `sunken-ship.nix` — NixOS home server (x86_64-linux, WiFi + AirPlay)
+  - `phantom-ship.nix` — NixOS home server (x86_64-linux, Ethernet)
   - `wsl.nix` — WSL (x86_64-linux)
-  - `server-install.nix` — disko-install target (LUKS + WiFi)
+  - `server-install.nix` — disko-install target (LUKS)
 - **Home Manager:** integrated on macOS, WSL, and sunken-ship; user config in `nixos/home/danny/home.nix`
 - **Shared modules:** `nixos/fish.nix` (fish + bash), `nixos/ollama.nix`
 - **Darwin config name:** `Daniel-Macbook-Air` (must match in rebuild commands)
@@ -46,8 +48,16 @@ cd ~/dotfiles/nixos && nix build .#installer-iso
 
 - SSH: `ssh -i ~/.ssh/id_ed25519_sunken_ship danny@sunken-ship`
 - Remote rebuild: `ssh ... 'cd /etc/dotfiles/nixos && sudo nixos-rebuild switch --flake .#sunken-ship'`
-- Auto-rebuild timer: `dotfiles-rebuild` — only active after flake config switch. Check with `systemctl is-active dotfiles-rebuild.timer`.
-- Server has WiFi; stays reachable when ethernet is unplugged.
+- Auto-rebuild timer: `dotfiles-rebuild` — every 15 min. Check with `systemctl is-active dotfiles-rebuild.timer`.
+- WiFi connected; stays reachable when ethernet is unplugged.
+- Services: UxPlay (AirPlay receiver on Scarlett Solo)
+
+## Server (phantom-ship)
+
+- SSH: `ssh danny@phantom-ship`
+- Remote rebuild: `ssh ... 'cd /etc/dotfiles/nixos && sudo nixos-rebuild switch --flake .#phantom-ship'`
+- Auto-rebuild timer: same pattern as sunken-ship.
+- Ethernet only (no WiFi).
 
 ## Ollama
 

@@ -1,0 +1,65 @@
+# NixOS server: bare config with SSH, auto-rebuild, Ethernet.
+# Services (OpenClaw, etc.) to be added later.
+{ config, lib, pkgs, ... }:
+
+let
+  dotfilesDir = "/etc/dotfiles";
+  flakeRef = "${dotfilesDir}/nixos#phantom-ship";
+in
+{
+  imports = [ ./phantom-ship-hardware.nix ];
+
+  networking.hostName = "phantom-ship";
+  networking.useDHCP = lib.mkDefault true;  # Ethernet; no wireless
+  time.timeZone = "Europe/Copenhagen";
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  programs.nix-ld.enable = true;  # run dynamically linked binaries (e.g. Claude Code remote CLI)
+  system.stateVersion = "24.11";
+
+  users.users.danny = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+  };
+
+  # Key-only auth; no password or keyboard-interactive.
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
+  };
+
+  # Passwordless sudo for wheel.
+  security.sudo.wheelNeedsPassword = false;
+  environment.systemPackages = with pkgs; [
+    git  # clone/bootstrap and dotfiles-rebuild timer
+  ];
+
+  # Pull dotfiles and rebuild if the repo has new commits.
+  systemd.services.dotfiles-rebuild = {
+    description = "Pull dotfiles and run nixos-rebuild if repo changed";
+    path = with pkgs; [ git nix ];
+    environment.GIT_CONFIG_COUNT = "1";
+    environment.GIT_CONFIG_KEY_0 = "safe.directory";
+    environment.GIT_CONFIG_VALUE_0 = dotfilesDir;
+    script = ''
+      set -euo pipefail
+      cd ${dotfilesDir}
+      git fetch origin
+      if [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ]; then
+        exit 0
+      fi
+      git pull origin main
+      exec nixos-rebuild switch --flake ${flakeRef}
+    '';
+    serviceConfig.Type = "oneshot";
+  };
+
+  systemd.timers.dotfiles-rebuild = {
+    wantedBy = [ "timers.target" ];
+    timerConfig.OnCalendar = "*-*-* *:00/15:00";  # every 15 minutes
+    timerConfig.RandomizedDelaySec = "2min";
+  };
+}

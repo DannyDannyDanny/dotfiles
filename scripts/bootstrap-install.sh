@@ -1,13 +1,13 @@
 #!/bin/bash
 # Fetch with curl and run to install NixOS (clone + run nixos-server-install.sh).
 # On the live system, run only:
-#   curl -sL https://raw.githubusercontent.com/DannyDannyDanny/dotfiles/server-installer-usb/scripts/bootstrap-install.sh | sudo bash
+#   curl -sL https://raw.githubusercontent.com/DannyDannyDanny/dotfiles/main/scripts/bootstrap-install.sh | sudo bash
 #
 # Optional: REPO_URL=... BRANCH=... (default repo and server-installer-usb)
 set -euo pipefail
 
 REPO_URL="${REPO_URL:-https://github.com/DannyDannyDanny/dotfiles.git}"
-BRANCH="${BRANCH:-server-installer-usb}"
+BRANCH="${BRANCH:-main}"
 DEST="/tmp/dotfiles"
 INSTALL_SCRIPT="$DEST/scripts/nixos-server-install.sh"
 
