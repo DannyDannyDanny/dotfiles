@@ -14,10 +14,16 @@ mount /dev/mapper/crypted /mnt
 mount /dev/disk/by-partlabel/disk-main-ESP /mnt/boot 2>/dev/null || true
 for d in dev proc sys; do mount --bind /$d /mnt/$d; done
 
-# Clone dotfiles (run git from live system, clone directly into /mnt)
+# Clone dotfiles — find git or nix, clone directly into /mnt (no chroot)
 if [[ ! -d /mnt/etc/dotfiles ]]; then
-  nix run --extra-experimental-features "nix-command flakes" nixpkgs#git -- \
-    clone "$REPO" /mnt/etc/dotfiles
+  # Ensure nix is in PATH (live installer may strip it under sudo)
+  export PATH=$PATH:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin
+  if command -v git &>/dev/null; then
+    git clone "$REPO" /mnt/etc/dotfiles
+  else
+    nix run --extra-experimental-features "nix-command flakes" nixpkgs#git -- \
+      clone "$REPO" /mnt/etc/dotfiles
+  fi
   echo "[ok] dotfiles cloned"
 else
   echo "[skip] dotfiles already present"
