@@ -20,6 +20,7 @@ in
   users.users.danny = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
+    initialPassword = "changeme";  # console fallback; change after first login
   };
 
   # Key-only auth; no password or keyboard-interactive.
