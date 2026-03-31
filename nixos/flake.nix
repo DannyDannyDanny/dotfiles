@@ -72,6 +72,26 @@
         ];
       };
 
+      phantom-ship = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/phantom-ship.nix
+
+          # Home Manager on NixOS
+          home-manager.nixosModules.home-manager
+          ({ lib, ... }: {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.users.danny = { ... }: {
+              home.username = "danny";
+              home.homeDirectory = lib.mkForce "/home/danny";
+              home.stateVersion = "25.11";
+            };
+          })
+        ];
+      };
+
       # For disko-install: LUKS + WiFi; hostname/WiFi via --system-config.
       server-install = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
