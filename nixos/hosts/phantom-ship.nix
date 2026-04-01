@@ -13,6 +13,26 @@ in
   networking.useDHCP = lib.mkDefault true;
   networking.wireless.enable = true;  # credentials in /etc/wpa_supplicant.conf (outside repo)
 
+  # NAT: share WiFi internet to rusty-anchor over ethernet
+  networking.nat = {
+    enable = true;
+    externalInterface = "wlp1s0";
+    internalInterfaces = [ "enp0s31f6" ];
+  };
+  networking.interfaces.enp0s31f6.ipv4.addresses = [{
+    address = "10.0.0.1";
+    prefixLength = 24;
+  }];
+  services.dnsmasq = {
+    enable = true;
+    settings = {
+      interface = "enp0s31f6";
+      dhcp-range = "10.0.0.10,10.0.0.50,24h";
+      dhcp-option = [ "3,10.0.0.1" "6,10.0.0.1" ];  # gateway + DNS
+    };
+  };
+  networking.firewall.trustedInterfaces = [ "enp0s31f6" ];
+
   hardware.enableRedistributableFirmware = true;  # iwlwifi (Intel 8260) + GPU + BT firmware
   time.timeZone = "Europe/Copenhagen";
 
