@@ -34,6 +34,22 @@ in
   networking.firewall.trustedInterfaces = [ "enp0s31f6" ];
 
   hardware.enableRedistributableFirmware = true;  # iwlwifi (Intel 8260) + GPU + BT firmware
+
+  boot.kernelParams = [ "consoleblank=60" ];  # blank TTY after 60s to reduce burn-in
+
+  # Turn off panel backlight after boot so the screen actually dims.
+  systemd.services.server-backlight-off = {
+    description = "Turn off panel backlight after console idle (reduce burn-in)";
+    after = [ "multi-user.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.Type = "oneshot";
+    script = ''
+      ${pkgs.coreutils}/bin/sleep 65
+      for d in /sys/class/backlight/*; do
+        [ -f "$d/brightness" ] && echo 0 > "$d/brightness" 2>/dev/null || true
+      done
+    '';
+  };
   time.timeZone = "Europe/Copenhagen";
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
