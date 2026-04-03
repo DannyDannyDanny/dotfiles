@@ -1,10 +1,14 @@
-# NixOS server: bare config with SSH, auto-rebuild, Ethernet.
-# Services (OpenClaw, etc.) to be added later.
+# NixOS server: SSH, auto-rebuild, NAT for rusty-anchor, OpenClaw gateway.
 { config, lib, pkgs, ... }:
 
 let
   dotfilesDir = "/etc/dotfiles";
   flakeRef = "${dotfilesDir}/nixos#phantom-ship";
+
+  # Telegram user ID(s) — gitignored, not committed to public repo.
+  # Create openclaw-allow-from.nix with e.g.: [ 12345678 ]
+  allowFromPath = ./openclaw-allow-from.nix;
+  openclawAllowFrom = if builtins.pathExists allowFromPath then import allowFromPath else [ ];
 in
 {
   imports = [ ./phantom-ship-hardware.nix ];
@@ -76,6 +80,19 @@ in
   environment.systemPackages = with pkgs; [
     git  # clone/bootstrap and dotfiles-rebuild timer
   ];
+
+  # OpenClaw AI gateway — Telegram bot, Anthropic API.
+  # Secrets (not in repo): /etc/openclaw/telegram-bot-token, /etc/openclaw/env (ANTHROPIC_API_KEY)
+  services.openclaw-gateway = {
+    enable = true;
+    environmentFiles = [ "/etc/openclaw/env" ];
+    config = {
+      channels.telegram = {
+        tokenFile = "/etc/openclaw/telegram-bot-token";
+        allowFrom = openclawAllowFrom;
+      };
+    };
+  };
 
   # Pull dotfiles and rebuild if the repo has new commits.
   systemd.services.dotfiles-rebuild = {
