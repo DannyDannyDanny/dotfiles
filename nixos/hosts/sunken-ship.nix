@@ -95,6 +95,30 @@ in
     };
   };
 
+  # BigBiggerBiggestBot — Telegram fitness tracker with Mini App.
+  # Code deployed separately via rsync (private repo, not referenced here).
+  # Bot token: ~danny/.secrets/bigbiggerbiggestbot
+  systemd.services.fitness-bot = let
+    pythonEnv = pkgs.python3.withPackages (ps: with ps; [
+      python-telegram-bot
+      python-dotenv
+      aiohttp
+    ]);
+  in {
+    description = "BigBiggerBiggestBot Telegram fitness tracker";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pythonEnv pkgs.cloudflared ];
+    serviceConfig = {
+      WorkingDirectory = "/home/danny/tg_fitness_bot";
+      ExecStart = "${pythonEnv}/bin/python start.py";
+      Restart = "on-failure";
+      RestartSec = 10;
+      User = "danny";
+    };
+  };
+
   # Pull dotfiles and rebuild if the repo has new commits.
   systemd.services.dotfiles-rebuild = {
     description = "Pull dotfiles and run nixos-rebuild if repo changed";
