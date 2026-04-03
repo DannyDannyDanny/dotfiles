@@ -96,6 +96,11 @@ in
     };
   };
 
+  # OpenClaw gateway needs write access to its config dir for runtime state.
+  systemd.tmpfiles.rules = [
+    "d /etc/openclaw 0775 root openclaw - -"
+  ];
+
   # Pull dotfiles and rebuild if the repo has new commits.
   systemd.services.dotfiles-rebuild = {
     description = "Pull dotfiles and run nixos-rebuild if repo changed";
