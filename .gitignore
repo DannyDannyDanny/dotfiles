@@ -15,5 +15,8 @@ nixos/installer-wifi.nix
 # Nix build output symlink
 result
 
+# OpenClaw: Telegram user ID (not committed to public repo)
+nixos/hosts/openclaw-allow-from.nix
+
 # Archived / local-only directories
 openclaw-documents-repo/

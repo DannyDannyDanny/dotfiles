@@ -15,6 +15,9 @@
 
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
+
+    nix-openclaw.url = "github:openclaw/nix-openclaw";
+    nix-openclaw.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -26,6 +29,7 @@
     home-manager,
     zen-browser,
     disko,
+    nix-openclaw,
     ...
   }: {
     nixosConfigurations = {
@@ -75,6 +79,7 @@
       phantom-ship = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
+          nix-openclaw.nixosModules.openclaw-gateway
           ./hosts/phantom-ship.nix
 
           # Home Manager on NixOS
