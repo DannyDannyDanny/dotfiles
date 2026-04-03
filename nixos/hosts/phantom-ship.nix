@@ -88,6 +88,7 @@ in
     enable = true;
     environmentFiles = [ "/etc/openclaw/env" ];
     config = {
+      gateway.mode = "local";
       channels.telegram = {
         tokenFile = "/etc/openclaw/telegram-bot-token";
         allowFrom = openclawAllowFrom;
@@ -98,7 +99,7 @@ in
   # Pull dotfiles and rebuild if the repo has new commits.
   systemd.services.dotfiles-rebuild = {
     description = "Pull dotfiles and run nixos-rebuild if repo changed";
-    path = with pkgs; [ git nix ];
+    path = with pkgs; [ git nix nixos-rebuild ];
     environment.GIT_CONFIG_COUNT = "1";
     environment.GIT_CONFIG_KEY_0 = "safe.directory";
     environment.GIT_CONFIG_VALUE_0 = dotfilesDir;
