@@ -101,6 +101,15 @@ in
     "d /etc/openclaw 0775 root openclaw - -"
   ];
 
+  # Harden the openclaw-gateway systemd service.
+  systemd.services.openclaw-gateway.serviceConfig = {
+    ProtectHome = "read-only";
+    ProtectSystem = "strict";
+    PrivateTmp = true;
+    NoNewPrivileges = true;
+    ReadWritePaths = [ "/var/lib/openclaw" "/etc/openclaw" ];
+  };
+
   # Pull dotfiles and rebuild if the repo has new commits.
   systemd.services.dotfiles-rebuild = {
     description = "Pull dotfiles and run nixos-rebuild if repo changed";
