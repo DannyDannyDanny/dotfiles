@@ -79,7 +79,9 @@ in
   # Passwordless sudo for wheel.
   security.sudo.wheelNeedsPassword = false;
   environment.systemPackages = with pkgs; [
-    git  # clone/bootstrap and dotfiles-rebuild timer
+    git        # clone/bootstrap and dotfiles-rebuild timer
+    nodejs     # npm for openclaw plugin installs
+    python3    # node-gyp dependency for openclaw plugins
   ];
 
   # OpenClaw AI gateway — Telegram bot, Anthropic API.
