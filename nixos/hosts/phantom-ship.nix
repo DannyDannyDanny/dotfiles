@@ -89,7 +89,7 @@ in
   services.openclaw-gateway = {
     enable = true;
     environmentFiles = [ "/etc/openclaw/env" ];
-    servicePath = [ pkgs.git pkgs.nodejs ];
+    servicePath = [ pkgs.git pkgs.nodejs pkgs.openai-whisper ];
     config = {
       gateway.mode = "local";
       channels.telegram = {
