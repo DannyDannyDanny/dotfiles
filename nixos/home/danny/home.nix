@@ -213,6 +213,7 @@
     # zed-editor   # TODO: Bloat
     code-cursor
     cursor-cli
+    dfu-util      # USB DFU firmware flasher (Flipper Zero etc.)
     discord
     mapscii
     mpv
