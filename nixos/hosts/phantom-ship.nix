@@ -64,7 +64,7 @@ in
   users.users.danny = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
-    initialPassword = "changeme";  # console fallback; change after first login
+    # Password is locked (key-only SSH). Use NixOS installer or recovery to reset if needed.
   };
 
   # Key-only auth; no password or keyboard-interactive.
