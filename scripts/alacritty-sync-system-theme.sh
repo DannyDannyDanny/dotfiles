@@ -44,3 +44,22 @@ fi
 
 chmod 0644 "$tmp"
 mv -f "$tmp" "$ACTIVE"
+
+# Sync theme to rusty-anchor VT console (best-effort, non-blocking)
+RUSTY_ANCHOR_KEY="$HOME/.ssh/id_ed25519_phantom_ship"
+RUSTY_ANCHOR_THEME_FILE="/etc/vt-theme"
+if [[ -f "$RUSTY_ANCHOR_KEY" ]]; then
+  last_rusty="$ALACRITTY_DIR/.last-rusty-anchor-theme"
+  if [[ "$(cat "$last_rusty" 2>/dev/null)" != "$want" ]]; then
+    (
+      ssh -i "$RUSTY_ANCHOR_KEY" \
+          -J danny@phantom-ship \
+          -o ConnectTimeout=5 \
+          -o StrictHostKeyChecking=no \
+          danny@10.0.0.2 \
+          "echo '$want' | sudo tee $RUSTY_ANCHOR_THEME_FILE > /dev/null && sudo /usr/local/bin/vt-theme '$want' /dev/tty1" \
+          2>/dev/null \
+        && printf '%s' "$want" >"$last_rusty"
+    ) &
+  fi
+fi

@@ -82,6 +82,7 @@ in
     git        # clone/bootstrap and dotfiles-rebuild timer
     nodejs     # npm for openclaw plugin installs
     python3    # node-gyp dependency for openclaw plugins
+    wakeonlan  # wake rusty-anchor: wakeonlan 00:16:cb:87:20:ba
   ];
 
   # OpenClaw AI gateway — Telegram bot, Anthropic API.
