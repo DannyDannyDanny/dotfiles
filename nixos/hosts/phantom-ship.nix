@@ -87,6 +87,7 @@ in
   services.openclaw-gateway = {
     enable = true;
     environmentFiles = [ "/etc/openclaw/env" ];
+    servicePath = [ pkgs.git pkgs.nodejs ];
     config = {
       gateway.mode = "local";
       channels.telegram = {
@@ -96,12 +97,29 @@ in
     };
   };
 
-  # OpenClaw gateway needs write access to its config dir for runtime state.
+  # OpenClaw gateway needs write access to its config dir and repo clones.
   systemd.tmpfiles.rules = [
     "d /etc/openclaw 0775 root openclaw - -"
+    "d /var/lib/openclaw/repos 0750 openclaw openclaw - -"
   ];
 
+  # Git config for the openclaw user: credential helper reads PAT from file.
+  # PAT (not in repo): /etc/openclaw/github-token (fine-grained, scoped to specific repos)
+  environment.etc."openclaw/gitconfig" = {
+    text = ''
+      [user]
+        name = OpenClaw Bot
+        email = noreply@openclaw.local
+      [credential "https://github.com"]
+        helper = "!f() { echo username=x-access-token; echo password=$(cat /etc/openclaw/github-token); }; f"
+      [safe]
+        directory = /var/lib/openclaw/repos
+    '';
+    mode = "0644";
+  };
+
   # Harden the openclaw-gateway systemd service.
+  systemd.services.openclaw-gateway.environment.GIT_CONFIG_GLOBAL = "/etc/openclaw/gitconfig";
   systemd.services.openclaw-gateway.serviceConfig = {
     ProtectHome = "read-only";
     ProtectSystem = "strict";
