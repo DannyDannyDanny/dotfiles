@@ -217,6 +217,7 @@
     discord
     mapscii
     mpv
+    uhk-agent  # UHK keyboard configuration GUI + CLI
   ]);
 
   # First HM version for this user config; bump only if you understand the migration notes.
