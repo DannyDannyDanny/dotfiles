@@ -40,6 +40,7 @@ in {
       "google-chrome"
       "disk-inventory-x" # Apple Silicon uses Homebrew; nixpkgs package is x86_64-darwin only.
       "qflipper"         # Flipper Zero firmware updater GUI
+      "uhk-agent"        # Ultimate Hacking Keyboard configuration
     ];
     onActivation.cleanup = "zap";
   };
