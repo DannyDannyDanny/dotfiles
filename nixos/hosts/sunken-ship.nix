@@ -80,17 +80,22 @@ in
   };
 
   # Navidrome — self-hosted music streaming server (Subsonic API).
-  # Music library: /home/danny/music
+  # Music library: /srv/music (bind-mounted from /home/danny/music).
   # Web UI + Substreamer client on port 4533.
   services.navidrome = {
     enable = true;
     settings = {
       Address = "0.0.0.0";
       Port = 4533;
-      MusicFolder = "/home/danny/music";
+      MusicFolder = "/srv/music";
     };
   };
-  users.users.navidrome.extraGroups = [ "users" ];
+
+  # Persist the bind mount so navidrome can read music outside ProtectHome.
+  fileSystems."/srv/music" = {
+    device = "/home/danny/music";
+    options = [ "bind" "ro" ];
+  };
 
   # UxPlay AirPlay receiver — audio-only, outputs directly to Scarlett Solo via ALSA.
   # Runs as a system service (no PipeWire needed on a headless server).
