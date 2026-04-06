@@ -90,6 +90,7 @@ in
       MusicFolder = "/home/danny/music";
     };
   };
+  users.users.navidrome.extraGroups = [ "users" ];
 
   # UxPlay AirPlay receiver — audio-only, outputs directly to Scarlett Solo via ALSA.
   # Runs as a system service (no PipeWire needed on a headless server).
