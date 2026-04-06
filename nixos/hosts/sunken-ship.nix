@@ -64,6 +64,7 @@ in
     brightnessctl # manual backlight; replaces removed `light` from nixpkgs
     uxplay # AirPlay mirroring receiver
     alsa-utils # aplay, amixer, arecord for audio debugging
+    cloudflared # Cloudflare Tunnel for external access
   ];
 
   # Avahi (mDNS) — required for AirPlay discovery.
@@ -95,6 +96,23 @@ in
   fileSystems."/srv/music" = {
     device = "/home/danny/music";
     options = [ "bind" "ro" ];
+  };
+
+  # Cloudflare Tunnel — exposes services to the internet without port forwarding.
+  # Token (not in repo): ~danny/.secrets/cloudflare-tunnel-token
+  # Routes configured in Cloudflare Zero Trust dashboard:
+  #   music.dannydannydanny.me → http://localhost:4533
+  systemd.services.cloudflare-tunnel = {
+    description = "Cloudflare Tunnel for sunken-ship";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      ExecStart = "/bin/sh -c '${pkgs.cloudflared}/bin/cloudflared tunnel --no-autoupdate run --token $(cat /home/danny/.secrets/cloudflare-tunnel-token)'";
+      Restart = "on-failure";
+      RestartSec = 10;
+      User = "danny";
+    };
   };
 
   # UxPlay AirPlay receiver — audio-only, outputs directly to Scarlett Solo via ALSA.
