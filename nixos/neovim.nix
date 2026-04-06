@@ -21,7 +21,7 @@
       let g:netrw_winsize = 25
     '';
 
-    extraLuaConfig = ''
+    initLua = ''
       -- Auto-detect system theme (dark/light) from marker file
       local config_file = os.getenv("HOME") .. "/.local/share/nvim_color_scheme"
       local f = io.open(config_file, "r")
