@@ -73,10 +73,22 @@ in
     publish = { enable = true; userServices = true; };
   };
 
-  # Open firewall for AirPlay (mDNS + UxPlay default ports).
+  # Open firewall for AirPlay (mDNS + UxPlay default ports) + Navidrome.
   networking.firewall = {
-    allowedTCPPorts = [ 7000 7001 7100 ];
+    allowedTCPPorts = [ 7000 7001 7100 4533 ];
     allowedUDPPorts = [ 5353 6000 6001 7011 ];
+  };
+
+  # Navidrome — self-hosted music streaming server (Subsonic API).
+  # Music library: /home/danny/music
+  # Web UI + Substreamer client on port 4533.
+  services.navidrome = {
+    enable = true;
+    settings = {
+      Address = "0.0.0.0";
+      Port = 4533;
+      MusicFolder = "/home/danny/music";
+    };
   };
 
   # UxPlay AirPlay receiver — audio-only, outputs directly to Scarlett Solo via ALSA.
@@ -87,7 +99,7 @@ in
     wants = [ "network-online.target" "avahi-daemon.service" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
-      ExecStart = ''${pkgs.uxplay}/bin/uxplay -n sunken-ship -p -vs 0 -as "alsasink device=plughw:USB,0 buffer-time=200000"'';
+      ExecStart = ''${pkgs.uxplay}/bin/uxplay -n sunken-ship -p -vs 0 -as "audioconvert ! audioresample ! alsasink device=plughw:USB,0 buffer-time=200000"'';
       Restart = "on-failure";
       RestartSec = 5;
       User = "danny";
