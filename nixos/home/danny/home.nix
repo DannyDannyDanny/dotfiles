@@ -217,7 +217,7 @@
     discord
     mapscii
     mpv
-    uhk-agent  # UHK keyboard configuration GUI + CLI
+    # uhk-agent  # UHK keyboard configuration GUI + CLI — removed, nixpkgs marks x86_64-linux only TODO
   ]);
 
   # First HM version for this user config; bump only if you understand the migration notes.
