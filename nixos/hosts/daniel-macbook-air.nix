@@ -40,7 +40,7 @@ in {
       "google-chrome"
       "disk-inventory-x" # Apple Silicon uses Homebrew; nixpkgs package is x86_64-darwin only.
       "qflipper"         # Flipper Zero firmware updater GUI
-      "uhk-agent"        # Ultimate Hacking Keyboard configuration
+      # "uhk-agent"        # Ultimate Hacking Keyboard configuration — removed, nixpkgs marks x86_64-linux only TODO
     ];
     onActivation.cleanup = "zap";
   };
@@ -67,7 +67,10 @@ in {
   # User-specific packages and environment variables are now in home-manager (home.nix)
   # Only system-level packages should remain here if needed
 
-  environment.systemPackages = [ alacrittySyncSystemTheme ];
+  environment.systemPackages = [
+    alacrittySyncSystemTheme
+    pkgs.feishin  # Subsonic/Navidrome desktop music player
+  ];
 
   # Poll macOS appearance; updates ~/.config/alacritty/active-colors.toml (Alacritty live_config_reload).
   launchd.user.agents.alacritty-system-theme = {
