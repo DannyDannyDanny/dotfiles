@@ -132,8 +132,9 @@ in
   };
 
   # BigBiggerBiggestBot — Telegram fitness tracker with Mini App.
-  # Code deployed separately via rsync (private repo, not referenced here).
+  # Code: https://github.com/DannyDannyDanny/bigbiggerbiggestbot cloned at /home/danny/tg_fitness_bot
   # Bot token: ~danny/.secrets/bigbiggerbiggestbot
+  # Deployment: fitness-bot-pull timer below runs every 15 min, git pulls, restarts service on changes.
   systemd.services.fitness-bot = let
     pythonEnv = pkgs.python3.withPackages (ps: with ps; [
       python-telegram-bot
@@ -153,6 +154,34 @@ in
       RestartSec = 10;
       User = "danny";
     };
+  };
+
+  # Pull fitness bot from GitHub and restart the service if the repo has new commits.
+  # Code lives at /home/danny/tg_fitness_bot (git clone of DannyDannyDanny/bigbiggerbiggestbot).
+  # workouts.db is gitignored — preserved across pulls.
+  systemd.services.fitness-bot-pull = {
+    description = "Pull fitness bot and restart service if repo changed";
+    path = with pkgs; [ git systemd ];
+    environment.GIT_CONFIG_COUNT = "1";
+    environment.GIT_CONFIG_KEY_0 = "safe.directory";
+    environment.GIT_CONFIG_VALUE_0 = "/home/danny/tg_fitness_bot";
+    script = ''
+      set -euo pipefail
+      cd /home/danny/tg_fitness_bot
+      git fetch origin
+      if [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ]; then
+        exit 0
+      fi
+      git pull origin main
+      systemctl restart fitness-bot
+    '';
+    serviceConfig.Type = "oneshot";
+  };
+
+  systemd.timers.fitness-bot-pull = {
+    wantedBy = [ "timers.target" ];
+    timerConfig.OnCalendar = "*-*-* *:07/15:00";  # every 15 minutes, offset from dotfiles-rebuild
+    timerConfig.RandomizedDelaySec = "2min";
   };
 
   # Pull dotfiles and rebuild if the repo has new commits.
