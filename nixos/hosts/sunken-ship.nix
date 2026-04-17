@@ -95,6 +95,7 @@ in
   # Persist the bind mount so navidrome can read music outside ProtectHome.
   fileSystems."/srv/music" = {
     device = "/home/danny/music";
+    fsType = "none";
     options = [ "bind" "ro" ];
   };
 
