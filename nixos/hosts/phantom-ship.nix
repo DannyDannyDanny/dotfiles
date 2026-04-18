@@ -85,10 +85,13 @@ in
     claude-code  # Claude Code CLI (channels replaces openclaw)
   ];
 
-  # OpenClaw AI gateway — Telegram bot, Anthropic API.
+  # OpenClaw AI gateway — DISABLED. Replaced by Claude Code Channels below.
+  # Config kept for easy rollback during validation; will be fully removed in a
+  # follow-up commit once Channels is proven stable. Workspace state at
+  # /var/lib/openclaw/ is preserved and also committed to vimwiki/openclaw/.
   # Secrets (not in repo): /etc/openclaw/telegram-bot-token, /etc/openclaw/env (ANTHROPIC_API_KEY)
   services.openclaw-gateway = {
-    enable = true;
+    enable = false;
     environmentFiles = [ "/etc/openclaw/env" ];
     servicePath = [ pkgs.git pkgs.nodejs pkgs.openai-whisper ];
     config = {
@@ -97,6 +100,33 @@ in
         tokenFile = "/etc/openclaw/telegram-bot-token";
         allowFrom = openclawAllowFrom;
       };
+    };
+  };
+
+  # Claude Code Channels — Telegram bridge for @HarakatBot.
+  # Uses claude.ai subscription auth (long-lived OAuth token) to bypass
+  # the API rate limits OpenClaw was hitting.
+  # Secret (not in repo): /etc/claude-channels/env (CLAUDE_CODE_OAUTH_TOKEN)
+  # Plugin + pairing state lives at /home/danny/.claude/ (set up interactively).
+  systemd.services.claude-channels = {
+    description = "Claude Code Channels (Telegram bridge for @HarakatBot)";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pkgs.claude-code pkgs.bun pkgs.git pkgs.util-linux ];
+    environment = {
+      HOME = "/home/danny";
+    };
+    serviceConfig = {
+      Type = "simple";
+      User = "danny";
+      Group = "users";
+      WorkingDirectory = "/home/danny";
+      EnvironmentFile = "/etc/claude-channels/env";
+      # claude needs a PTY; wrap with script(1). /dev/null discards the typescript.
+      ExecStart = ''${pkgs.util-linux}/bin/script -qfc "${pkgs.claude-code}/bin/claude --channels plugin:telegram@claude-plugins-official" /dev/null'';
+      Restart = "always";
+      RestartSec = 5;
     };
   };
 
