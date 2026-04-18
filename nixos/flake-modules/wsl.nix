@@ -7,17 +7,12 @@
       ../hosts/wsl.nix
       ../fish.nix
 
-      # Home Manager on WSL
       inputs.home-manager.nixosModules.home-manager
-      ({ lib, ... }: {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.backupFileExtension = "backup";
-        home-manager.users.dth = { ... }: {
-          home.username = "dth";
-          home.homeDirectory = lib.mkForce "/home/dth";
-          imports = [ ../home/danny/home.nix ];
-        };
+      (import ../lib/home-manager-user.nix {
+        lib = inputs.nixpkgs.lib;
+        user = "dth";
+        homeDirectory = "/home/dth";
+        userImports = [ ../home/danny/home.nix ];
       })
     ];
   };

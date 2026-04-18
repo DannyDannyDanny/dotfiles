@@ -4,17 +4,12 @@
     modules = [
       ../hosts/sunken-ship.nix
 
-      # Home Manager on NixOS
       inputs.home-manager.nixosModules.home-manager
-      ({ lib, ... }: {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.backupFileExtension = "backup";
-        home-manager.users.danny = { ... }: {
-          home.username = "danny";
-          home.homeDirectory = lib.mkForce "/home/danny";
-          home.stateVersion = "25.11";
-        };
+      (import ../lib/home-manager-user.nix {
+        lib = inputs.nixpkgs.lib;
+        user = "danny";
+        homeDirectory = "/home/danny";
+        stateVersion = "25.11";
       })
     ];
   };
