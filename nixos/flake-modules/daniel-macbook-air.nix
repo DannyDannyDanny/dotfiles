@@ -10,21 +10,12 @@
       ../hosts/daniel-macbook-air.nix
       ../fish.nix
 
-      # Home Manager on macOS
       inputs.home-manager.darwinModules.home-manager
-      ({ lib, ... }: {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        # Automatically backup files before home-manager overwrites them
-        home-manager.backupFileExtension = "backup";
-        home-manager.users.danny = { ... }: {
-          # Force an absolute path even if another module sets a bad value.
-          home.username = "danny";
-          home.homeDirectory = lib.mkForce "/Users/danny";
-          imports = [
-            ../home/danny/home.nix
-          ];
-        };
+      (import ../lib/home-manager-user.nix {
+        lib = inputs.nixpkgs.lib;
+        user = "danny";
+        homeDirectory = "/Users/danny";
+        userImports = [ ../home/danny/home.nix ];
       })
     ];
   };
