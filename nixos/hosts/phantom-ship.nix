@@ -124,9 +124,9 @@ in
       WorkingDirectory = "/home/danny";
       EnvironmentFile = "/etc/claude-channels/env";
       # claude needs a PTY; wrap with script(1). /dev/null discards the typescript.
-      # --dangerously-skip-permissions: unattended use. Safe here because the bot
-      # is paired only to danny's Telegram ID (allowFrom) on a private server.
-      ExecStart = ''${pkgs.util-linux}/bin/script -qfc "${pkgs.claude-code}/bin/claude --channels plugin:telegram@claude-plugins-official --dangerously-skip-permissions" /dev/null'';
+      # Permission bypass lives in ~/.claude/settings.json (permissions.defaultMode)
+      # — using the CLI flag triggers an interactive warning dialog at startup.
+      ExecStart = ''${pkgs.util-linux}/bin/script -qfc "${pkgs.claude-code}/bin/claude --channels plugin:telegram@claude-plugins-official" /dev/null'';
       Restart = "always";
       RestartSec = 5;
     };
