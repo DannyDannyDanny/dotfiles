@@ -1,4 +1,4 @@
-{ pkgs, lib, config, zen-browser ? null, ... }:
+{ pkgs, lib, config, ... }:
 {
   # TODO: remove next two lines from here or from flake.nix
   # home.username = "danny";
@@ -171,9 +171,9 @@
   # Fonts
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
-    # Zen Browser (Firefox fork; from flake, supports aarch64-darwin)
-  ] ++ (lib.optionals (zen-browser != null) [
-    zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+    # Zen Browser (Firefox fork; from flake overlay, supports aarch64-darwin)
+  ] ++ (lib.optionals (pkgs ? zen-browser) [
+    pkgs.zen-browser
   ]) ++ (with pkgs; [
     # Google Fonts (includes Michroma)
     google-fonts
