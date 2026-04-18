@@ -185,6 +185,12 @@ in
     timerConfig.RandomizedDelaySec = "2min";
   };
 
+  # Trust /etc/dotfiles as root even though it's owned by `danny`.
+  # The GIT_CONFIG_* env vars below only affect the git CLI; nix/libgit2
+  # reads safe.directory from /etc/gitconfig, so set it there too.
+  programs.git.enable = true;
+  programs.git.config.safe.directory = [ dotfilesDir ];
+
   # Pull dotfiles and rebuild if the repo has new commits.
   systemd.services.dotfiles-rebuild = {
     description = "Pull dotfiles and run nixos-rebuild if repo changed";
