@@ -7,10 +7,6 @@
 # Timer runs every 15 min: git fetch, pull if origin/main changed, rebuild.
 { config, lib, pkgs, ... }:
 
-let
-  dotfilesDir = "/etc/dotfiles";
-  flakeRef = "${dotfilesDir}/nixos#sunken-ship";
-in
 {
   imports = [ ./sunken-ship-hardware.nix ];
 
@@ -185,35 +181,6 @@ in
     timerConfig.RandomizedDelaySec = "2min";
   };
 
-  # Trust /etc/dotfiles as root even though it's owned by `danny`.
-  # The GIT_CONFIG_* env vars below only affect the git CLI; nix/libgit2
-  # reads safe.directory from /etc/gitconfig, so set it there too.
-  programs.git.enable = true;
-  programs.git.config.safe.directory = [ dotfilesDir ];
-
-  # Pull dotfiles and rebuild if the repo has new commits.
-  systemd.services.dotfiles-rebuild = {
-    description = "Pull dotfiles and run nixos-rebuild if repo changed";
-    path = with pkgs; [ git nix nixos-rebuild ];
-    environment.GIT_CONFIG_COUNT = "1";
-    environment.GIT_CONFIG_KEY_0 = "safe.directory";
-    environment.GIT_CONFIG_VALUE_0 = dotfilesDir;
-    script = ''
-      set -euo pipefail
-      cd ${dotfilesDir}
-      git fetch origin
-      if [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ]; then
-        exit 0
-      fi
-      git pull origin main
-      exec nixos-rebuild switch --flake ${flakeRef}
-    '';
-    serviceConfig.Type = "oneshot";
-  };
-
-  systemd.timers.dotfiles-rebuild = {
-    wantedBy = [ "timers.target" ];
-    timerConfig.OnCalendar = "*-*-* *:00/15:00";  # every 15 minutes
-    timerConfig.RandomizedDelaySec = "2min";
-  };
+  # Auto-rebuild service/timer + safe.directory provided by the
+  # shared dotfiles-rebuild NixOS module (see nixos/modules/dotfiles-rebuild.nix).
 }
