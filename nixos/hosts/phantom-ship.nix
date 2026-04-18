@@ -56,7 +56,8 @@ in
   };
   time.timeZone = "Europe/Copenhagen";
 
-  nixpkgs.config.permittedInsecurePackages = [ "openclaw-2026.3.12" ];
+  nixpkgs.config.permittedInsecurePackages = [ "openclaw-2026.3.12" "openclaw-2026.4.12" ];
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "claude-code" ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   programs.nix-ld.enable = true;  # run dynamically linked binaries (e.g. Claude Code remote CLI)
   system.stateVersion = "24.11";
@@ -79,10 +80,12 @@ in
   # Passwordless sudo for wheel.
   security.sudo.wheelNeedsPassword = false;
   environment.systemPackages = with pkgs; [
-    git        # clone/bootstrap and dotfiles-rebuild timer
-    nodejs     # npm for openclaw plugin installs
-    python3    # node-gyp dependency for openclaw plugins
-    wakeonlan  # wake rusty-anchor: wakeonlan 00:16:cb:87:20:ba
+    git          # clone/bootstrap and dotfiles-rebuild timer
+    nodejs       # npm for openclaw plugin installs
+    python3      # node-gyp dependency for openclaw plugins
+    wakeonlan    # wake rusty-anchor: wakeonlan 00:16:cb:87:20:ba
+    bun          # runtime for claude-code channel plugins
+    claude-code  # Claude Code CLI (channels replaces openclaw)
   ];
 
   # OpenClaw AI gateway — Telegram bot, Anthropic API.
