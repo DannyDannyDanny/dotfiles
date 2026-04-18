@@ -151,14 +151,16 @@ in
     mode = "0644";
   };
 
-  # Harden the openclaw-gateway systemd service.
-  systemd.services.openclaw-gateway.environment.GIT_CONFIG_GLOBAL = "/etc/openclaw/gitconfig";
-  systemd.services.openclaw-gateway.serviceConfig = {
-    ProtectHome = "read-only";
-    ProtectSystem = "strict";
-    PrivateTmp = true;
-    NoNewPrivileges = true;
-    ReadWritePaths = [ "/var/lib/openclaw" "/etc/openclaw" ];
+  # Harden the openclaw-gateway systemd service (only when enabled).
+  systemd.services.openclaw-gateway = lib.mkIf config.services.openclaw-gateway.enable {
+    environment.GIT_CONFIG_GLOBAL = "/etc/openclaw/gitconfig";
+    serviceConfig = {
+      ProtectHome = "read-only";
+      ProtectSystem = "strict";
+      PrivateTmp = true;
+      NoNewPrivileges = true;
+      ReadWritePaths = [ "/var/lib/openclaw" "/etc/openclaw" ];
+    };
   };
 
   # Auto-rebuild service/timer + safe.directory provided by the
