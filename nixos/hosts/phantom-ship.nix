@@ -56,7 +56,7 @@ in
   };
   time.timeZone = "Europe/Copenhagen";
 
-  nixpkgs.config.permittedInsecurePackages = [ "openclaw-2026.3.12" ];
+  nixpkgs.config.permittedInsecurePackages = [ "openclaw-2026.3.12" "openclaw-2026.4.12" ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   programs.nix-ld.enable = true;  # run dynamically linked binaries (e.g. Claude Code remote CLI)
   system.stateVersion = "24.11";
