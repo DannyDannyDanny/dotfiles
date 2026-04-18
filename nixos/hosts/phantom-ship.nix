@@ -83,6 +83,8 @@ in
     wakeonlan    # wake rusty-anchor: wakeonlan 00:16:cb:87:20:ba
     bun          # runtime for claude-code channel plugins
     claude-code  # Claude Code CLI (channels replaces openclaw)
+    openai-whisper  # voice message transcription
+    ffmpeg          # audio decoding for whisper
   ];
 
   # OpenClaw AI gateway — DISABLED. Replaced by Claude Code Channels below.
