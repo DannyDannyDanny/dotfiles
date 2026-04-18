@@ -7,6 +7,9 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
 
+    # Auto-loads every .nix file under ./flake-modules as a flake-parts module.
+    import-tree.url = "github:vic/import-tree";
+
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -23,17 +26,9 @@
     nix-openclaw.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs @ { flake-parts, ... }:
+  outputs = inputs @ { flake-parts, import-tree, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" "aarch64-darwin" ];
-
-      imports = [
-        ./flake-modules/wsl.nix
-        ./flake-modules/sunken-ship.nix
-        ./flake-modules/phantom-ship.nix
-        ./flake-modules/daniel-macbook-air.nix
-        ./flake-modules/server-install.nix
-        ./flake-modules/installer-iso.nix
-      ];
+      imports = [ (import-tree ./flake-modules) ];
     };
 }
