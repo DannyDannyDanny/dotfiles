@@ -4,8 +4,8 @@
     system = "x86_64-linux";
     modules = [
       inputs.disko.nixosModules.disko
-      ../disko-server.nix
-      ../hosts/server-install.nix
+      ../nixos/disko-server.nix
+      ../nixos/hosts/server-install.nix
     ];
   };
 }

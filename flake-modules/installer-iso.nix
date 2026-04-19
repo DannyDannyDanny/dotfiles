@@ -3,7 +3,7 @@
   # Optional: add ./installer-wifi.nix (gitignored) to modules for live WiFi.
   flake.nixosConfigurations.installer-iso = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
-    modules = [ ../installer-iso.nix ];
+    modules = [ ../nixos/installer-iso.nix ];
   };
 
   flake.packages.x86_64-linux.installer-iso =

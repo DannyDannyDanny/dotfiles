@@ -1,13 +1,13 @@
 # Shared auto-rebuild-from-git service for homelab hosts.
 #
 # Every 15 min: git fetch origin, fast-forward main, and if there were any
-# new commits run nixos-rebuild switch against `<dotfilesDir>/nixos#<host>`.
+# new commits run nixos-rebuild switch against `<dotfilesDir>#<host>`.
 #
 # Assumes /etc/dotfiles is an already-cloned checkout of the dotfiles repo.
 { config, lib, pkgs, ... }:
 let
   dotfilesDir = "/etc/dotfiles";
-  flakeRef = "${dotfilesDir}/nixos#${config.networking.hostName}";
+  flakeRef = "${dotfilesDir}#${config.networking.hostName}";
 in {
   environment.systemPackages = [ pkgs.git ];
 

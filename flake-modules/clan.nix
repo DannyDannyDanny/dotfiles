@@ -47,7 +47,7 @@ in {
           clan.core.networking.targetHost = "danny@sunken-ship";
           clan.core.networking.buildHost = "danny@sunken-ship";
         }
-        ../hosts/sunken-ship.nix
+        ../nixos/hosts/sunken-ship.nix
         config.flake.nixosModules.dotfiles-rebuild
         inputs.home-manager.nixosModules.home-manager
         (hmModule {
@@ -66,7 +66,7 @@ in {
           clan.core.networking.buildHost = "danny@phantom-ship";
         }
         inputs.nix-openclaw.nixosModules.openclaw-gateway
-        ../hosts/phantom-ship.nix
+        ../nixos/hosts/phantom-ship.nix
         config.flake.nixosModules.dotfiles-rebuild
         inputs.home-manager.nixosModules.home-manager
         (hmModule {
