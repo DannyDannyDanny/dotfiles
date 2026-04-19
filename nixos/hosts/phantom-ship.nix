@@ -167,6 +167,34 @@ in
     };
   };
 
+  # Shipyard — Telegram bot that lists Danny's mini-apps and collects feedback.
+  # Code deployed out-of-band via rsync to /home/danny/shipyard/
+  # (staying in-tree in ~/python-projects/26_shipyard/ until spun out to its own repo).
+  # Bot token (not in repo): ~danny/.secrets/telegram-bot-token-shipyard
+  # Data (feedback.jsonl, pointer cache): ~danny/.local/share/shipyard/
+  systemd.services.shipyard = let
+    pythonEnv = pkgs.python3.withPackages (ps: with ps; [
+      python-telegram-bot
+      httpx
+    ]);
+  in {
+    description = "Shipyard Telegram bot (mini-app launcher + feedback)";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pythonEnv ];
+    environment = {
+      SHIPYARD_BOT_TOKEN_FILE = "/home/danny/.secrets/telegram-bot-token-shipyard";
+    };
+    serviceConfig = {
+      WorkingDirectory = "/home/danny/shipyard";
+      ExecStart = "${pythonEnv}/bin/python bot.py";
+      Restart = "on-failure";
+      RestartSec = 10;
+      User = "danny";
+    };
+  };
+
   # Auto-rebuild service/timer + safe.directory provided by the
   # shared dotfiles-rebuild NixOS module (see nixos/modules/dotfiles-rebuild.nix).
 }
