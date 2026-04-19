@@ -7,15 +7,15 @@
         }) ];
       }
 
-      ../hosts/daniel-macbook-air.nix
-      ../fish.nix
+      ../nixos/hosts/daniel-macbook-air.nix
+      ../nixos/fish.nix
 
       inputs.home-manager.darwinModules.home-manager
       (import ../lib/home-manager-user.nix {
         lib = inputs.nixpkgs.lib;
         user = "danny";
         homeDirectory = "/Users/danny";
-        userImports = [ ../home/danny/home.nix ];
+        userImports = [ ../nixos/home/danny/home.nix ];
       })
     ];
   };

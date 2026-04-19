@@ -2,8 +2,10 @@
 
 ## Build commands
 
+The flake lives at the repo root (`~/dotfiles/flake.nix`) — clan-cli doesn't handle flakes in subdirs.
+
 ```bash
-# macOS (from ~/dotfiles/nixos)
+# macOS (from ~/dotfiles)
 darwin-rebuild switch --flake .
 
 # NixOS servers (SSH from mac, or on server)
@@ -11,13 +13,17 @@ sudo nixos-rebuild switch --flake .#sunken-ship
 sudo nixos-rebuild switch --flake .#phantom-ship
 
 # WSL
-sudo nixos-rebuild switch --flake ~/dotfiles/nixos#wsl
+sudo nixos-rebuild switch --flake ~/dotfiles#wsl
 
 # Update flake + rebuild (fish alias: nixupdate)
-cd ~/dotfiles/nixos && sudo nix flake update && sudo darwin-rebuild switch --flake ~/dotfiles/nixos#Daniel-Macbook-Air
+cd ~/dotfiles && sudo nix flake update && sudo darwin-rebuild switch --flake ~/dotfiles#Daniel-Macbook-Air
 
 # Installer ISO (Linux only, cannot build on macOS)
-cd ~/dotfiles/nixos && nix build .#installer-iso
+cd ~/dotfiles && nix build .#installer-iso
+
+# Clan push update (from mac; builds on target so aarch64-darwin → x86_64-linux works)
+nix run git+https://git.clan.lol/clan/clan-core#clan-cli -- \
+  machines update sunken-ship --flake ~/dotfiles
 ```
 
 ## Rebuild protocol
@@ -47,7 +53,7 @@ cd ~/dotfiles/nixos && nix build .#installer-iso
 ## Server (sunken-ship)
 
 - SSH: `ssh -i ~/.ssh/id_ed25519_sunken_ship danny@sunken-ship`
-- Remote rebuild: `ssh ... 'cd /etc/dotfiles/nixos && sudo nixos-rebuild switch --flake .#sunken-ship'`
+- Remote rebuild: `ssh ... 'cd /etc/dotfiles && sudo nixos-rebuild switch --flake .#sunken-ship'`
 - Auto-rebuild timer: `dotfiles-rebuild` — every 15 min. Check with `systemctl is-active dotfiles-rebuild.timer`.
 - WiFi connected; stays reachable when ethernet is unplugged.
 - Services: UxPlay (AirPlay receiver on Scarlett Solo)
@@ -55,7 +61,7 @@ cd ~/dotfiles/nixos && nix build .#installer-iso
 ## Server (phantom-ship)
 
 - SSH: `ssh danny@phantom-ship`
-- Remote rebuild: `ssh ... 'cd /etc/dotfiles/nixos && sudo nixos-rebuild switch --flake .#phantom-ship'`
+- Remote rebuild: `ssh ... 'cd /etc/dotfiles && sudo nixos-rebuild switch --flake .#phantom-ship'`
 - Auto-rebuild timer: same pattern as sunken-ship.
 - Ethernet only (no WiFi).
 
@@ -72,11 +78,10 @@ Terminal colors follow **System Settings → Appearance**: `programs.alacritty` 
 **CLI invocation:** clan-cli is not installed globally. Run ad-hoc via:
 
 ```bash
-nix run git+https://git.clan.lol/clan/clan-core#clan-cli -- machines list \
-  --flake 'path:/Users/danny/dotfiles/nixos'
+nix run git+https://git.clan.lol/clan/clan-core#clan-cli -- machines list --flake ~/dotfiles
 ```
 
-**Flake path quirk:** `--flake .` and `--flake git+…` both fail from a git worktree when the flake lives in a subdir (`nixos/`). Use `--flake 'path:…/nixos'` explicitly. May not be needed from the main checkout — retest.
+Flake lives at the repo root (not `nixos/`) — clan-cli silently ignores `?dir=` so a subdir flake breaks `clan machines update`.
 
 **`enableRecommendedDefaults = false`:** we opted out fleet-wide because clan's defaults flip to `systemd-networkd` + `systemd-resolved` + `boot.initrd.systemd`, which breaks dnsmasq (NAT DNS on phantom-ship) and navidrome's resolv.conf bind-mount on sunken-ship. Revisit per-service in a later pass — the defaults also include handy extras (tcpdump, htop, curl, jq, nixos-facter). Option defined in `nixosModules/clanCore/defaults.nix` + `nixosModules/clanCore/networking.nix` inside the `clan-core` flake.
 
