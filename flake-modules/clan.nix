@@ -37,6 +37,22 @@ in {
       roles.peer.machines.sunken-ship = { };
     };
 
+    # Direct SSH reachability on the LAN. Priority 2000 > ZT's 900, so
+    # `clan machines update` prefers LAN hostnames over ZT IPv6 — and uses
+    # the right user (ZT service defaults to root@).
+    inventory.instances.internet = {
+      module.name = "internet";
+      module.input = "clan-core";
+      roles.default.machines.sunken-ship.settings = {
+        host = "sunken-ship";
+        user = "danny";
+      };
+      roles.default.machines.phantom-ship.settings = {
+        host = "phantom-ship";
+        user = "danny";
+      };
+    };
+
     # Preserve current network / init stack (no systemd-networkd/resolved,
     # no boot.initrd.systemd, no extra debug packages). Revisit per-service
     # in later stages rather than flipping this fleet-wide.
