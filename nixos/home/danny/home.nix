@@ -9,6 +9,23 @@
   # Import neovim configuration
   imports = [ ../../neovim.nix ];
 
+  # ZeroTier SSH aliases — managed drop-in under ~/.ssh/config.d/.
+  # For this to take effect, your ~/.ssh/config must include:
+  #   Include ~/.ssh/config.d/*
+  # near the top (before any host-specific blocks).
+  home.file.".ssh/config.d/zerotier".text = ''
+    Host sunken-ship-zt
+      HostName fdd5:53a2:de33:d269:6499:93d5:53a2:de33
+      User danny
+      IdentityFile ~/.ssh/id_ed25519_sunken_ship
+      IdentitiesOnly yes
+
+    Host phantom-ship-zt
+      HostName fdd5:53a2:de33:d269:6499:936c:48a:bbdc
+      User danny
+      IdentitiesOnly yes
+  '';
+
   # tmux (user-level; same config on macOS and NixOS if you reuse this file)
   programs.tmux = {
     enable = true;
