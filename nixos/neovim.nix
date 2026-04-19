@@ -4,6 +4,8 @@
   programs.neovim = {
     enable = true;
     defaultEditor = true;
+    withRuby = false;
+    withPython3 = false;
 
     # VimScript settings (options that have no Lua equivalent or are simpler in vim)
     extraConfig = ''
