@@ -96,16 +96,32 @@
   };
 
   # Cloudflare Tunnel — exposes services to the internet without port forwarding.
-  # Token (not in repo): ~danny/.secrets/cloudflare-tunnel-token
+  # Token managed as a clan var (see generator below); prompted interactively
+  # on first `clan vars generate` and stored SOPS-encrypted under vars/.
   # Routes configured in Cloudflare Zero Trust dashboard:
   #   music.dannydannydanny.me → http://localhost:4533
+  # Scheduled for retirement in stage 4d — ZeroTier-only access after that.
+  clan.core.vars.generators.cloudflare-tunnel = {
+    files.tunnel-token = {
+      secret = true;
+      deploy = true;
+      owner = "danny";
+    };
+    prompts.tunnel-token = {
+      description = "Cloudflare Tunnel token (Zero Trust dashboard → Networks → Tunnels → your tunnel → refresh token)";
+      type = "hidden";
+      persist = true;
+    };
+    script = "cp $prompts/tunnel-token $out/tunnel-token";
+  };
+
   systemd.services.cloudflare-tunnel = {
     description = "Cloudflare Tunnel for sunken-ship";
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
-      ExecStart = "/bin/sh -c '${pkgs.cloudflared}/bin/cloudflared tunnel --no-autoupdate run --token $(cat /home/danny/.secrets/cloudflare-tunnel-token)'";
+      ExecStart = "/bin/sh -c '${pkgs.cloudflared}/bin/cloudflared tunnel --no-autoupdate run --token $(cat ${config.clan.core.vars.generators.cloudflare-tunnel.files.tunnel-token.path})'";
       Restart = "on-failure";
       RestartSec = 10;
       User = "danny";
