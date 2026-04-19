@@ -24,6 +24,10 @@
 
     nix-openclaw.url = "github:openclaw/nix-openclaw";
     nix-openclaw.inputs.nixpkgs.follows = "nixpkgs";
+
+    clan-core.url = "https://git.clan.lol/clan/clan-core/archive/main.tar.gz";
+    clan-core.inputs.nixpkgs.follows = "nixpkgs";
+    clan-core.inputs.flake-parts.follows = "flake-parts";
   };
 
   outputs = inputs @ { flake-parts, import-tree, ... }:
