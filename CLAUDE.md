@@ -67,6 +67,21 @@ Custom nix-darwin module at `nixos/ollama.nix` (upstream PR not yet merged). Ena
 
 Terminal colors follow **System Settings → Appearance**: `programs.alacritty` imports `~/.config/alacritty/active-colors.toml`; `scripts/alacritty-sync-system-theme.sh` copies Catppuccin latte/mocha there when the OS mode changes. **nix-darwin** `launchd.user.agents.alacritty-system-theme` polls every 30s; **fish** runs the same script on interactive startup. After changing Nix, one `darwin-rebuild switch`. Details: `assets/alacritty/README.md`.
 
+## clan.lol
+
+**CLI invocation:** clan-cli is not installed globally. Run ad-hoc via:
+
+```bash
+nix run git+https://git.clan.lol/clan/clan-core#clan-cli -- machines list \
+  --flake 'path:/Users/danny/dotfiles/nixos'
+```
+
+**Flake path quirk:** `--flake .` and `--flake git+…` both fail from a git worktree when the flake lives in a subdir (`nixos/`). Use `--flake 'path:…/nixos'` explicitly. May not be needed from the main checkout — retest.
+
+**`enableRecommendedDefaults = false`:** we opted out fleet-wide because clan's defaults flip to `systemd-networkd` + `systemd-resolved` + `boot.initrd.systemd`, which breaks dnsmasq (NAT DNS on phantom-ship) and navidrome's resolv.conf bind-mount on sunken-ship. Revisit per-service in a later pass — the defaults also include handy extras (tcpdump, htop, curl, jq, nixos-facter). Option defined in `nixosModules/clanCore/defaults.nix` + `nixosModules/clanCore/networking.nix` inside the `clan-core` flake.
+
+**Deployment:** `dotfiles-rebuild` timer (every 15 min pull) is still the source of truth. `clan machines update` works as a push escape hatch; dm-pull-deploy replaces the timer in a later stage.
+
 ## Shell
 
 Fish is the default shell. Bash auto-execs fish unless the parent process is already fish. Vi keybindings with fzf integration. Zoxide aliased to `cd`.
