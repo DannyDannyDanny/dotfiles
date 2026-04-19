@@ -40,6 +40,7 @@ in {
       "google-chrome"
       "disk-inventory-x" # Apple Silicon uses Homebrew; nixpkgs package is x86_64-darwin only.
       "qflipper"         # Flipper Zero firmware updater GUI
+      "zerotier-one"     # Clan homelab overlay — authorize on sunken-ship controller
       # "uhk-agent"        # Ultimate Hacking Keyboard configuration — removed, nixpkgs marks x86_64-linux only TODO
     ];
     onActivation.cleanup = "zap";
