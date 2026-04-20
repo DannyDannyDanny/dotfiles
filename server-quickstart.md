@@ -44,7 +44,7 @@ Optional: `services.openssh.settings = { PasswordAuthentication = false; PermitR
 
 ```bash
 sudo nixos-rebuild switch
-# or: sudo nixos-rebuild switch --flake /path/to/dotfiles/nixos#hostname
+# or: sudo nixos-rebuild switch --flake /path/to/dotfiles#hostname
 ```
 
 Then from your main machine: `ssh danny@myserver`

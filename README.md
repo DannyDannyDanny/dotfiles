@@ -25,7 +25,7 @@ nix-shell -p gh git
 gh auth login
 gh repo clone dannydannydanny/dotfiles && cd dotfiles
 # git checkout <branch>  # if needed
-sudo nixos-rebuild switch --flake ~/dotfiles/nixos#wsl
+sudo nixos-rebuild switch --flake ~/dotfiles#wsl
 ```
 
 ### Clone via SSH
