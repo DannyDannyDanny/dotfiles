@@ -50,7 +50,7 @@ Bootable USB that installs NixOS on a new server with disk encryption (LUKS). Th
 8. SSH in: `ssh danny@phantom-ship`
 9. First rebuild to switch from generic `server-install` to `phantom-ship` config:
    ```bash
-   cd /etc/dotfiles/nixos && sudo nixos-rebuild switch --flake .#phantom-ship
+   cd /etc/dotfiles && sudo nixos-rebuild switch --flake .#phantom-ship
    ```
 10. Commit the generated `phantom-ship-hardware.nix` back to the repo.
 
@@ -87,7 +87,7 @@ Adds WiFi kernel modules for servers that need WiFi on the live system.
 ### Build directly on Linux
 
 ```bash
-cd ~/dotfiles/nixos && nix build .#installer-iso
+cd ~/dotfiles && nix build .#installer-iso
 # Write to USB:
 sudo dd if=result/iso/nixos-minimal-*.iso of=/dev/sdX status=progress bs=4M
 ```
@@ -117,7 +117,7 @@ sudo INSTALLER_SYSTEM_CONFIG_FILE=/path/to/wifi.json INSTALLER_HOSTNAME=my-serve
 
 ```bash
 sudo nix run github:nix-community/disko/latest#disko-install -- \
-  --flake 'path:/tmp/dotfiles/nixos#server-install' \
+  --flake 'path:/tmp/dotfiles#server-install' \
   --disk main /dev/sda \
   --system-config '{"networking":{"hostName":"my-server"}}'
 ```
@@ -130,5 +130,5 @@ sudo nix run github:nix-community/disko/latest#disko-install -- \
 | **Boot** | Boot new server from USB, plug Ethernet |
 | **Install** | `curl ... \| INSTALLER_HOSTNAME=phantom-ship SSH_PUBKEY_FILE=/tmp/key.pub sudo -E bash` |
 | **Reboot** | Remove USB, unlock LUKS |
-| **First rebuild** | `sudo nixos-rebuild switch --flake /etc/dotfiles/nixos#phantom-ship` |
+| **First rebuild** | `sudo nixos-rebuild switch --flake /etc/dotfiles#phantom-ship` |
 | **Commit** | Push generated `phantom-ship-hardware.nix` to repo |

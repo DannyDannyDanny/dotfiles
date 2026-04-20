@@ -1,32 +1,39 @@
-# NixOS flake
+# NixOS modules
 
-Rebuild from dotfiles dir:
+Host-specific NixOS and home-manager modules live under this dir:
+
+- `hosts/<machine>.nix` + `hosts/<machine>-hardware.nix`
+- `home/danny/home.nix` (home-manager)
+- `fish.nix`, `neovim.nix`, `ollama.nix`, `installer-iso.nix`, `disko-server.nix`
+
+The flake itself (`flake.nix`, `flake.lock`, `flake-modules/`, `lib/`, `modules/`, `sops/`, `vars/`) lives at the **repo root**, not here. See [CLAUDE.md](../CLAUDE.md) at the repo root for rebuild commands, clan.lol operations, and the `dotfiles-rebuild` timer.
+
+## Quick rebuild reference
 
 ```bash
 # macOS
-cd ~/dotfiles/nixos && darwin-rebuild switch --flake .
+cd ~/dotfiles && darwin-rebuild switch --flake .
 
 # WSL
-sudo nixos-rebuild switch --flake ~/dotfiles/nixos#wsl
+sudo nixos-rebuild switch --flake ~/dotfiles#wsl
 
-# sunken-ship (on server)
-sudo nixos-rebuild switch --flake /etc/dotfiles/nixos#sunken-ship
+# Servers (via clan from mac)
+nix run git+https://git.clan.lol/clan/clan-core#clan-cli -- \
+  machines update sunken-ship --flake ~/dotfiles
 ```
 
-## Server (sunken-ship)
-
-One-time bootstrap (no git until first rebuild):
+## Server bootstrap (one-time)
 
 ```bash
-nix run --extra-experimental-features "nix-command flakes" nixpkgs#git -- clone https://github.com/DannyDannyDanny/dotfiles.git /tmp/dotfiles
+nix run --extra-experimental-features "nix-command flakes" nixpkgs#git -- \
+  clone https://github.com/DannyDannyDanny/dotfiles.git /tmp/dotfiles
 sudo mv /tmp/dotfiles /etc/dotfiles
-sudo nixos-rebuild switch --flake /etc/dotfiles/nixos#sunken-ship --option accept-flake-config true
+sudo nixos-rebuild switch --flake /etc/dotfiles#sunken-ship \
+  --option accept-flake-config true
 ```
 
-If the daemon doesn't have flakes: copy [server-configuration-with-flakes.nix](server-configuration-with-flakes.nix) to `/etc/nixos/configuration.nix`, run `sudo nixos-rebuild switch`, then build and switch to the flake (see [server-quickstart.md](../server-quickstart.md) for SSH keys).
+If the daemon doesn't have flakes: copy [server-configuration-with-flakes.nix](server-configuration-with-flakes.nix) to `/etc/nixos/configuration.nix`, `sudo nixos-rebuild switch`, then build the flake.
 
 SSH keys (not in repo): `scp ~/.ssh/*.pub danny@server:/tmp/`, then on server `mkdir -p ~/.ssh; cat /tmp/*.pub >> ~/.ssh/authorized_keys`. See [docs/ssh-and-secrets.md](../docs/ssh-and-secrets.md).
-
-Timer: every 15 min the server pulls and rebuilds when `main` changes. Config: `hosts/sunken-ship.nix`, `hosts/sunken-ship-hardware.nix`.
 
 No git in PATH: `sudo nix run nixpkgs#git -- -C /etc/dotfiles pull origin main`.

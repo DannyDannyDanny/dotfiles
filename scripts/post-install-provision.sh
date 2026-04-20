@@ -57,5 +57,5 @@ cryptsetup close crypted 2>/dev/null || true
 echo ""
 echo "=== Done! Remove USB and reboot. ==="
 echo "After unlocking LUKS, SSH in: ssh danny@${HOSTNAME}"
-echo "Then: cd /etc/dotfiles/nixos && sudo nixos-rebuild switch --flake .#${HOSTNAME}"
+echo "Then: cd /etc/dotfiles && sudo nixos-rebuild switch --flake .#${HOSTNAME}"
 echo "Commit ${HOSTNAME}-hardware.nix from the USB back to the repo."

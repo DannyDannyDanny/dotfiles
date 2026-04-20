@@ -16,12 +16,12 @@ set -euo pipefail
 
 FLAKE_REF="${FLAKE_REF:-}"
 if [[ -z "$FLAKE_REF" ]]; then
-  if [[ -d "$(dirname "$0")/../nixos" ]] && [[ -f "$(dirname "$0")/../nixos/flake.nix" ]]; then
+  if [[ -f "$(dirname "$0")/../flake.nix" ]]; then
     REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-    FLAKE_REF="path:${REPO_ROOT}/nixos"
+    FLAKE_REF="path:${REPO_ROOT}"
   else
     echo "FLAKE_REF not set and not running from dotfiles repo. Example:"
-    echo "  export FLAKE_REF=github:USER/REPO   # or path:/path/to/dotfiles/nixos"
+    echo "  export FLAKE_REF=github:USER/REPO   # or path:/path/to/dotfiles"
     exit 1
   fi
 fi
@@ -197,5 +197,5 @@ echo ""
 echo "=== Done! ==="
 echo "Remove the USB and reboot. After unlocking LUKS:"
 echo "  1. SSH in: ssh danny@${hostname}"
-echo "  2. First rebuild: cd /etc/dotfiles/nixos && sudo nixos-rebuild switch --flake .#${hostname}"
+echo "  2. First rebuild: cd /etc/dotfiles && sudo nixos-rebuild switch --flake .#${hostname}"
 echo "  3. Commit ${hostname}-hardware.nix back to the repo"

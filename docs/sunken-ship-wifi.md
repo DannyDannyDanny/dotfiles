@@ -42,10 +42,10 @@ nix shell nixpkgs#wpa_supplicant -c wpa_passphrase "YOUR_SSID" "YOUR_PASSWORD"
 
 ## Rebuild (after changing Nix config)
 
-From the server (flake is in `nixos/`):
+From the server (flake is at the repo root):
 
 ```bash
-cd /etc/dotfiles/nixos && sudo nixos-rebuild switch --flake .#sunken-ship
+cd /etc/dotfiles && sudo nixos-rebuild switch --flake .#sunken-ship
 ```
 
 ## Verify
