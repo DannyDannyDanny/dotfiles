@@ -60,7 +60,6 @@
     brightnessctl # manual backlight; replaces removed `light` from nixpkgs
     uxplay # AirPlay mirroring receiver
     alsa-utils # aplay, amixer, arecord for audio debugging
-    cloudflared # Cloudflare Tunnel for external access
   ];
 
   # Avahi (mDNS) — required for AirPlay discovery.
@@ -95,38 +94,11 @@
     options = [ "bind" "ro" ];
   };
 
-  # Cloudflare Tunnel — exposes services to the internet without port forwarding.
-  # Token managed as a clan var (see generator below); prompted interactively
-  # on first `clan vars generate` and stored SOPS-encrypted under vars/.
-  # Routes configured in Cloudflare Zero Trust dashboard:
-  #   music.dannydannydanny.me → http://localhost:4533
-  # Scheduled for retirement in stage 4d — ZeroTier-only access after that.
-  clan.core.vars.generators.cloudflare-tunnel = {
-    files.tunnel-token = {
-      secret = true;
-      deploy = true;
-      owner = "danny";
-    };
-    prompts.tunnel-token = {
-      description = "Cloudflare Tunnel token (Zero Trust dashboard → Networks → Tunnels → your tunnel → refresh token)";
-      type = "hidden";
-      persist = true;
-    };
-    script = "cp $prompts/tunnel-token $out/tunnel-token";
-  };
-
-  systemd.services.cloudflare-tunnel = {
-    description = "Cloudflare Tunnel for sunken-ship";
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      ExecStart = "/bin/sh -c '${pkgs.cloudflared}/bin/cloudflared tunnel --no-autoupdate run --token $(cat ${config.clan.core.vars.generators.cloudflare-tunnel.files.tunnel-token.path})'";
-      Restart = "on-failure";
-      RestartSec = 10;
-      User = "danny";
-    };
-  };
+  # Navidrome is now reachable only over the ZeroTier mesh — see the
+  # sunken-ship-zt SSH alias on the mac, or hit http://[fdd5:53a2:de33:
+  # d269:6499:93d5:53a2:de33]:4533 directly from any ZT-joined device.
+  # The Cloudflare Tunnel + its clan vars generator were retired in 4d;
+  # delete the tunnel itself in the Cloudflare Zero Trust dashboard.
 
   # UxPlay AirPlay receiver — audio-only, outputs directly to Scarlett Solo via ALSA.
   # Runs as a system service (no PipeWire needed on a headless server).
