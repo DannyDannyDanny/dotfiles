@@ -23,6 +23,7 @@
     Host phantom-ship-zt
       HostName <zt-addr>
       User danny
+      IdentityFile ~/.ssh/id_ed25519_phantom_ship
       IdentitiesOnly yes
   '';
 
