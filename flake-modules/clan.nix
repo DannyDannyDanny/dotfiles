@@ -14,11 +14,30 @@ let
     import ../lib/home-manager-user.nix {
       inherit lib user homeDirectory stateVersion userImports;
     };
+
+  # ZT IPv6 addresses of the two clan machines. Clan publishes these as
+  # generated vars at vars/per-machine/<host>/zerotier/zerotier-ip/value;
+  # duplicated here so we can drop them into /etc/hosts at module-eval time.
+  sunkenShipZTv6 = "fdd5:53a2:de33:d269:6499:93d5:53a2:de33";
+  phantomShipZTv6 = "fdd5:53a2:de33:d269:6499:936c:48a:bbdc";
+
+  # Shared across both servers: /etc/hosts entries so data-mesher's
+  # libp2p /dns/<machine>.clan/... bootstrap multiaddrs resolve over ZT.
+  clanHostsModule = {
+    networking.hosts = {
+      "${sunkenShipZTv6}" = [ "sunken-ship.clan" ];
+      "${phantomShipZTv6}" = [ "phantom-ship.clan" ];
+    };
+  };
 in {
   imports = [ inputs.clan-core.flakeModules.default ];
 
   clan = {
     meta.name = "homelab";
+    # data-mesher uses `<machine>.${domain}` as a libp2p /dns/ multiaddr.
+    # We don't run a DNS server for "clan" — per-machine networking.hosts
+    # entries (via clanHostsModule) resolve it to the host's ZT IPv6.
+    meta.domain = "clan";
 
     # Inventory machines — required for `inventory.instances` role bindings
     # to resolve. Host-specific NixOS config lives under `machines.<name>`
@@ -35,6 +54,35 @@ in {
       roles.controller.machines.sunken-ship = { };
       roles.peer.machines.phantom-ship = { };
       roles.peer.machines.sunken-ship = { };
+    };
+
+    # data-mesher — signed-file gossip protocol over libp2p (port 7946).
+    # Underpins dm-pull-deploy below. Files are registered + their allowed
+    # signers managed automatically via clan service exports.
+    # sunken-ship is the bootstrap node; phantom-ship joins via its
+    # /dns/sunken-ship.clan/... multiaddr (resolved via /etc/hosts).
+    inventory.instances.data-mesher = {
+      module.name = "data-mesher";
+      module.input = "clan-core";
+      roles.default.machines.sunken-ship = { };
+      roles.default.machines.phantom-ship = { };
+      roles.bootstrap.machines.sunken-ship = { };
+    };
+
+    # dm-pull-deploy — pull-based NixOS deploy via data-mesher gossip.
+    # Our clan-community input is pinned to the branch that sanitizes
+    # machine.name for the status file name (upstream PR pending).
+    # sunken-ship is the push node; both servers run the default watcher
+    # with action="switch".
+    inventory.instances.dm-pull-deploy = {
+      module.name = "dm-pull-deploy";
+      module.input = "clan-community";
+      roles.push.machines.sunken-ship.settings = {
+        gitUrl = "https://github.com/DannyDannyDanny/dotfiles.git";
+        branch = "main";
+      };
+      roles.default.machines.sunken-ship.settings.action = "switch";
+      roles.default.machines.phantom-ship.settings.action = "switch";
     };
 
     # `clan machines update` connection target. Priority 2000 > ZT's 900
@@ -63,6 +111,7 @@ in {
           clan.core.networking.targetHost = "danny@[fdd5:53a2:de33:d269:6499:93d5:53a2:de33]";
           clan.core.networking.buildHost = "danny@[fdd5:53a2:de33:d269:6499:93d5:53a2:de33]";
         }
+        clanHostsModule
         ../nixos/hosts/sunken-ship.nix
         config.flake.nixosModules.dotfiles-rebuild
         inputs.home-manager.nixosModules.home-manager
@@ -81,6 +130,7 @@ in {
           clan.core.networking.targetHost = "danny@[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]";
           clan.core.networking.buildHost = "danny@[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]";
         }
+        clanHostsModule
         inputs.nix-openclaw.nixosModules.openclaw-gateway
         ../nixos/hosts/phantom-ship.nix
         config.flake.nixosModules.dotfiles-rebuild
