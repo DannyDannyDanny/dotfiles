@@ -14,13 +14,13 @@
   #   Include ~/.ssh/config.d/*
   # near the top (before any host-specific blocks).
   home.file.".ssh/config.d/zerotier".text = ''
-    Host sunken-ship-zt
+    Host sunken-ship-zt fdd5:53a2:de33:d269:6499:93d5:53a2:de33
       HostName fdd5:53a2:de33:d269:6499:93d5:53a2:de33
       User danny
       IdentityFile ~/.ssh/id_ed25519_sunken_ship
       IdentitiesOnly yes
 
-    Host phantom-ship-zt
+    Host phantom-ship-zt fdd5:53a2:de33:d269:6499:936c:48a:bbdc
       HostName fdd5:53a2:de33:d269:6499:936c:48a:bbdc
       User danny
       IdentityFile ~/.ssh/id_ed25519_phantom_ship
