@@ -28,11 +28,6 @@
     clan-core.url = "https://git.clan.lol/clan/clan-core/archive/main.tar.gz";
     clan-core.inputs.nixpkgs.follows = "nixpkgs";
     clan-core.inputs.flake-parts.follows = "flake-parts";
-
-    # clan-community: dm-pull-deploy (and other user-curated services).
-    clan-community.url = "https://git.clan.lol/clan/clan-community/archive/main.tar.gz";
-    clan-community.inputs.nixpkgs.follows = "nixpkgs";
-    clan-community.inputs.clan-core.follows = "clan-core";
   };
 
   outputs = inputs @ { flake-parts, import-tree, ... }:
