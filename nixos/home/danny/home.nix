@@ -23,6 +23,7 @@
     Host phantom-ship-zt
       HostName fdd5:53a2:de33:d269:6499:936c:48a:bbdc
       User danny
+      IdentityFile ~/.ssh/id_ed25519_phantom_ship
       IdentitiesOnly yes
   '';
 
