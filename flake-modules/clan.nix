@@ -37,18 +37,18 @@ in {
       roles.peer.machines.sunken-ship = { };
     };
 
-    # Direct SSH reachability on the LAN. Priority 2000 > ZT's 900, so
-    # `clan machines update` prefers LAN hostnames over ZT IPv6 — and uses
-    # the right user (ZT service defaults to root@).
+    # `clan machines update` connection target. Priority 2000 > ZT's 900
+    # and overrides the ZT service's root@ default. Using the ZT IPv6 as
+    # the host makes updates work regardless of LAN DNS / mDNS state.
     inventory.instances.internet = {
       module.name = "internet";
       module.input = "clan-core";
       roles.default.machines.sunken-ship.settings = {
-        host = "sunken-ship";
+        host = "fdd5:53a2:de33:d269:6499:93d5:53a2:de33";
         user = "danny";
       };
       roles.default.machines.phantom-ship.settings = {
-        host = "phantom-ship";
+        host = "fdd5:53a2:de33:d269:6499:936c:48a:bbdc";
         user = "danny";
       };
     };
@@ -60,8 +60,8 @@ in {
       imports = [
         {
           clan.core.enableRecommendedDefaults = false;
-          clan.core.networking.targetHost = "danny@sunken-ship";
-          clan.core.networking.buildHost = "danny@sunken-ship";
+          clan.core.networking.targetHost = "danny@[fdd5:53a2:de33:d269:6499:93d5:53a2:de33]";
+          clan.core.networking.buildHost = "danny@[fdd5:53a2:de33:d269:6499:93d5:53a2:de33]";
         }
         ../nixos/hosts/sunken-ship.nix
         config.flake.nixosModules.dotfiles-rebuild
@@ -78,8 +78,8 @@ in {
       imports = [
         {
           clan.core.enableRecommendedDefaults = false;
-          clan.core.networking.targetHost = "danny@phantom-ship";
-          clan.core.networking.buildHost = "danny@phantom-ship";
+          clan.core.networking.targetHost = "danny@[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]";
+          clan.core.networking.buildHost = "danny@[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]";
         }
         inputs.nix-openclaw.nixosModules.openclaw-gateway
         ../nixos/hosts/phantom-ship.nix
