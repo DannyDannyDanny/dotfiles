@@ -9,9 +9,14 @@
 
   nixpkgs.hostPlatform = "x86_64-linux";
 
-  # Hetzner Cloud boots EFI with systemd-boot.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  # Hetzner Cloud vServers boot in BIOS mode (confirmed via rescue:
+  # /sys/firmware/efi doesn't exist, product_name=vServer). systemd-boot
+  # is UEFI-only, so use GRUB with BIOS MBR support instead.
+  boot.loader.grub = {
+    enable = true;
+    device = "/dev/sda";
+    efiSupport = false;
+  };
 
   # Hetzner Cloud cx23 uses QEMU virtio-scsi for the disk and virtio-net
   # for the NIC. Without these modules in initrd, the kernel can't find

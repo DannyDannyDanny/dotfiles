@@ -1,4 +1,5 @@
 # Disko layout for cloud VPS installs (e.g. Hetzner Cloud).
+# GPT with a 1MB BIOS boot partition (for GRUB on a BIOS system) + root.
 # No LUKS — the provider has physical disk access anyway and there's
 # no operator present at boot to enter a passphrase.
 {
@@ -9,15 +10,11 @@
       content = {
         type = "gpt";
         partitions = {
-          ESP = {
-            size = "512M";
-            type = "EF00";
-            content = {
-              type = "filesystem";
-              format = "vfat";
-              mountpoint = "/boot";
-              mountOptions = [ "fmask=0022" "dmask=0022" ];
-            };
+          # GRUB BIOS boot partition — holds stage-1.5 bootloader code.
+          # Type EF02. No filesystem.
+          BIOSBOOT = {
+            size = "1M";
+            type = "EF02";
           };
           root = {
             size = "100%";
