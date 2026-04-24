@@ -120,6 +120,11 @@
   # Code: https://github.com/DannyDannyDanny/bigbiggerbiggestbot cloned at /home/danny/tg_fitness_bot
   # Bot token: ~danny/.secrets/bigbiggerbiggestbot
   # Deployment: fitness-bot-pull timer below runs every 15 min, git pulls, restarts service on changes.
+  #
+  # Mini App URL is fronted by Caddy on the vps-relay host at
+  # https://bbbot.dannydannydanny.me (VPS → ZeroTier → localhost:8080).
+  # The bot's start.py honors WEBAPP_URL to skip starting its own
+  # cloudflared Quick Tunnel when we've got a stable URL from the VPS.
   systemd.services.fitness-bot = let
     pythonEnv = pkgs.python3.withPackages (ps: with ps; [
       python-telegram-bot
@@ -131,7 +136,8 @@
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
-    path = [ pythonEnv pkgs.cloudflared ];
+    path = [ pythonEnv ];
+    environment.WEBAPP_URL = "https://bbbot.dannydannydanny.me";
     serviceConfig = {
       WorkingDirectory = "/home/danny/tg_fitness_bot";
       ExecStart = "${pythonEnv}/bin/python start.py";

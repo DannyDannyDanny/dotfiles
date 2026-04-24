@@ -20,6 +20,7 @@ let
   # duplicated here so we can drop them into /etc/hosts at module-eval time.
   sunkenShipZTv6 = "fdd5:53a2:de33:d269:6499:93d5:53a2:de33";
   phantomShipZTv6 = "fdd5:53a2:de33:d269:6499:936c:48a:bbdc";
+  vpsRelayZTv6 = "fdd5:53a2:de33:d269:6499:9305:339f:2ed3";
 
   # Shared across both servers: /etc/hosts entries so data-mesher's
   # libp2p /dns/<machine>.clan/... bootstrap multiaddrs resolve over ZT.
@@ -27,6 +28,7 @@ let
     networking.hosts = {
       "${sunkenShipZTv6}" = [ "sunken-ship.clan" ];
       "${phantomShipZTv6}" = [ "phantom-ship.clan" ];
+      "${vpsRelayZTv6}" = [ "vps-relay.clan" ];
     };
   };
 in {
@@ -44,6 +46,7 @@ in {
     # below.
     inventory.machines.sunken-ship = { };
     inventory.machines.phantom-ship = { };
+    inventory.machines.vps-relay = { };
 
     # ZeroTier mesh VPN. sunken-ship is the controller (manages network
     # membership); phantom-ship is a peer. The mac joins manually as an
@@ -54,6 +57,7 @@ in {
       roles.controller.machines.sunken-ship = { };
       roles.peer.machines.phantom-ship = { };
       roles.peer.machines.sunken-ship = { };
+      roles.peer.machines.vps-relay = { };
     };
 
     # data-mesher — signed-file gossip protocol over libp2p (port 7946).
@@ -99,6 +103,10 @@ in {
         host = "fdd5:53a2:de33:d269:6499:936c:48a:bbdc";
         user = "danny";
       };
+      roles.default.machines.vps-relay.settings = {
+        host = "fdd5:53a2:de33:d269:6499:9305:339f:2ed3";
+        user = "danny";
+      };
     };
 
     # Preserve current network / init stack (no systemd-networkd/resolved,
@@ -114,6 +122,25 @@ in {
         clanHostsModule
         ../nixos/hosts/sunken-ship.nix
         config.flake.nixosModules.dotfiles-rebuild
+        inputs.home-manager.nixosModules.home-manager
+        (hmModule {
+          user = "danny";
+          homeDirectory = "/home/danny";
+          stateVersion = "25.11";
+        })
+      ];
+    };
+
+    machines.vps-relay = {
+      imports = [
+        {
+          clan.core.enableRecommendedDefaults = false;
+          # Initial install uses --target-host override; subsequent
+          # updates go over ZT IPv6 (set once generated, via the
+          # internet instance above).
+        }
+        clanHostsModule
+        ../nixos/hosts/vps-relay.nix
         inputs.home-manager.nixosModules.home-manager
         (hmModule {
           user = "danny";
