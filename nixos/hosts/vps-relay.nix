@@ -13,6 +13,20 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Hetzner Cloud cx23 uses QEMU virtio-scsi for the disk and virtio-net
+  # for the NIC. Without these modules in initrd, the kernel can't find
+  # the root partition and hangs during boot.
+  boot.initrd.availableKernelModules = [
+    "virtio_pci"
+    "virtio_scsi"
+    "virtio_net"
+    "virtio_blk"
+    "ata_piix"
+    "sd_mod"
+    "sr_mod"
+  ];
+  boot.kernelModules = [ "virtio_pci" "virtio_scsi" "virtio_net" ];
+
   # Cloud provisioners add the initial root SSH key via cloud-init or
   # equivalent; we don't run cloud-init. All config is baked at install.
   networking.hostName = "vps-relay";
