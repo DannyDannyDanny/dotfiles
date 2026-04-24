@@ -103,8 +103,12 @@ in {
         host = "fdd5:53a2:de33:d269:6499:936c:48a:bbdc";
         user = "danny";
       };
+      # Using public IPv4 while ZT identity is being bootstrapped on the
+      # VPS. Swap to ZT IPv6 (fdd5:53a2:de33:d269:6499:9305:339f:2ed3)
+      # after the first clan update uploads SOPS keys and zerotierone
+      # restarts with the clan-managed identity.
       roles.default.machines.vps-relay.settings = {
-        host = "fdd5:53a2:de33:d269:6499:9305:339f:2ed3";
+        host = "89.167.39.251";
         user = "danny";
       };
     };
