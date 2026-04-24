@@ -61,7 +61,7 @@ in
 
   users.users.danny = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "openclaw" ];
     # Password is locked (key-only SSH). Use NixOS installer or recovery to reset if needed.
   };
 
