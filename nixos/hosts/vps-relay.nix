@@ -11,12 +11,15 @@
 
   # Hetzner Cloud vServers boot in BIOS mode (confirmed via rescue:
   # /sys/firmware/efi doesn't exist, product_name=vServer). systemd-boot
-  # is UEFI-only, so use GRUB with BIOS MBR support instead.
-  boot.loader.grub = {
-    enable = true;
-    device = "/dev/sda";
-    efiSupport = false;
-  };
+  # is UEFI-only, so use GRUB/BIOS. disko's EF02 BIOS boot partition
+  # already tells GRUB where to embed stage-1.5; we just enable grub +
+  # set the install device list.
+  boot.loader.systemd-boot.enable = lib.mkForce false;
+  boot.loader.grub.enable = lib.mkForce true;
+  boot.loader.grub.efiSupport = lib.mkForce false;
+  boot.loader.grub.devices = lib.mkForce [ "/dev/sda" ];
+  # Ensure no default-set .device slips through and duplicates mirroredBoots.
+  boot.loader.grub.device = lib.mkForce "nodev";
 
   # Hetzner Cloud cx23 uses QEMU virtio-scsi for the disk and virtio-net
   # for the NIC. Without these modules in initrd, the kernel can't find
