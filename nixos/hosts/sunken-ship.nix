@@ -55,6 +55,10 @@
 
   # Passwordless sudo for wheel.
   security.sudo.wheelNeedsPassword = false;
+
+  # Trust `danny` for Nix remote builds (so the mac can delegate
+  # x86_64-linux builds here via ssh-ng://danny@sunken-ship-zt).
+  nix.settings.trusted-users = [ "root" "danny" ];
   environment.systemPackages = with pkgs; [
     git # clone/bootstrap and dotfiles-rebuild timer
     brightnessctl # manual backlight; replaces removed `light` from nixpkgs
