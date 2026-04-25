@@ -144,6 +144,8 @@
     wantedBy = [ "multi-user.target" ];
     path = [ pythonEnv ];
     environment.WEBAPP_URL = "https://bbbot.dannydannydanny.me";
+    # Bind dual-stack so the VPS Caddy can reach us over ZT IPv6.
+    environment.API_HOST = "::";
     serviceConfig = {
       WorkingDirectory = "/home/danny/tg_fitness_bot";
       ExecStart = "${pythonEnv}/bin/python start.py";
