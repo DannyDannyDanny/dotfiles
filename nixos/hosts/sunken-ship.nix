@@ -73,9 +73,11 @@
     publish = { enable = true; userServices = true; };
   };
 
-  # Open firewall for AirPlay (mDNS + UxPlay default ports) + Navidrome.
+  # Open firewall for AirPlay (mDNS + UxPlay default ports) + Navidrome
+  # + bbbot HTTP backend (proxied by Caddy on vps-relay over ZT).
+  # TODO 4g: tighten to only the VPS's ZT IPv6 instead of any source.
   networking.firewall = {
-    allowedTCPPorts = [ 7000 7001 7100 4533 ];
+    allowedTCPPorts = [ 7000 7001 7100 4533 8080 ];
     allowedUDPPorts = [ 5353 6000 6001 7011 ];
   };
 
