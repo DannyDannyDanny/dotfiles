@@ -63,7 +63,19 @@ in
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     # Password is locked (key-only SSH). Use NixOS installer or recovery to reset if needed.
+    openssh.authorizedKeys.keys = [
+      # Mac admin (~/.ssh/id_ed25519_phantom_ship on Daniel-Macbook-Air).
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDNl6PrKcEhmYJVqSXNcFU6cba3neekLBGnQCkD7lWAc danny@phantom-ship"
+      # Self-loopback (clan ssh-ng:// back to this host).
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPyEX8De/b+sMAxUZIqqiPphcrWCoAsN5p8gRFubzqvB danny@phantom-ship"
+    ];
   };
+
+  # root needs the mac admin key so `clan machines update` can SSH to
+  # root@<host> for SOPS upload.
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDNl6PrKcEhmYJVqSXNcFU6cba3neekLBGnQCkD7lWAc danny@phantom-ship"
+  ];
 
   # Key-only auth; no password or keyboard-interactive.
   services.openssh = {

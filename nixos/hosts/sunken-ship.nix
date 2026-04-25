@@ -39,9 +39,21 @@
   users.users.danny = {
     isNormalUser = true;
     extraGroups = [ "wheel" "video" "audio" ];  # video: backlight; audio: sound devices
-    # SSH keys: push via scp, don't commit. NixOS does not manage authorized_keys so scp'd keys persist.
-    # Example: scp ~/.ssh/id_ed25519_sunken_ship.pub danny@server:/tmp/ then on server: mkdir -p ~/.ssh; cat /tmp/*.pub >> ~/.ssh/authorized_keys
+    openssh.authorizedKeys.keys = [
+      # Mac admin (~/.ssh/id_ed25519_sunken_ship on Daniel-Macbook-Air).
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKW/akfIiVU5o63YrTAJVZhMj7kXfYHOnXDtlpVFW7pf danny@sunken-ship"
+      # Self-loopback (used by clan ssh-ng:// during nix-copy-closure
+      # back to this same host on `clan machines update`). Pubkey of the
+      # /home/danny/.ssh/id_ed25519 that lives on this host.
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB9t4YAaoHvVouqp+qyFOq8o3SAtXMiAmjF6J0ldyx4g danny@sunken-ship self"
+    ];
   };
+
+  # root needs the mac admin key so `clan machines update` can SSH to
+  # root@<host> to upload SOPS keys (sops-install-secrets bootstrap).
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKW/akfIiVU5o63YrTAJVZhMj7kXfYHOnXDtlpVFW7pf danny@sunken-ship"
+  ];
 
   # Key-only auth; no password or keyboard-interactive.
   services.openssh = {
