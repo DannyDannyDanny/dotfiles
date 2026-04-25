@@ -73,12 +73,17 @@
     publish = { enable = true; userServices = true; };
   };
 
-  # Open firewall for AirPlay (mDNS + UxPlay default ports) + Navidrome
-  # + bbbot HTTP backend (proxied by Caddy on vps-relay over ZT).
-  # TODO 4g: tighten to only the VPS's ZT IPv6 instead of any source.
+  # Open firewall for AirPlay (mDNS + UxPlay default ports) + Navidrome.
+  # bbbot's HTTP backend (port 8080) is intentionally NOT in the global
+  # allowedTCPPorts — it's only allowed on the ZeroTier interface
+  # (clan-managed name; matches anything starting with `zt`) so the
+  # vps-relay Caddy can reach it via the ZT mesh. Same trick could lock
+  # 4533 down later but Navidrome stays globally accessible for now (LAN
+  # convenience).
   networking.firewall = {
-    allowedTCPPorts = [ 7000 7001 7100 4533 8080 ];
+    allowedTCPPorts = [ 7000 7001 7100 4533 ];
     allowedUDPPorts = [ 5353 6000 6001 7011 ];
+    interfaces."zt+".allowedTCPPorts = [ 8080 ];
   };
 
   # Navidrome — self-hosted music streaming server (Subsonic API).
