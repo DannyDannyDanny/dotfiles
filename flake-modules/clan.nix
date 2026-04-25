@@ -126,6 +126,7 @@ in {
         clanHostsModule
         ../nixos/hosts/sunken-ship.nix
         config.flake.nixosModules.dotfiles-rebuild
+        config.flake.nixosModules.server-debug-tools
         inputs.home-manager.nixosModules.home-manager
         (hmModule {
           user = "danny";
@@ -165,6 +166,7 @@ in {
         inputs.nix-openclaw.nixosModules.openclaw-gateway
         ../nixos/hosts/phantom-ship.nix
         config.flake.nixosModules.dotfiles-rebuild
+        config.flake.nixosModules.server-debug-tools
         inputs.home-manager.nixosModules.home-manager
         (hmModule {
           user = "danny";

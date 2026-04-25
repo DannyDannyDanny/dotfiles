@@ -70,6 +70,23 @@
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ 22 80 443 ];
 
+  # fail2ban — public SSH gets brute-force probed within minutes of any
+  # cloud VM being created. Ban offending IPs after a few failures.
+  services.fail2ban = {
+    enable = true;
+    bantime = "1h";
+    bantime-increment = {
+      enable = true;
+      multipliers = "1 4 16 64 256";  # 1h, 4h, 16h, ~2.7d, ~10.7d
+      maxtime = "30d";
+    };
+    jails.sshd.settings = {
+      enabled = true;
+      maxretry = 5;
+      findtime = "10m";
+    };
+  };
+
   # --- Caddy reverse proxy --------------------------------------------
   # Subdomains → clan backends over ZeroTier. IPs are sunken-ship's /
   # phantom-ship's ZT IPv6; brackets required in URLs.

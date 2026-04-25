@@ -4,4 +4,5 @@
 #   modules = [ config.flake.nixosModules.dotfiles-rebuild ];
 { ... }: {
   flake.nixosModules.dotfiles-rebuild = ../modules/dotfiles-rebuild.nix;
+  flake.nixosModules.server-debug-tools = ../modules/server-debug-tools.nix;
 }
