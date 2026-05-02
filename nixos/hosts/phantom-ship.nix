@@ -2,13 +2,27 @@
 { config, lib, pkgs, ... }:
 
 let
-  # Telegram user ID(s) — gitignored, not committed to public repo.
+  # Telegram user ID(s) - gitignored, not committed to public repo.
   # Create openclaw-allow-from.nix with e.g.: [ 12345678 ]
   allowFromPath = ./openclaw-allow-from.nix;
   openclawAllowFrom = if builtins.pathExists allowFromPath then import allowFromPath else [ ];
+
+  haraGmailMcp = pkgs.callPackage ../pkgs/hara-gmail-mcp { };
+  haraMcpServersJson = builtins.toJSON {
+    mcpServers = {
+      gmail = {
+        command = "${haraGmailMcp}/bin/hara-gmail-mcp";
+        args = [ ];
+        env = { };
+      };
+    };
+  };
 in
 {
-  imports = [ ./phantom-ship-hardware.nix ];
+  imports = [
+    ./phantom-ship-hardware.nix
+    ../pkgs/hara-gmail-mcp/module.nix
+  ];
 
   networking.hostName = "phantom-ship";
   networking.useDHCP = lib.mkDefault true;
@@ -140,7 +154,7 @@ in
       # claude needs a PTY; wrap with script(1). /dev/null discards the typescript.
       # Permission bypass lives in ~/.claude/settings.json (permissions.defaultMode)
       # — using the CLI flag triggers an interactive warning dialog at startup.
-      ExecStart = ''${pkgs.util-linux}/bin/script -qfc "${pkgs.claude-code}/bin/claude --channels plugin:telegram@claude-plugins-official" /dev/null'';
+      ExecStart = ''${pkgs.util-linux}/bin/script -qfc "${pkgs.claude-code}/bin/claude --channels plugin:telegram@claude-plugins-official --mcp-config /etc/hara/mcp-servers.json" /dev/null'';
       Restart = "always";
       RestartSec = 5;
     };
@@ -151,6 +165,33 @@ in
     "d /etc/openclaw 0775 root openclaw - -"
     "d /var/lib/openclaw/repos 0750 openclaw openclaw - -"
   ];
+
+  # Hara Gmail MCP server (path 1: IMAP+SMTP). Replaced by an OAuth2
+  # Gmail+Calendar server in path 2.
+  services.hara-gmail-mcp = {
+    enable = true;
+    package = haraGmailMcp;
+    accounts = [
+      {
+        email = "powerhouseplayer@gmail.com";
+        password_file = "/etc/openclaw/gmail-powerhouseplayer-app-password";
+      }
+      {
+        email = "wildstylewarrior@gmail.com";
+        password_file = "/etc/openclaw/gmail-wildstylewarrior-app-password";
+      }
+      {
+        email = "danielth95@gmail.com";
+        password_file = "/etc/openclaw/gmail-danielth95-app-password";
+      }
+    ];
+  };
+
+  # MCP server registry consumed by claude-channels via --mcp-config.
+  environment.etc."hara/mcp-servers.json" = {
+    text = haraMcpServersJson;
+    mode = "0644";
+  };
 
   # Git config for the openclaw user: credential helper reads PAT from file.
   # PAT (not in repo): /etc/openclaw/github-token (fine-grained, scoped to specific repos)
