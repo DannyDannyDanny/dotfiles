@@ -48,11 +48,11 @@ in
   };
   networking.firewall.trustedInterfaces = [ "enp0s31f6" ];
 
-  # Shelfish (:8081), Scuttle (:8082), Bananasimulator (:8083) are
-  # reachable only over the ZeroTier mesh — the vps-relay Caddy
-  # reverse-proxies into them. Same pattern as sunken-ship's bbbot.
+  # KomTolk (:8080), Shelfish (:8081), Scuttle (:8082), Bananasimulator
+  # (:8083) are reachable only over the ZeroTier mesh — the vps-relay
+  # Caddy reverse-proxies into them. Same pattern as sunken-ship's bbbot.
   # Not in global allowedTCPPorts, so the WAN side stays closed.
-  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 8081 8082 8083 ];
+  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 8080 8081 8082 8083 ];
 
   hardware.enableRedistributableFirmware = true;  # iwlwifi (Intel 8260) + GPU + BT firmware
 
@@ -174,6 +174,7 @@ in
     "d /home/danny/.local/share/shelfish 0755 danny users - -"
     "d /home/danny/.local/share/scuttle 0755 danny users - -"
     "d /home/danny/.local/share/bananasimulator 0755 danny users - -"
+    "d /home/danny/.local/share/komtolk 0755 danny users - -"
   ];
 
   # Hara Gmail MCP server (path 1: IMAP+SMTP). Replaced by an OAuth2
@@ -350,6 +351,34 @@ in
     serviceConfig = {
       WorkingDirectory = "/home/danny/bananasimulator";
       ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8083";
+      Restart = "on-failure";
+      RestartSec = 10;
+      User = "danny";
+    };
+  };
+
+  # KomTolk (formerly translate-platform) — Copenhagen translation gigs Mini App.
+  # Code rsync'd from ~/python-projects/26_komtolk/ to /home/danny/komtolk/
+  systemd.services.komtolk = let
+    pythonEnv = pkgs.python3.withPackages (ps: with ps; [
+      fastapi
+      uvicorn
+      httpx
+      python-telegram-bot
+    ]);
+  in {
+    description = "KomTolk FastAPI server (Copenhagen translation gigs)";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pythonEnv ];
+    environment = {
+      SHIPYARD_BOT_TOKEN_FILE = "/home/danny/.secrets/telegram-bot-token-shipyard";
+      KT_DB_PATH = "/home/danny/.local/share/komtolk/komtolk.db";
+    };
+    serviceConfig = {
+      WorkingDirectory = "/home/danny/komtolk";
+      ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8080";
       Restart = "on-failure";
       RestartSec = 10;
       User = "danny";

@@ -114,6 +114,10 @@
       "bananasimulator.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8083
       '';
+      # KomTolk (formerly translate-platform) — same backend, port 8080.
+      "komtolk.dannydannydanny.me".extraConfig = ''
+        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8080
+      '';
     };
   };
 
