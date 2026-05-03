@@ -101,6 +101,10 @@
       "bbbot.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[fdd5:53a2:de33:d269:6499:93d5:53a2:de33]:8080
       '';
+      # Shelfish — phantom-ship's ZT IPv6.
+      "shelfish.dannydannydanny.me".extraConfig = ''
+        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8081
+      '';
     };
   };
 
