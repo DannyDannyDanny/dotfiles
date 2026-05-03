@@ -153,6 +153,34 @@ def read_email(
         )
 
 
+def mark_read(
+    store: AccountStore,
+    email_addr: str,
+    uid: str,
+    mailbox: str = "INBOX",
+) -> None:
+    """Mark a message as read by adding the \\Seen flag."""
+    account = store.get(email_addr)
+    password = store.password_for(email_addr)
+    with _open(account, password, mailbox) as conn:
+        conn.uid("store", uid, "+FLAGS", r"(\Seen)")
+
+
+def archive(
+    store: AccountStore,
+    email_addr: str,
+    uid: str,
+    mailbox: str = "INBOX",
+) -> None:
+    """Archive a message: copy to All Mail then delete from INBOX."""
+    account = store.get(email_addr)
+    password = store.password_for(email_addr)
+    with _open(account, password, mailbox) as conn:
+        conn.uid("copy", uid, "[Gmail]/All Mail")
+        conn.uid("store", uid, "+FLAGS", r"(\Deleted)")
+        conn.expunge()
+
+
 def _fetch_summary(conn: imaplib.IMAP4_SSL, uid: str) -> MessageSummary:
     typ, data = conn.uid(
         "fetch",

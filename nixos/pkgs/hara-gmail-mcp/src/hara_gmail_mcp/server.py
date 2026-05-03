@@ -1,14 +1,15 @@
 """Hara Gmail MCP server.
 
-Exposes a small toolset for reading and (later) replying to mail across
-the configured Gmail accounts. v1 ships read-only tools; reply/archive/label
-follow once Hara is using these reliably.
+Exposes a small toolset for reading and writing mail across the configured
+Gmail accounts.
 
 Tools:
     list_accounts()                    list configured accounts
     list_inbox(email, limit)           recent messages from an account
     search(email, query, limit)        IMAP SEARCH wrapper
     read_email(email, uid)             full body of one message
+    mark_read(email, uid)              mark a message as read
+    archive(email, uid)                archive a message (remove from INBOX)
 """
 from __future__ import annotations
 
@@ -21,7 +22,7 @@ from dataclasses import asdict
 from mcp.server.fastmcp import FastMCP
 
 from .accounts import AccountStore
-from .imap_client import list_inbox, read_email, search
+from .imap_client import archive, list_inbox, mark_read, read_email, search
 
 logger = logging.getLogger("hara_gmail_mcp")
 
@@ -90,6 +91,36 @@ def gmail_read_email(email: str, uid: str) -> str:
     """
     msg = read_email(_get_store(), email, uid=uid)
     return json.dumps(asdict(msg), ensure_ascii=False)
+
+
+@mcp.tool()
+def gmail_mark_read(email: str, uid: str) -> str:
+    """Mark a message as read (sets the \\Seen flag).
+
+    Args:
+        email: which configured account
+        uid: the message UID (returned by gmail_list_inbox or gmail_search)
+
+    Returns:
+        JSON object with ok and uid.
+    """
+    mark_read(_get_store(), email, uid=uid)
+    return json.dumps({"ok": True, "uid": uid})
+
+
+@mcp.tool()
+def gmail_archive(email: str, uid: str) -> str:
+    """Archive a message (copies to All Mail, removes from INBOX).
+
+    Args:
+        email: which configured account
+        uid: the message UID (returned by gmail_list_inbox or gmail_search)
+
+    Returns:
+        JSON object with ok and uid.
+    """
+    archive(_get_store(), email, uid=uid)
+    return json.dumps({"ok": True, "uid": uid})
 
 
 def main() -> None:

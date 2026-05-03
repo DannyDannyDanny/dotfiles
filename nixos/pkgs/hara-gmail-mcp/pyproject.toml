@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hara-gmail-mcp"
-version = "0.1.0"
+version = "0.2.0"
 description = "Gmail MCP server for Hara (IMAP+SMTP, throwaway pre-OAuth2)"
 requires-python = ">=3.11"
 dependencies = [

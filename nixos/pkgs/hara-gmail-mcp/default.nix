@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "hara-gmail-mcp";
-  version = "0.1.0";
+  version = "0.2.0";
   pyproject = true;
   src = ./.;
   nativeBuildInputs = [ python3Packages.setuptools ];
