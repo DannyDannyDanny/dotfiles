@@ -248,6 +248,52 @@ in
     };
   };
 
+  # Caddy reverse proxy in front of the local HTTP services (shelfish, etc).
+  # Auto-Let's-Encrypt; ACME requires the subdomain to A-record to this host.
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  services.caddy = {
+    enable = true;
+    email = "powerhouseplayer@gmail.com";
+    virtualHosts."shelfish.dannydannydanny.me".extraConfig = ''
+      reverse_proxy 127.0.0.1:8081
+    '';
+  };
+
+  # Shelfish — Goodreads-flavoured book club Mini App.
+  # Code deployed out-of-band via rsync to /home/danny/shelfish/
+  # (staying in-tree in ~/python-projects/27_shelfish/ until spun out).
+  # Auth: validates Telegram WebApp initData against shipyard's bot token
+  # (the bot that publishes shelfish via shipyard's project list).
+  # DB lives outside the rsynced code dir so deploys don't clobber state.
+  systemd.tmpfiles.rules = (lib.mkAfter [
+    "d /home/danny/.local/share/shelfish 0755 danny users - -"
+  ]);
+  systemd.services.shelfish = let
+    pythonEnv = pkgs.python3.withPackages (ps: with ps; [
+      fastapi
+      uvicorn
+      httpx
+      python-telegram-bot
+    ]);
+  in {
+    description = "Shelfish FastAPI server (book club Mini App)";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pythonEnv ];
+    environment = {
+      SHIPYARD_BOT_TOKEN_FILE = "/home/danny/.secrets/telegram-bot-token-shipyard";
+      SH_DB_PATH = "/home/danny/.local/share/shelfish/shelfish.db";
+    };
+    serviceConfig = {
+      WorkingDirectory = "/home/danny/shelfish";
+      ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host 127.0.0.1 --port 8081";
+      Restart = "on-failure";
+      RestartSec = 10;
+      User = "danny";
+    };
+  };
+
   # Auto-rebuild service/timer + safe.directory provided by the
   # shared dotfiles-rebuild NixOS module (see nixos/modules/dotfiles-rebuild.nix).
 }
