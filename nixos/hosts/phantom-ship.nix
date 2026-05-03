@@ -250,18 +250,10 @@ in
     };
   };
 
-  # Caddy reverse proxy in front of the local HTTP services (shelfish, etc).
-  # Auto-Let's-Encrypt; ACME requires the subdomain to A-record to this host.
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
-  services.caddy = {
-    enable = true;
-    email = "powerhouseplayer@gmail.com";
-    virtualHosts."shelfish.dannydannydanny.me".extraConfig = ''
-      reverse_proxy 127.0.0.1:8081
-    '';
-  };
-
   # Shelfish — Goodreads-flavoured book club Mini App.
+  # Public traffic comes through vps-relay's Caddy → ZeroTier → here.
+  # See vps-relay.nix for the public-facing virtualHost. We never expose
+  # this host's IP directly.
   # Code deployed out-of-band via rsync to /home/danny/shelfish/
   # (staying in-tree in ~/python-projects/27_shelfish/ until spun out).
   # Auth: validates Telegram WebApp initData against shipyard's bot token
