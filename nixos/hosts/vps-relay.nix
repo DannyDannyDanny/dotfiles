@@ -110,6 +110,10 @@
       "scuttle.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8082
       '';
+      # Bananasimulator — same backend, port 8083.
+      "bananasimulator.dannydannydanny.me".extraConfig = ''
+        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8083
+      '';
     };
   };
 
