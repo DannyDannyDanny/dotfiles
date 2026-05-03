@@ -105,6 +105,11 @@
       "shelfish.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8081
       '';
+      # Scuttle — same backend, different port. WebSocket upgrade is
+      # transparent under reverse_proxy.
+      "scuttle.dannydannydanny.me".extraConfig = ''
+        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8082
+      '';
     };
   };
 

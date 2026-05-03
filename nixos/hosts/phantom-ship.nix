@@ -48,10 +48,11 @@ in
   };
   networking.firewall.trustedInterfaces = [ "enp0s31f6" ];
 
-  # Shelfish HTTP (8081) is reachable only over the ZeroTier mesh — the
-  # vps-relay Caddy reverse-proxies into it. Same pattern as sunken-ship's
-  # bbbot. Not in global allowedTCPPorts, so the WAN side stays closed.
-  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 8081 ];
+  # Shelfish (:8081) and Scuttle (:8082) are reachable only over the
+  # ZeroTier mesh — the vps-relay Caddy reverse-proxies into them. Same
+  # pattern as sunken-ship's bbbot. Not in global allowedTCPPorts, so
+  # the WAN side stays closed.
+  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 8081 8082 ];
 
   hardware.enableRedistributableFirmware = true;  # iwlwifi (Intel 8260) + GPU + BT firmware
 
@@ -171,6 +172,7 @@ in
     "d /etc/openclaw 0775 root openclaw - -"
     "d /var/lib/openclaw/repos 0750 openclaw openclaw - -"
     "d /home/danny/.local/share/shelfish 0755 danny users - -"
+    "d /home/danny/.local/share/scuttle 0755 danny users - -"
   ];
 
   # Hara Gmail MCP server (path 1: IMAP+SMTP). Replaced by an OAuth2
@@ -285,6 +287,38 @@ in
     serviceConfig = {
       WorkingDirectory = "/home/danny/shelfish";
       ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8081";
+      Restart = "on-failure";
+      RestartSec = 10;
+      User = "danny";
+    };
+  };
+
+  # Scuttle — topdown tilt-to-move multiplayer Mini App.
+  # Same vps-relay-fronted ZT path as shelfish; binds to :: so the
+  # ZeroTier IPv6 address can reach it.
+  # Code rsync'd from ~/python-projects/26_scuttle/ to /home/danny/scuttle/
+  # DB at ~/.local/share/scuttle/scuttle.db.
+  systemd.services.scuttle = let
+    pythonEnv = pkgs.python3.withPackages (ps: with ps; [
+      fastapi
+      uvicorn
+      httpx
+      websockets
+      python-telegram-bot
+    ]);
+  in {
+    description = "Scuttle FastAPI + WebSocket game server";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pythonEnv ];
+    environment = {
+      SHIPYARD_BOT_TOKEN_FILE = "/home/danny/.secrets/telegram-bot-token-shipyard";
+      SC_DB_PATH = "/home/danny/.local/share/scuttle/scuttle.db";
+    };
+    serviceConfig = {
+      WorkingDirectory = "/home/danny/scuttle";
+      ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8082";
       Restart = "on-failure";
       RestartSec = 10;
       User = "danny";
