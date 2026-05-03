@@ -160,10 +160,12 @@ in
     };
   };
 
-  # OpenClaw gateway needs write access to its config dir and repo clones.
+  # OpenClaw gateway needs write access to its config dir and repo clones;
+  # shelfish wants its DB outside the rsynced code dir.
   systemd.tmpfiles.rules = [
     "d /etc/openclaw 0775 root openclaw - -"
     "d /var/lib/openclaw/repos 0750 openclaw openclaw - -"
+    "d /home/danny/.local/share/shelfish 0755 danny users - -"
   ];
 
   # Hara Gmail MCP server (path 1: IMAP+SMTP). Replaced by an OAuth2
@@ -265,9 +267,7 @@ in
   # Auth: validates Telegram WebApp initData against shipyard's bot token
   # (the bot that publishes shelfish via shipyard's project list).
   # DB lives outside the rsynced code dir so deploys don't clobber state.
-  systemd.tmpfiles.rules = (lib.mkAfter [
-    "d /home/danny/.local/share/shelfish 0755 danny users - -"
-  ]);
+  # (tmpfiles rule for the DB dir is bundled into the OpenClaw block above.)
   systemd.services.shelfish = let
     pythonEnv = pkgs.python3.withPackages (ps: with ps; [
       fastapi
