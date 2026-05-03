@@ -175,6 +175,7 @@ in
     "d /home/danny/.local/share/scuttle 0755 danny users - -"
     "d /home/danny/.local/share/bananasimulator 0755 danny users - -"
     "d /home/danny/.local/share/komtolk 0755 danny users - -"
+    "d /home/danny/.local/share/scuttle/tiles 0755 danny users - -"
   ];
 
   # Hara Gmail MCP server (path 1: IMAP+SMTP). Replaced by an OAuth2
@@ -309,7 +310,7 @@ in
       python-telegram-bot
     ]);
   in {
-    description = "Scuttle FastAPI + WebSocket game server";
+    description = "Scuttle FastAPI + WebSocket game server (geo: Østerbro)";
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
@@ -317,6 +318,7 @@ in
     environment = {
       SHIPYARD_BOT_TOKEN_FILE = "/home/danny/.secrets/telegram-bot-token-shipyard";
       SC_DB_PATH = "/home/danny/.local/share/scuttle/scuttle.db";
+      SC_TILES_DIR = "/home/danny/.local/share/scuttle/tiles";
     };
     serviceConfig = {
       WorkingDirectory = "/home/danny/scuttle";
