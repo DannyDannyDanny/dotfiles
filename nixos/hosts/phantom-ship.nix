@@ -284,7 +284,7 @@ in
     };
     serviceConfig = {
       WorkingDirectory = "/home/danny/shelfish";
-      ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host 0.0.0.0 --port 8081";
+      ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8081";
       Restart = "on-failure";
       RestartSec = 10;
       User = "danny";
