@@ -48,6 +48,11 @@ in
   };
   networking.firewall.trustedInterfaces = [ "enp0s31f6" ];
 
+  # Shelfish HTTP (8081) is reachable only over the ZeroTier mesh — the
+  # vps-relay Caddy reverse-proxies into it. Same pattern as sunken-ship's
+  # bbbot. Not in global allowedTCPPorts, so the WAN side stays closed.
+  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 8081 ];
+
   hardware.enableRedistributableFirmware = true;  # iwlwifi (Intel 8260) + GPU + BT firmware
 
   boot.kernelParams = [ "consoleblank=60" ];  # blank TTY after 60s to reduce burn-in
@@ -279,7 +284,7 @@ in
     };
     serviceConfig = {
       WorkingDirectory = "/home/danny/shelfish";
-      ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host 127.0.0.1 --port 8081";
+      ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host 0.0.0.0 --port 8081";
       Restart = "on-failure";
       RestartSec = 10;
       User = "danny";
