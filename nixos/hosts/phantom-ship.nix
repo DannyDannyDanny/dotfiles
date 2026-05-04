@@ -250,6 +250,8 @@ in
     path = [ pythonEnv ];
     environment = {
       SHIPYARD_BOT_TOKEN_FILE = "/home/danny/.secrets/telegram-bot-token-shipyard";
+      # Owner-only commands (/admin, /grant, /revoke) — anyone else gets ignored.
+      SHIPYARD_OWNER_ID = "66070351";  # @DannyDannyDanny
     };
     serviceConfig = {
       WorkingDirectory = "/home/danny/shipyard";
