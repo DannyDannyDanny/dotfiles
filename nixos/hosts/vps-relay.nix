@@ -101,6 +101,11 @@
       "bbbot.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[fdd5:53a2:de33:d269:6499:93d5:53a2:de33]:8080
       '';
+      # Forgejo on phantom-ship — Phase 1 of the de-platform-from-GitHub
+      # roadmap (vimwiki/diary/2026-05-03.md).
+      "git.dannydannydanny.me".extraConfig = ''
+        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:3000
+      '';
     };
   };
 

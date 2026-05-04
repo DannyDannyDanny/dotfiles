@@ -48,6 +48,11 @@ in
   };
   networking.firewall.trustedInterfaces = [ "enp0s31f6" ];
 
+  # Forgejo's HTTP backend is only allowed on the ZeroTier interface so
+  # vps-relay's Caddy can reach it via the ZT mesh. Same pattern as
+  # bbbot on sunken-ship — port 3000 is never exposed on WAN/Wi-Fi.
+  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 3000 ];
+
   hardware.enableRedistributableFirmware = true;  # iwlwifi (Intel 8260) + GPU + BT firmware
 
   boot.kernelParams = [ "consoleblank=60" ];  # blank TTY after 60s to reduce burn-in
@@ -245,6 +250,36 @@ in
       Restart = "on-failure";
       RestartSec = 10;
       User = "danny";
+    };
+  };
+
+  # Forgejo — self-hosted Git forge. Phase 1 of the de-platform-from-GitHub
+  # roadmap (vimwiki/diary/2026-05-03.md). Public URL git.dannydannydanny.me
+  # is fronted by Caddy on vps-relay reverse-proxying over ZT to :3000 here.
+  # Auth for now: HTTPS + PAT (osxkeychain credential helper on the Mac).
+  # SSH disabled in Phase 1; revisit if push-via-https gets annoying.
+  # Backups: TODO — snapshot /var/lib/forgejo/ once it's up.
+  services.forgejo = {
+    enable = true;
+    database.type = "sqlite3";  # personal scale; one user, plenty
+    lfs.enable = true;
+    settings = {
+      DEFAULT.APP_NAME = "git.dannydannydanny.me";
+      server = {
+        DOMAIN = "git.dannydannydanny.me";
+        ROOT_URL = "https://git.dannydannydanny.me/";
+        # Bind to all interfaces — firewall above scopes inbound to ZT.
+        HTTP_ADDR = "0.0.0.0";
+        HTTP_PORT = 3000;
+        DISABLE_SSH = true;
+      };
+      service = {
+        DISABLE_REGISTRATION = true;       # admin-bootstrapped only
+        REQUIRE_SIGNIN_VIEW = true;         # no anonymous browsing
+      };
+      session.COOKIE_SECURE = true;
+      log.LEVEL = "Info";
+      repository.DEFAULT_BRANCH = "main";
     };
   };
 
