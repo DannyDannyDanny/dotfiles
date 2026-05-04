@@ -426,7 +426,8 @@ in
   systemd.timers.hara-heartbeat = {
     wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnCalendar = "Europe/Copenhagen *-*-* 08:07:00";
+      OnCalendar = "08,12,16,20:07";
+      Timezone = "Europe/Copenhagen";
       Persistent = true;
     };
   };
