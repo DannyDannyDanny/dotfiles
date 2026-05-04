@@ -49,10 +49,11 @@ in
   networking.firewall.trustedInterfaces = [ "enp0s31f6" ];
 
   # KomTolk (:8080), Shelfish (:8081), Scuttle (:8082), Bananasimulator
-  # (:8083) are reachable only over the ZeroTier mesh — the vps-relay
-  # Caddy reverse-proxies into them. Same pattern as sunken-ship's bbbot.
-  # Not in global allowedTCPPorts, so the WAN side stays closed.
-  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 8080 8081 8082 8083 ];
+  # (:8083), Forgejo (:3000) are reachable only over the ZeroTier mesh —
+  # the vps-relay Caddy reverse-proxies into them. Same pattern as
+  # sunken-ship's bbbot. Not in global allowedTCPPorts, so the WAN side
+  # stays closed.
+  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 3000 8080 8081 8082 8083 ];
 
   hardware.enableRedistributableFirmware = true;  # iwlwifi (Intel 8260) + GPU + BT firmware
 
@@ -331,6 +332,7 @@ in
     };
   };
 
+<<<<<<< HEAD
   # Bananasimulator — the actual project at https://bananasimulator.dannydannydanny.me
   # (was a placeholder in shipyard's apps.json for ages). You ARE a banana.
   # Code rsync'd from ~/python-projects/26_bananasimulator/ to /home/danny/bananasimulator/
@@ -429,6 +431,35 @@ in
       OnCalendar = "06,10,14,18:07";
       Timezone = "Europe/Copenhagen";
       Persistent = true;
+=======
+  # Forgejo — self-hosted Git forge. Phase 1 of the de-platform-from-GitHub
+  # roadmap (vimwiki/diary/2026-05-03.md). Public URL git.dannydannydanny.me
+  # is fronted by Caddy on vps-relay reverse-proxying over ZT to :3000 here.
+  # Auth for now: HTTPS + PAT (osxkeychain credential helper on the Mac).
+  # SSH disabled in Phase 1; revisit if push-via-https gets annoying.
+  # Backups: TODO — snapshot /var/lib/forgejo/ once it's up.
+  services.forgejo = {
+    enable = true;
+    database.type = "sqlite3";  # personal scale; one user, plenty
+    lfs.enable = true;
+    settings = {
+      DEFAULT.APP_NAME = "git.dannydannydanny.me";
+      server = {
+        DOMAIN = "git.dannydannydanny.me";
+        ROOT_URL = "https://git.dannydannydanny.me/";
+        # Bind to all interfaces — firewall above scopes inbound to ZT.
+        HTTP_ADDR = "0.0.0.0";
+        HTTP_PORT = 3000;
+        DISABLE_SSH = true;
+      };
+      service = {
+        DISABLE_REGISTRATION = true;       # admin-bootstrapped only
+        REQUIRE_SIGNIN_VIEW = true;         # no anonymous browsing
+      };
+      session.COOKIE_SECURE = true;
+      log.LEVEL = "Info";
+      repository.DEFAULT_BRANCH = "main";
+>>>>>>> 0a9124e (phantom-ship + vps-relay: Forgejo on git.dannydannydanny.me)
     };
   };
 
