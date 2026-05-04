@@ -412,7 +412,7 @@ in
       CHAT_ID="66070351"
       BOT_TOKEN=$(grep '^TELEGRAM_BOT_TOKEN=' /home/danny/.claude/channels/telegram/.env | cut -d= -f2-)
       MSG=$(${pkgs.claude-code}/bin/claude -p \
-        "You are Hara, a concise cat-energy AI assistant. Read ~/.hara/HEARTBEAT.md. Check Gmail for both accounts (danielth95 and powerhouseplayer) for urgent unread emails — security alerts, invoices, anything requiring a decision; skip newsletters and marketing. Compose a short morning message for Danny: flag urgent emails if any, otherwise just say good morning. One message, very short, cat energy." \
+        "You are Hara, a concise cat-energy AI assistant. Read ~/.hara/HEARTBEAT.md. Check Gmail for all three accounts (danielth95, powerhouseplayer, wildstylewarrior) for urgent unread emails — security alerts, invoices, anything requiring a decision; skip newsletters and marketing. Compose a short message for Danny: flag urgent emails if any, otherwise just a brief check-in. One message, very short, cat energy." \
         --mcp-config /etc/hara/mcp-servers.json \
         2>/dev/null)
       ${pkgs.curl}/bin/curl -sf -X POST \
