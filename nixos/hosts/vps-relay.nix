@@ -123,6 +123,10 @@
       "git.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:3000
       '';
+      # Escape Hormuz — turn-based boat race, port 8090.
+      "escapehormuz.dannydannydanny.me".extraConfig = ''
+        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8090
+      '';
     };
   };
 

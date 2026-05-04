@@ -53,7 +53,7 @@ in
   # the vps-relay Caddy reverse-proxies into them. Same pattern as
   # sunken-ship's bbbot. Not in global allowedTCPPorts, so the WAN side
   # stays closed.
-  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 3000 8080 8081 8082 8083 ];
+  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 3000 8080 8081 8082 8083 8090 ];
 
   hardware.enableRedistributableFirmware = true;  # iwlwifi (Intel 8260) + GPU + BT firmware
 
@@ -176,6 +176,7 @@ in
     "d /home/danny/.local/share/scuttle 0755 danny users - -"
     "d /home/danny/.local/share/bananasimulator 0755 danny users - -"
     "d /home/danny/.local/share/komtolk 0755 danny users - -"
+    "d /home/danny/.local/share/escape_hormuz 0755 danny users - -"
     "d /home/danny/.local/share/scuttle/tiles 0755 danny users - -"
   ];
 
@@ -332,7 +333,6 @@ in
     };
   };
 
-<<<<<<< HEAD
   # Bananasimulator — the actual project at https://bananasimulator.dannydannydanny.me
   # (was a placeholder in shipyard's apps.json for ages). You ARE a banana.
   # Code rsync'd from ~/python-projects/26_bananasimulator/ to /home/danny/bananasimulator/
@@ -391,6 +391,35 @@ in
     };
   };
 
+  # Escape Hormuz — turn-based boat racing Mini App through the Strait of Hormuz.
+  # Code rsync'd from ~/python-projects/28_escape_hormuz/ to /home/danny/escape_hormuz/
+  # DB at ~/.local/share/escape_hormuz/escape_hormuz.db.
+  systemd.services.escape-hormuz = let
+    pythonEnv = pkgs.python3.withPackages (ps: with ps; [
+      fastapi
+      uvicorn
+      python-telegram-bot
+    ]);
+  in {
+    description = "Escape Hormuz FastAPI server (turn-based boat race)";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pythonEnv ];
+    environment = {
+      SHIPYARD_BOT_TOKEN_FILE = "/home/danny/.secrets/telegram-bot-token-shipyard";
+      DB_PATH = "/home/danny/.local/share/escape_hormuz/escape_hormuz.db";
+      MINIAPP_URL = "https://escapehormuz.dannydannydanny.me";
+    };
+    serviceConfig = {
+      WorkingDirectory = "/home/danny/escape_hormuz";
+      ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8090";
+      Restart = "on-failure";
+      RestartSec = 10;
+      User = "danny";
+    };
+  };
+
   # Hara morning heartbeat — daily email check + Telegram good-morning ping.
   # Runs claude in print mode with the Gmail MCP, then sends output via Bot API.
   # Token lives in ~/.claude/channels/telegram/.env (managed by the telegram plugin).
@@ -431,7 +460,9 @@ in
       OnCalendar = "06,10,14,18:07";
       Timezone = "Europe/Copenhagen";
       Persistent = true;
-=======
+    };
+  };
+
   # Forgejo — self-hosted Git forge. Phase 1 of the de-platform-from-GitHub
   # roadmap (vimwiki/diary/2026-05-03.md). Public URL git.dannydannydanny.me
   # is fronted by Caddy on vps-relay reverse-proxying over ZT to :3000 here.
@@ -459,7 +490,6 @@ in
       session.COOKIE_SECURE = true;
       log.LEVEL = "Info";
       repository.DEFAULT_BRANCH = "main";
->>>>>>> 0a9124e (phantom-ship + vps-relay: Forgejo on git.dannydannydanny.me)
     };
   };
 
