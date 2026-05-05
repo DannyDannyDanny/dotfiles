@@ -95,7 +95,10 @@
   networking.firewall = {
     allowedTCPPorts = [ 7000 7001 7100 4533 ];
     allowedUDPPorts = [ 5353 6000 6001 7011 ];
-    interfaces."zt+".allowedTCPPorts = [ 8080 ];
+    # 8080: bbbot HTTP backend. 8091: mulbo-server companion service.
+    # Both ZT-only — see vps-relay.nix for reverse proxy if exposing
+    # publicly later.
+    interfaces."zt+".allowedTCPPorts = [ 8080 8091 ];
   };
 
   # Navidrome — self-hosted music streaming server (Subsonic API).
@@ -197,6 +200,77 @@
   systemd.timers.fitness-bot-pull = {
     wantedBy = [ "timers.target" ];
     timerConfig.OnCalendar = "*-*-* *:07/15:00";  # every 15 minutes, offset from dotfiles-rebuild
+    timerConfig.RandomizedDelaySec = "2min";
+  };
+
+  # Mulbo companion service (Phase 5: uploads + dedup index + folders).
+  # Wire spec: ~danny/python-projects/20_mulbo/SERVER_API.md.
+  # Bootstrap (one-time): git clone git@github.com:DannyDannyDanny/python-projects.git /home/danny/python-projects
+  # (uses sunken-ship's id_ed25519 as a read-only deploy key on the repo)
+  # ZT-only via the firewall rule above (port 8091). Runs as `danny` so
+  # writes go through to /home/danny/music/mulbo-uploads, which Navidrome
+  # reads via the existing /srv/music ro bind-mount with no mount changes.
+  systemd.tmpfiles.rules = [
+    "d /home/danny/music/mulbo-uploads 0755 danny users -"
+  ];
+
+  systemd.services.mulbo-server = let
+    pythonEnv = pkgs.python312.withPackages (ps: with ps; [
+      fastapi
+      uvicorn
+      python-multipart
+    ]);
+  in {
+    description = "Mulbo companion service (uploads, dedup, folders)";
+    after = [ "network-online.target" "navidrome.service" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    environment = {
+      MULBO_UPLOADS_DIR   = "/home/danny/music/mulbo-uploads";
+      MULBO_INDEX_DB      = "/var/lib/mulbo-server/index.db";
+      MULBO_NAVIDROME_URL = "http://localhost:4533";
+      MULBO_BIND_HOST     = "::";
+      MULBO_BIND_PORT     = "8091";
+      PYTHONUNBUFFERED    = "1";  # immediate journal output
+    };
+    serviceConfig = {
+      WorkingDirectory = "/home/danny/python-projects/20_mulbo";
+      ExecStart        = "${pythonEnv}/bin/python mulbo_server/app.py";
+      Restart          = "on-failure";
+      RestartSec       = 5;
+      User             = "danny";
+      StateDirectory   = "mulbo-server";  # /var/lib/mulbo-server, owned by danny
+    };
+  };
+
+  # Pull mulbo (python-projects repo) and restart service if repo changed.
+  # Repo lives at /home/danny/python-projects (must be cloned manually first
+  # — see bootstrap note above). DBs/state live in /var/lib/mulbo-server,
+  # not in the repo, so they survive pulls.
+  systemd.services.mulbo-pull = {
+    description = "Pull mulbo repo and restart mulbo-server if changed";
+    path = with pkgs; [ git systemd ];
+    environment = {
+      GIT_CONFIG_COUNT   = "1";
+      GIT_CONFIG_KEY_0   = "safe.directory";
+      GIT_CONFIG_VALUE_0 = "/home/danny/python-projects";
+    };
+    script = ''
+      set -euo pipefail
+      cd /home/danny/python-projects
+      git fetch origin
+      if [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ]; then
+        exit 0
+      fi
+      git pull origin main
+      systemctl restart mulbo-server
+    '';
+    serviceConfig.Type = "oneshot";
+  };
+
+  systemd.timers.mulbo-pull = {
+    wantedBy = [ "timers.target" ];
+    timerConfig.OnCalendar = "*-*-* *:11/15:00";  # every 15 min, offset from fitness-bot-pull and dotfiles-rebuild
     timerConfig.RandomizedDelaySec = "2min";
   };
 
