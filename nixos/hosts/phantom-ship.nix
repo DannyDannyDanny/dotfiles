@@ -49,10 +49,10 @@ in
   networking.firewall.trustedInterfaces = [ "enp0s31f6" ];
 
   # KomTolk (:8080), Shelfish (:8081), Scuttle (:8082), Bananasimulator
-  # (:8083), Forgejo (:3000) are reachable only over the ZeroTier mesh —
-  # the vps-relay Caddy reverse-proxies into them. Same pattern as
-  # sunken-ship's bbbot. Not in global allowedTCPPorts, so the WAN side
-  # stays closed.
+  # (:8083), Forgejo (:3000), Escape Hormuz (:8090) are reachable only
+  # over the ZeroTier mesh — the vps-relay Caddy reverse-proxies into
+  # them. Same pattern as sunken-ship's bbbot. Not in global
+  # allowedTCPPorts, so the WAN side stays closed.
   networking.firewall.interfaces."zt+".allowedTCPPorts = [ 3000 8080 8081 8082 8083 8090 ];
 
   hardware.enableRedistributableFirmware = true;  # iwlwifi (Intel 8260) + GPU + BT firmware
@@ -178,6 +178,7 @@ in
     "d /home/danny/.local/share/komtolk 0755 danny users - -"
     "d /home/danny/.local/share/escape_hormuz 0755 danny users - -"
     "d /home/danny/.local/share/scuttle/tiles 0755 danny users - -"
+    "d /home/danny/.local/share/escape_hormuz 0755 danny users - -"
   ];
 
   # Hara Gmail MCP server (path 1: IMAP+SMTP). Replaced by an OAuth2
@@ -357,6 +358,35 @@ in
     serviceConfig = {
       WorkingDirectory = "/home/danny/bananasimulator";
       ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8083";
+      Restart = "on-failure";
+      RestartSec = 10;
+      User = "danny";
+    };
+  };
+
+  # Escape Hormuz — turn-based boat-race Mini App (Hara's first build).
+  # Code lives at /home/danny/escape_hormuz/. Same vps-relay-fronted ZT path
+  # as the others; binds :: so the ZeroTier IPv6 address is reachable.
+  systemd.services.escape-hormuz = let
+    pythonEnv = pkgs.python3.withPackages (ps: with ps; [
+      fastapi
+      uvicorn
+      python-telegram-bot
+    ]);
+  in {
+    description = "Escape Hormuz FastAPI server (turn-based boat race)";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pythonEnv ];
+    environment = {
+      SHIPYARD_BOT_TOKEN_FILE = "/home/danny/.secrets/telegram-bot-token-shipyard";
+      DB_PATH = "/home/danny/.local/share/escape_hormuz/escape_hormuz.db";
+      MINIAPP_URL = "https://escapehormuz.dannydannydanny.me";
+    };
+    serviceConfig = {
+      WorkingDirectory = "/home/danny/escape_hormuz";
+      ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8090";
       Restart = "on-failure";
       RestartSec = 10;
       User = "danny";
