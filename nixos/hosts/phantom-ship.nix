@@ -178,7 +178,6 @@ in
     "d /home/danny/.local/share/komtolk 0755 danny users - -"
     "d /home/danny/.local/share/escape_hormuz 0755 danny users - -"
     "d /home/danny/.local/share/scuttle/tiles 0755 danny users - -"
-    "d /home/danny/.local/share/escape_hormuz 0755 danny users - -"
   ];
 
   # Hara Gmail MCP server (path 1: IMAP+SMTP). Replaced by an OAuth2
@@ -415,35 +414,6 @@ in
     serviceConfig = {
       WorkingDirectory = "/home/danny/komtolk";
       ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8080";
-      Restart = "on-failure";
-      RestartSec = 10;
-      User = "danny";
-    };
-  };
-
-  # Escape Hormuz — turn-based boat racing Mini App through the Strait of Hormuz.
-  # Code rsync'd from ~/python-projects/28_escape_hormuz/ to /home/danny/escape_hormuz/
-  # DB at ~/.local/share/escape_hormuz/escape_hormuz.db.
-  systemd.services.escape-hormuz = let
-    pythonEnv = pkgs.python3.withPackages (ps: with ps; [
-      fastapi
-      uvicorn
-      python-telegram-bot
-    ]);
-  in {
-    description = "Escape Hormuz FastAPI server (turn-based boat race)";
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
-    path = [ pythonEnv ];
-    environment = {
-      SHIPYARD_BOT_TOKEN_FILE = "/home/danny/.secrets/telegram-bot-token-shipyard";
-      DB_PATH = "/home/danny/.local/share/escape_hormuz/escape_hormuz.db";
-      MINIAPP_URL = "https://escapehormuz.dannydannydanny.me";
-    };
-    serviceConfig = {
-      WorkingDirectory = "/home/danny/escape_hormuz";
-      ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8090";
       Restart = "on-failure";
       RestartSec = 10;
       User = "danny";
