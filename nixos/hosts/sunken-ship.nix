@@ -228,6 +228,7 @@
     environment = {
       MULBO_UPLOADS_DIR   = "/home/danny/music/mulbo-uploads";
       MULBO_INDEX_DB      = "/var/lib/mulbo-server/index.db";
+      MULBO_MUSIC_ROOT    = "/srv/music";  # for /folders fs walk
       MULBO_NAVIDROME_URL = "http://localhost:4533";
       MULBO_BIND_HOST     = "::";
       MULBO_BIND_PORT     = "8091";
@@ -240,6 +241,12 @@
       RestartSec       = 5;
       User             = "danny";
       StateDirectory   = "mulbo-server";  # /var/lib/mulbo-server, owned by danny
+      # Navidrome credentials — file format: KEY=value lines.
+      # Required keys: MULBO_NAVIDROME_USER, MULBO_NAVIDROME_PASS.
+      # Created manually on sunken-ship (mode 600, owned by danny):
+      #   echo -e "MULBO_NAVIDROME_USER=DannyDannyDanny\nMULBO_NAVIDROME_PASS=..." > ~/.secrets/mulbo-server-navidrome
+      #   chmod 600 ~/.secrets/mulbo-server-navidrome
+      EnvironmentFile = "/home/danny/.secrets/mulbo-server-navidrome";
     };
   };
 
