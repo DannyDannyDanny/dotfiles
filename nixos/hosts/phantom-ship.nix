@@ -427,7 +427,7 @@ in
     description = "Hara morning heartbeat (email check + Telegram ping)";
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
-    path = [ pkgs.claude-code pkgs.curl pkgs.jq ];
+    path = [ pkgs.claude-code pkgs.curl pkgs.jq pkgs.gnused ];
     environment = {
       HOME = "/home/danny";
     };
@@ -443,9 +443,9 @@ in
       CHAT_ID="66070351"
       BOT_TOKEN=$(grep '^TELEGRAM_BOT_TOKEN=' /home/danny/.claude/channels/telegram/.env | cut -d= -f2-)
       MSG=$(${pkgs.claude-code}/bin/claude -p \
-        "You are Hara, a concise cat-energy AI assistant. Read ~/.hara/HEARTBEAT.md. Check Gmail for all three accounts (danielth95, powerhouseplayer, wildstylewarrior) for urgent unread emails — security alerts, invoices, anything requiring a decision; skip newsletters and marketing. Compose a short message for Danny: flag urgent emails if any, otherwise just a brief check-in. One message, very short, cat energy. IMPORTANT: use plain text only — no markdown, no asterisks, no bold syntax. The message is sent via Telegram Bot API plain text mode." \
+        "You are Hara, a concise cat-energy AI assistant. Read ~/.hara/HEARTBEAT.md. Check Gmail for all three accounts (danielth95, powerhouseplayer, wildstylewarrior) for urgent unread emails — security alerts, invoices, anything requiring a decision; skip newsletters and marketing. Compose a short message for Danny: flag urgent emails if any, otherwise just a brief check-in. One message, very short, cat energy." \
         --mcp-config /etc/hara/mcp-servers.json \
-        2>/dev/null)
+        2>/dev/null | ${pkgs.gnused}/bin/sed 's/\*\*//g; s/\*//g; s/__//g; s/_//g')
       ${pkgs.curl}/bin/curl -sf -X POST \
         "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
         -H "Content-Type: application/json" \
