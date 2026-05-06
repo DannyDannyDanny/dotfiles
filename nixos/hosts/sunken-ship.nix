@@ -113,6 +113,13 @@
     };
   };
 
+  # Navidrome's Subsonic API path field is tag-virtual; only the internal
+  # SQLite has real fs paths. mulbo-server reads navidrome.db ro to
+  # power /folders + POST /tracks resolution. UMask=0027 makes new DB
+  # files (and WAL rotations) group-readable; the tmpfile rule fixes the
+  # existing files written under the previous 0600 umask.
+  systemd.services.navidrome.serviceConfig.UMask = lib.mkForce "0027";
+
   # Persist the bind mount so navidrome can read music outside ProtectHome.
   fileSystems."/srv/music" = {
     device = "/home/danny/music";
@@ -212,6 +219,12 @@
   # reads via the existing /srv/music ro bind-mount with no mount changes.
   systemd.tmpfiles.rules = [
     "d /home/danny/music/mulbo-uploads 0755 danny users -"
+    # One-time fix for the existing navidrome.db (+ WAL/SHM) created
+    # under the old 0600 umask. UMask=0027 above keeps future writes
+    # group-readable.
+    "z /var/lib/navidrome/navidrome.db     0640 navidrome navidrome -"
+    "z /var/lib/navidrome/navidrome.db-wal 0640 navidrome navidrome -"
+    "z /var/lib/navidrome/navidrome.db-shm 0640 navidrome navidrome -"
   ];
 
   systemd.services.mulbo-server = let
@@ -235,18 +248,21 @@
       PYTHONUNBUFFERED    = "1";  # immediate journal output
     };
     serviceConfig = {
-      WorkingDirectory = "/home/danny/python-projects/20_mulbo";
-      ExecStart        = "${pythonEnv}/bin/python mulbo_server/app.py";
-      Restart          = "on-failure";
-      RestartSec       = 5;
-      User             = "danny";
-      StateDirectory   = "mulbo-server";  # /var/lib/mulbo-server, owned by danny
+      WorkingDirectory   = "/home/danny/python-projects/20_mulbo";
+      ExecStart          = "${pythonEnv}/bin/python mulbo_server/app.py";
+      Restart            = "on-failure";
+      RestartSec         = 5;
+      User               = "danny";
+      # Read-only access to navidrome.db (+WAL/SHM) — see UMask override
+      # on the navidrome service above.
+      SupplementaryGroups = [ "navidrome" ];
+      StateDirectory     = "mulbo-server";  # /var/lib/mulbo-server, owned by danny
       # Navidrome credentials — file format: KEY=value lines.
       # Required keys: MULBO_NAVIDROME_USER, MULBO_NAVIDROME_PASS.
       # Created manually on sunken-ship (mode 600, owned by danny):
       #   echo -e "MULBO_NAVIDROME_USER=DannyDannyDanny\nMULBO_NAVIDROME_PASS=..." > ~/.secrets/mulbo-server-navidrome
       #   chmod 600 ~/.secrets/mulbo-server-navidrome
-      EnvironmentFile = "/home/danny/.secrets/mulbo-server-navidrome";
+      EnvironmentFile    = "/home/danny/.secrets/mulbo-server-navidrome";
     };
   };
 
