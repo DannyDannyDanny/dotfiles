@@ -297,6 +297,38 @@
     timerConfig.RandomizedDelaySec = "2min";
   };
 
+  # One-shot backfill: walks Navidrome's media_file, computes
+  # (sha256, chromaprint) per file, populates mulbo-server's tracks_index
+  # with the corresponding navidrome_track_id. Idempotent — existing rows
+  # left alone. Without this, /tracks/by-hash misses for every existing
+  # offshore track and `mulbo reconcile-local` duplicates content.
+  #
+  # Trigger manually:   sudo systemctl start mulbo-server-backfill
+  # Follow progress:    journalctl -fu mulbo-server-backfill
+  systemd.services.mulbo-server-backfill = let
+    pythonEnv = pkgs.python312.withPackages (ps: with ps; [ ]);
+  in {
+    description = "Backfill mulbo-server tracks_index from Navidrome catalog";
+    after = [ "mulbo-server.service" ];
+    requires = [ "mulbo-server.service" ];
+    path = [ pkgs.chromaprint ];  # provides fpcalc
+    environment = {
+      MULBO_INDEX_DB     = "/var/lib/mulbo-server/index.db";
+      MULBO_NAVIDROME_DB = "/var/lib/navidrome/navidrome.db";
+      MULBO_MUSIC_ROOT   = "/srv/music";
+      PYTHONUNBUFFERED   = "1";
+    };
+    serviceConfig = {
+      Type             = "oneshot";
+      WorkingDirectory = "/home/danny/python-projects/20_mulbo";
+      ExecStart        = "${pythonEnv}/bin/python mulbo_server/backfill.py";
+      User             = "danny";
+      SupplementaryGroups = [ "navidrome" ];   # ro access to navidrome.db
+      StateDirectory   = "mulbo-server";       # so /var/lib/mulbo-server/index.db stays writable
+      TimeoutSec       = "8h";                 # full backfill on 274 GB ≈ 1h, leave headroom
+    };
+  };
+
   # Auto-rebuild service/timer + safe.directory provided by the
   # shared dotfiles-rebuild NixOS module (see nixos/modules/dotfiles-rebuild.nix).
 }
