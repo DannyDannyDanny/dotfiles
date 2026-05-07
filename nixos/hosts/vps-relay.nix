@@ -127,6 +127,11 @@
       "escapehormuz.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8090
       '';
+      # bon — receipt scanner Mini App, port 8091. Camera capture in
+      # the WebView needs HTTPS, which Caddy terminates here.
+      "bon.dannydannydanny.me".extraConfig = ''
+        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8091
+      '';
     };
   };
 

@@ -49,11 +49,11 @@ in
   networking.firewall.trustedInterfaces = [ "enp0s31f6" ];
 
   # KomTolk (:8080), Shelfish (:8081), Scuttle (:8082), Bananasimulator
-  # (:8083), Forgejo (:3000), Escape Hormuz (:8090) are reachable only
-  # over the ZeroTier mesh — the vps-relay Caddy reverse-proxies into
-  # them. Same pattern as sunken-ship's bbbot. Not in global
-  # allowedTCPPorts, so the WAN side stays closed.
-  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 3000 8080 8081 8082 8083 8090 ];
+  # (:8083), Forgejo (:3000), Escape Hormuz (:8090), bon (:8091) are
+  # reachable only over the ZeroTier mesh — the vps-relay Caddy
+  # reverse-proxies into them. Same pattern as sunken-ship's bbbot. Not
+  # in global allowedTCPPorts, so the WAN side stays closed.
+  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 3000 8080 8081 8082 8083 8090 8091 ];
 
   hardware.enableRedistributableFirmware = true;  # iwlwifi (Intel 8260) + GPU + BT firmware
 
@@ -178,6 +178,8 @@ in
     "d /home/danny/.local/share/komtolk 0755 danny users - -"
     "d /home/danny/.local/share/escape_hormuz 0755 danny users - -"
     "d /home/danny/.local/share/scuttle/tiles 0755 danny users - -"
+    "d /home/danny/.local/share/bon 0755 danny users - -"
+    "d /home/danny/.local/share/bon/images 0755 danny users - -"
   ];
 
   # Hara Gmail MCP server (path 1: IMAP+SMTP). Replaced by an OAuth2
@@ -386,6 +388,37 @@ in
     serviceConfig = {
       WorkingDirectory = "/home/danny/escape_hormuz";
       ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8090";
+      Restart = "on-failure";
+      RestartSec = 10;
+      User = "danny";
+    };
+  };
+
+  # bon — receipt scanner Mini App (camera capture + gallery).
+  # Code rsync'd from ~/python-projects/26_bon/ to /home/danny/bon/
+  # Images on disk under /home/danny/.local/share/bon/images/<user_id>/
+  systemd.services.bon = let
+    pythonEnv = pkgs.python3.withPackages (ps: with ps; [
+      fastapi
+      uvicorn
+      python-telegram-bot
+      python-multipart
+      pillow
+    ]);
+  in {
+    description = "bon FastAPI server (receipt scanner)";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pythonEnv ];
+    environment = {
+      SHIPYARD_BOT_TOKEN_FILE = "/home/danny/.secrets/telegram-bot-token-shipyard";
+      BON_DB_PATH    = "/home/danny/.local/share/bon/bon.db";
+      BON_IMAGES_DIR = "/home/danny/.local/share/bon/images";
+    };
+    serviceConfig = {
+      WorkingDirectory = "/home/danny/bon";
+      ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8091";
       Restart = "on-failure";
       RestartSec = 10;
       User = "danny";
