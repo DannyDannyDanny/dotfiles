@@ -132,6 +132,14 @@
       "bon.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8091
       '';
+      # notes — markdown blog (notes.X) + apex landing (X). Same backend
+      # service on phantom :8092 routes by Host header.
+      "notes.dannydannydanny.me".extraConfig = ''
+        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8092
+      '';
+      "dannydannydanny.me".extraConfig = ''
+        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8092
+      '';
     };
   };
 

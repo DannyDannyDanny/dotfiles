@@ -49,11 +49,12 @@ in
   networking.firewall.trustedInterfaces = [ "enp0s31f6" ];
 
   # KomTolk (:8080), Shelfish (:8081), Scuttle (:8082), Bananasimulator
-  # (:8083), Forgejo (:3000), Escape Hormuz (:8090), bon (:8091) are
-  # reachable only over the ZeroTier mesh — the vps-relay Caddy
-  # reverse-proxies into them. Same pattern as sunken-ship's bbbot. Not
-  # in global allowedTCPPorts, so the WAN side stays closed.
-  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 3000 8080 8081 8082 8083 8090 8091 ];
+  # (:8083), Forgejo (:3000), Escape Hormuz (:8090), bon (:8091),
+  # notes (:8092) are reachable only over the ZeroTier mesh — the
+  # vps-relay Caddy reverse-proxies into them. Same pattern as
+  # sunken-ship's bbbot. Not in global allowedTCPPorts, so the WAN side
+  # stays closed.
+  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 3000 8080 8081 8082 8083 8090 8091 8092 ];
 
   hardware.enableRedistributableFirmware = true;  # iwlwifi (Intel 8260) + GPU + BT firmware
 
@@ -469,6 +470,33 @@ in
     serviceConfig = {
       WorkingDirectory = "/home/danny/komtolk";
       ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8080";
+      Restart = "on-failure";
+      RestartSec = 10;
+      User = "danny";
+    };
+  };
+
+  # notes — tiny markdown blog + apex landing page.
+  # One service serves two hostnames via Host-header switch:
+  #   notes.dannydannydanny.me  → blog
+  #   dannydannydanny.me        → landing
+  # Code rsync'd from ~/python-projects/26_notes/ to /home/danny/notes/
+  systemd.services.notes = let
+    pythonEnv = pkgs.python3.withPackages (ps: with ps; [
+      fastapi
+      uvicorn
+      markdown
+      jinja2
+    ]);
+  in {
+    description = "notes — markdown blog + landing page";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pythonEnv ];
+    serviceConfig = {
+      WorkingDirectory = "/home/danny/notes";
+      ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8092";
       Restart = "on-failure";
       RestartSec = 10;
       User = "danny";
