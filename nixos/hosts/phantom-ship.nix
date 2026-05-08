@@ -396,14 +396,18 @@ in
   };
 
   # Ollama — local LLM runtime, used by bon's structured-data extraction
-  # step. Listens on 127.0.0.1:11434 only (not exposed over ZT). The
-  # qwen2.5:3b-instruct model is pre-pulled at boot via loadModels.
+  # step. Listens on 127.0.0.1:11434 only (not exposed over ZT).
+  # We pre-pull both 3B and 7B Qwen2.5; bon currently runs 7B for better
+  # column-parsing accuracy on receipts (3B mis-conflates qty/price
+  # columns and over-eagerly nominates line items as merchants).
   services.ollama = {
     enable = true;
     host   = "127.0.0.1";
     port   = 11434;
-    # ~2.5 GB on disk after Q4_K_M quantization. Phantom-ship has plenty.
-    loadModels = [ "qwen2.5:3b-instruct" ];
+    loadModels = [
+      "qwen2.5:3b-instruct"   # ~2.5 GB — kept as fast fallback
+      "qwen2.5:7b-instruct"   # ~4.7 GB — current default, slower but better
+    ];
   };
 
   # bon — receipt scanner Mini App (camera capture + gallery + OCR + extract).
@@ -437,7 +441,7 @@ in
       BON_DB_PATH    = "/home/danny/.local/share/bon/bon.db";
       BON_IMAGES_DIR = "/home/danny/.local/share/bon/images";
       BON_OLLAMA_URL   = "http://127.0.0.1:11434";
-      BON_OLLAMA_MODEL = "qwen2.5:3b-instruct";
+      BON_OLLAMA_MODEL = "qwen2.5:7b-instruct";
     };
     serviceConfig = {
       WorkingDirectory = "/home/danny/bon";
