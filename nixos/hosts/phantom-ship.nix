@@ -394,10 +394,22 @@ in
     };
   };
 
-  # bon — receipt scanner Mini App (camera capture + gallery + OCR).
+  # Ollama — local LLM runtime, used by bon's structured-data extraction
+  # step. Listens on 127.0.0.1:11434 only (not exposed over ZT). The
+  # qwen2.5:3b-instruct model is pre-pulled at boot via loadModels.
+  services.ollama = {
+    enable = true;
+    host   = "127.0.0.1";
+    port   = 11434;
+    # ~2.5 GB on disk after Q4_K_M quantization. Phantom-ship has plenty.
+    loadModels = [ "qwen2.5:3b-instruct" ];
+  };
+
+  # bon — receipt scanner Mini App (camera capture + gallery + OCR + extract).
   # Code rsync'd from ~/python-projects/26_bon/ to /home/danny/bon/
   # Images on disk under /home/danny/.local/share/bon/images/<user_id>/
   # OCR via tesseract (binary on PATH; server uses subprocess directly).
+  # Structured extraction via local Ollama (qwen2.5:3b-instruct).
   systemd.services.bon = let
     pythonEnv = pkgs.python3.withPackages (ps: with ps; [
       fastapi
@@ -405,6 +417,7 @@ in
       python-telegram-bot
       python-multipart
       pillow
+      httpx           # for the Ollama HTTP call from extract.py
     ]);
     # English-only for now — Danish receipts in DK are mostly English chars
     # plus prices, which `eng` handles fine. Add more languages later if
@@ -414,7 +427,7 @@ in
     };
   in {
     description = "bon FastAPI server (receipt scanner)";
-    after = [ "network-online.target" ];
+    after = [ "network-online.target" "ollama.service" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
     path = [ pythonEnv tesseractEng ];
@@ -422,6 +435,8 @@ in
       SHIPYARD_BOT_TOKEN_FILE = "/home/danny/.secrets/telegram-bot-token-shipyard";
       BON_DB_PATH    = "/home/danny/.local/share/bon/bon.db";
       BON_IMAGES_DIR = "/home/danny/.local/share/bon/images";
+      BON_OLLAMA_URL   = "http://127.0.0.1:11434";
+      BON_OLLAMA_MODEL = "qwen2.5:3b-instruct";
     };
     serviceConfig = {
       WorkingDirectory = "/home/danny/bon";
