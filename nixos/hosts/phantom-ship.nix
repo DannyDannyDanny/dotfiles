@@ -397,16 +397,17 @@ in
 
   # Ollama — local LLM runtime, used by bon's structured-data extraction
   # step. Listens on 127.0.0.1:11434 only (not exposed over ZT).
-  # We pre-pull both 3B and 7B Qwen2.5; bon currently runs 7B for better
-  # column-parsing accuracy on receipts (3B mis-conflates qty/price
-  # columns and over-eagerly nominates line items as merchants).
+  # 3B is bon's default — 7B was tested but ran ~3.6 min/receipt vs ~30s
+  # for 3B on phantom-ship CPU, with no real accuracy gain (still picked
+  # line items as merchant on header-less OCR; that's an OCR problem,
+  # not a model problem). Both kept loaded so we can A/B without a pull.
   services.ollama = {
     enable = true;
     host   = "127.0.0.1";
     port   = 11434;
     loadModels = [
-      "qwen2.5:3b-instruct"   # ~2.5 GB — kept as fast fallback
-      "qwen2.5:7b-instruct"   # ~4.7 GB — current default, slower but better
+      "qwen2.5:3b-instruct"   # ~2.5 GB — current default
+      "qwen2.5:7b-instruct"   # ~4.7 GB — A/B testing only
     ];
   };
 
@@ -441,7 +442,7 @@ in
       BON_DB_PATH    = "/home/danny/.local/share/bon/bon.db";
       BON_IMAGES_DIR = "/home/danny/.local/share/bon/images";
       BON_OLLAMA_URL   = "http://127.0.0.1:11434";
-      BON_OLLAMA_MODEL = "qwen2.5:7b-instruct";
+      BON_OLLAMA_MODEL = "qwen2.5:3b-instruct";
     };
     serviceConfig = {
       WorkingDirectory = "/home/danny/bon";
