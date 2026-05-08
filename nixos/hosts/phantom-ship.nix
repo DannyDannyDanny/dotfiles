@@ -394,9 +394,10 @@ in
     };
   };
 
-  # bon — receipt scanner Mini App (camera capture + gallery).
+  # bon — receipt scanner Mini App (camera capture + gallery + OCR).
   # Code rsync'd from ~/python-projects/26_bon/ to /home/danny/bon/
   # Images on disk under /home/danny/.local/share/bon/images/<user_id>/
+  # OCR via tesseract (binary on PATH; server uses subprocess directly).
   systemd.services.bon = let
     pythonEnv = pkgs.python3.withPackages (ps: with ps; [
       fastapi
@@ -405,12 +406,18 @@ in
       python-multipart
       pillow
     ]);
+    # English-only for now — Danish receipts in DK are mostly English chars
+    # plus prices, which `eng` handles fine. Add more languages later if
+    # vyscul or other testers report missed text.
+    tesseractEng = pkgs.tesseract.override {
+      enableLanguages = [ "eng" ];
+    };
   in {
     description = "bon FastAPI server (receipt scanner)";
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
-    path = [ pythonEnv ];
+    path = [ pythonEnv tesseractEng ];
     environment = {
       SHIPYARD_BOT_TOKEN_FILE = "/home/danny/.secrets/telegram-bot-token-shipyard";
       BON_DB_PATH    = "/home/danny/.local/share/bon/bon.db";
