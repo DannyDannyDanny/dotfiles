@@ -239,9 +239,10 @@
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
     environment = {
-      MULBO_UPLOADS_DIR   = "/home/danny/music/mulbo-uploads";
-      MULBO_INDEX_DB      = "/var/lib/mulbo-server/index.db";
-      MULBO_MUSIC_ROOT    = "/srv/music";  # for /folders fs walk
+      MULBO_UPLOADS_DIR     = "/home/danny/music/mulbo-uploads";
+      MULBO_INDEX_DB        = "/var/lib/mulbo-server/index.db";
+      MULBO_MUSIC_ROOT      = "/srv/music";  # ro view via bind-mount; reads + hashing
+      MULBO_MUSIC_WRITE_ROOT = "/home/danny/music";  # underlying rw path; deletes + quarantines
       MULBO_NAVIDROME_URL = "http://localhost:4533";
       MULBO_BIND_HOST     = "::";
       MULBO_BIND_PORT     = "8091";
