@@ -210,6 +210,71 @@
     timerConfig.RandomizedDelaySec = "2min";
   };
 
+  # ── Shipyard staging — second instance for verifying changes pre-prod ─
+  # Working dir: /home/danny/tg_fitness_bot_shipyard (separate clone of the same repo).
+  # Branch: origin/staging (push there to deploy here; push to origin/main for prod).
+  # Bot token (separate from prod): /home/danny/.secrets/bigbiggerbiggestbot-shipyard.env
+  #   File contents: BOT_TOKEN=<token-from-@BotFather>
+  #   Service won't start until this file exists (ConditionPathExists).
+  # Mini App URL: ephemeral cloudflared Quick Tunnel (no VPS Caddy).
+  # Workflow: git push origin <branch>:staging  → wait ~15 min → /start the
+  #   shipyard bot in Telegram → test → git push origin <branch>:main.
+  systemd.services.fitness-bot-shipyard = let
+    pythonEnv = pkgs.python3.withPackages (ps: with ps; [
+      python-telegram-bot
+      python-dotenv
+      aiohttp
+    ]);
+  in {
+    description = "BigBiggerBiggestBot — SHIPYARD STAGING instance";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pythonEnv pkgs.cloudflared ];
+    environment.API_HOST = "::";
+    environment.API_PORT = "8081";
+    # No WEBAPP_URL — start.py spins up its own ephemeral cloudflared tunnel.
+    unitConfig.ConditionPathExists = "/home/danny/.secrets/bigbiggerbiggestbot-shipyard.env";
+    serviceConfig = {
+      WorkingDirectory = "/home/danny/tg_fitness_bot_shipyard";
+      EnvironmentFile = "/home/danny/.secrets/bigbiggerbiggestbot-shipyard.env";
+      ExecStart = "${pythonEnv}/bin/python start.py";
+      Restart = "on-failure";
+      RestartSec = 10;
+      User = "danny";
+    };
+  };
+
+  systemd.services.fitness-bot-shipyard-pull = {
+    description = "Pull shipyard fitness bot from origin/staging and restart if changed";
+    path = with pkgs; [ git systemd ];
+    environment.GIT_CONFIG_COUNT = "1";
+    environment.GIT_CONFIG_KEY_0 = "safe.directory";
+    environment.GIT_CONFIG_VALUE_0 = "/home/danny/tg_fitness_bot_shipyard";
+    script = ''
+      set -euo pipefail
+      if [ ! -d /home/danny/tg_fitness_bot_shipyard/.git ]; then
+        echo "Shipyard working dir not bootstrapped yet — skipping pull."
+        exit 0
+      fi
+      cd /home/danny/tg_fitness_bot_shipyard
+      git fetch origin
+      if [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/staging)" ]; then
+        exit 0
+      fi
+      git pull origin staging
+      systemctl restart fitness-bot-shipyard
+    '';
+    serviceConfig.Type = "oneshot";
+  };
+
+  systemd.timers.fitness-bot-shipyard-pull = {
+    wantedBy = [ "timers.target" ];
+    # Offset from prod (07/15), mulbo (11/15), and dotfiles-rebuild.
+    timerConfig.OnCalendar = "*-*-* *:13/15:00";
+    timerConfig.RandomizedDelaySec = "2min";
+  };
+
   # Mulbo companion service (Phase 5: uploads + dedup index + folders).
   # Wire spec: ~danny/python-projects/20_mulbo/SERVER_API.md.
   # Bootstrap (one-time): git clone git@github.com:DannyDannyDanny/python-projects.git /home/danny/python-projects
