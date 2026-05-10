@@ -95,10 +95,10 @@
   networking.firewall = {
     allowedTCPPorts = [ 7000 7001 7100 4533 ];
     allowedUDPPorts = [ 5353 6000 6001 7011 ];
-    # 8080: bbbot HTTP backend. 8091: mulbo-server companion service.
-    # Both ZT-only — see vps-relay.nix for reverse proxy if exposing
-    # publicly later.
-    interfaces."zt+".allowedTCPPorts = [ 8080 8091 ];
+    # 8080: bbbot HTTP backend. 8081: bbbot SHIPYARD STAGING (B3Bot beta).
+    # 8091: mulbo-server companion service. All ZT-only — see vps-relay.nix
+    # for the reverse proxies that expose them publicly.
+    interfaces."zt+".allowedTCPPorts = [ 8080 8081 8091 ];
   };
 
   # Navidrome — self-hosted music streaming server (Subsonic API).
@@ -210,17 +210,22 @@
     timerConfig.RandomizedDelaySec = "2min";
   };
 
-  # ── Shipyard staging — second instance for verifying changes pre-prod ─
-  # Working dir: /home/danny/tg_fitness_bot_shipyard (separate clone of the same repo).
+  # ── Shipyard staging — B3Bot beta tenant under shipyard_poc_bot ──────
+  # Mini-App-only HTTP server (no Telegram polling — shipyard_poc_bot on
+  # phantom-ship owns the polling loop; this service only validates Telegram
+  # WebApp initData HMACs against the shared bot token).
+  #
+  # Working dir: /home/danny/tg_fitness_bot_shipyard (separate clone of the
+  #   same repo, gitignored workouts.db kept across pulls).
   # Branch: origin/staging (push there to deploy here; push to origin/main for prod).
-  # Bot: shipyard_poc_bot — the shared "POC slot" Telegram bot. While B3Bot
-  #   staging is the active POC, shipyard_poc_bot polls into this service.
   # Token file: /home/danny/.secrets/shipyard_poc_bot.env
   #   File contents: BOT_TOKEN=<shipyard_poc_bot token>
   #   Service won't start until this file exists (ConditionPathExists).
-  # Mini App URL: ephemeral cloudflared Quick Tunnel (no VPS Caddy).
-  # Workflow: git push origin <branch>:staging  → wait ~15 min → /start
-  #   shipyard_poc_bot in Telegram → test → git push origin <branch>:main.
+  # Mini App URL: https://b3.dannydannydanny.me (vps-relay Caddy →
+  #   ZT IPv6 → here:8081). Stable across restarts — listed in
+  #   ~/python-projects/26_shipyard/apps.json.
+  # Workflow: git push origin <branch>:staging  → wait ~15 min → tap B3Bot
+  #   beta in shipyard_poc_bot's launcher → test → git push <branch>:main.
   systemd.services.fitness-bot-shipyard = let
     pythonEnv = pkgs.python3.withPackages (ps: with ps; [
       python-telegram-bot
@@ -232,10 +237,12 @@
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
-    path = [ pythonEnv pkgs.cloudflared ];
+    path = [ pythonEnv ];
     environment.API_HOST = "::";
     environment.API_PORT = "8081";
-    # No WEBAPP_URL — start.py spins up its own ephemeral cloudflared tunnel.
+    # Stable URL fronted by vps-relay's Caddy → ZT → here:8081.
+    # WEBAPP_URL set tells start.py to skip cloudflared entirely.
+    environment.WEBAPP_URL = "https://b3.dannydannydanny.me";
     unitConfig.ConditionPathExists = "/home/danny/.secrets/shipyard_poc_bot.env";
     serviceConfig = {
       WorkingDirectory = "/home/danny/tg_fitness_bot_shipyard";

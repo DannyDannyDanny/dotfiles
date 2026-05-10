@@ -101,6 +101,11 @@
       "bbbot.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[fdd5:53a2:de33:d269:6499:93d5:53a2:de33]:8080
       '';
+      # B3Bot beta — bbbot's staging tenant under shipyard_poc_bot.
+      # Same backend host as bbbot prod, port 8081.
+      "b3.dannydannydanny.me".extraConfig = ''
+        reverse_proxy http://[fdd5:53a2:de33:d269:6499:93d5:53a2:de33]:8081
+      '';
       # Shelfish — phantom-ship's ZT IPv6.
       "shelfish.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8081
