@@ -395,6 +395,45 @@
     };
   };
 
+  # Phase 7.5 enrichment one-shot. For tracks where Navidrome's tags
+  # are empty/Unknown, runs three sources (filename heuristics, yt-dlp
+  # for SoundCloud `[<id>]` patterns, AcoustID+MusicBrainz), votes the
+  # results, and writes back via mutagen with strict-replacement
+  # (never touches user-set tags).
+  #
+  # Trigger:           sudo systemctl start mulbo-server-enrich
+  # Follow progress:   journalctl -fu mulbo-server-enrich
+  systemd.services.mulbo-server-enrich = let
+    pythonEnv = pkgs.python312.withPackages (ps: with ps; [
+      mutagen   # tag writeback
+    ]);
+  in {
+    description = "Enrich Navidrome tracks with empty/Unknown metadata";
+    after = [ "mulbo-server.service" ];
+    requires = [ "mulbo-server.service" ];
+    path = with pkgs; [ yt-dlp ];   # provides yt-dlp for SoundCloud lookups
+    environment = {
+      MULBO_INDEX_DB         = "/var/lib/mulbo-server/index.db";
+      MULBO_NAVIDROME_DB     = "/var/lib/navidrome/navidrome.db";
+      MULBO_MUSIC_ROOT       = "/srv/music";
+      MULBO_MUSIC_WRITE_ROOT = "/home/danny/music";
+      PYTHONUNBUFFERED       = "1";
+    };
+    serviceConfig = {
+      Type             = "oneshot";
+      WorkingDirectory = "/home/danny/python-projects/20_mulbo";
+      ExecStart        = "${pythonEnv}/bin/python mulbo_server/enrich.py";
+      User             = "danny";
+      SupplementaryGroups = [ "navidrome" ];
+      StateDirectory   = "mulbo-server";
+      # Add MULBO_ACOUSTID_KEY to the secrets file to enable the
+      # AcoustID source. yt-dlp source needs no key. Filename source
+      # needs nothing.
+      EnvironmentFile  = "/home/danny/.secrets/mulbo-server-navidrome";
+      TimeoutSec       = "8h";
+    };
+  };
+
   # Auto-rebuild service/timer + safe.directory provided by the
   # shared dotfiles-rebuild NixOS module (see nixos/modules/dotfiles-rebuild.nix).
 }
