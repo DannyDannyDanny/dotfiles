@@ -213,12 +213,14 @@
   # ── Shipyard staging — second instance for verifying changes pre-prod ─
   # Working dir: /home/danny/tg_fitness_bot_shipyard (separate clone of the same repo).
   # Branch: origin/staging (push there to deploy here; push to origin/main for prod).
-  # Bot token (separate from prod): /home/danny/.secrets/bigbiggerbiggestbot-shipyard.env
-  #   File contents: BOT_TOKEN=<token-from-@BotFather>
+  # Bot: shipyard_poc_bot — the shared "POC slot" Telegram bot. While B3Bot
+  #   staging is the active POC, shipyard_poc_bot polls into this service.
+  # Token file: /home/danny/.secrets/shipyard_poc_bot.env
+  #   File contents: BOT_TOKEN=<shipyard_poc_bot token>
   #   Service won't start until this file exists (ConditionPathExists).
   # Mini App URL: ephemeral cloudflared Quick Tunnel (no VPS Caddy).
-  # Workflow: git push origin <branch>:staging  → wait ~15 min → /start the
-  #   shipyard bot in Telegram → test → git push origin <branch>:main.
+  # Workflow: git push origin <branch>:staging  → wait ~15 min → /start
+  #   shipyard_poc_bot in Telegram → test → git push origin <branch>:main.
   systemd.services.fitness-bot-shipyard = let
     pythonEnv = pkgs.python3.withPackages (ps: with ps; [
       python-telegram-bot
@@ -234,10 +236,10 @@
     environment.API_HOST = "::";
     environment.API_PORT = "8081";
     # No WEBAPP_URL — start.py spins up its own ephemeral cloudflared tunnel.
-    unitConfig.ConditionPathExists = "/home/danny/.secrets/bigbiggerbiggestbot-shipyard.env";
+    unitConfig.ConditionPathExists = "/home/danny/.secrets/shipyard_poc_bot.env";
     serviceConfig = {
       WorkingDirectory = "/home/danny/tg_fitness_bot_shipyard";
-      EnvironmentFile = "/home/danny/.secrets/bigbiggerbiggestbot-shipyard.env";
+      EnvironmentFile = "/home/danny/.secrets/shipyard_poc_bot.env";
       ExecStart = "${pythonEnv}/bin/python start.py";
       Restart = "on-failure";
       RestartSec = 10;
