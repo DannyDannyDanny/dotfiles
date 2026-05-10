@@ -420,7 +420,7 @@
     description = "Enrich Navidrome tracks with empty/Unknown metadata";
     after = [ "mulbo-server.service" ];
     requires = [ "mulbo-server.service" ];
-    path = with pkgs; [ yt-dlp ];   # provides yt-dlp for SoundCloud lookups
+    path = with pkgs; [ yt-dlp chromaprint ];   # yt-dlp for SC/YT lookups, chromaprint for AcoustID's -plain fingerprint
     environment = {
       MULBO_INDEX_DB         = "/var/lib/mulbo-server/index.db";
       MULBO_NAVIDROME_DB     = "/var/lib/navidrome/navidrome.db";
