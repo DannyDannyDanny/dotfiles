@@ -127,6 +127,8 @@ in {
         ../nixos/hosts/sunken-ship.nix
         config.flake.nixosModules.dotfiles-rebuild
         config.flake.nixosModules.server-debug-tools
+        config.flake.nixosModules.monitoring-node-exporter
+        config.flake.nixosModules.monitoring-prometheus-server
         inputs.home-manager.nixosModules.home-manager
         (hmModule {
           user = "danny";
@@ -146,6 +148,7 @@ in {
         }
         clanHostsModule
         ../nixos/hosts/vps-relay.nix
+        config.flake.nixosModules.monitoring-node-exporter
         inputs.home-manager.nixosModules.home-manager
         (hmModule {
           user = "danny";
@@ -167,6 +170,7 @@ in {
         ../nixos/hosts/phantom-ship.nix
         config.flake.nixosModules.dotfiles-rebuild
         config.flake.nixosModules.server-debug-tools
+        config.flake.nixosModules.monitoring-node-exporter
         inputs.home-manager.nixosModules.home-manager
         (hmModule {
           user = "danny";
