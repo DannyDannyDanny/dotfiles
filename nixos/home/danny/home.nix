@@ -228,7 +228,7 @@
     # alacritty   # TODO: configured via programs.alacritty above, so not needed here
     # warp-terminal # TODO: Bloat
     # vscodium     # TODO: Bloat
-    # zed-editor   # TODO: Bloat
+    zed-editor
     code-cursor
     cursor-cli
     dfu-util      # USB DFU firmware flasher (Flipper Zero etc.)
