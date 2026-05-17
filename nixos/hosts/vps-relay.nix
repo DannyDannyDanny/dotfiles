@@ -145,6 +145,11 @@
       "dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8092
       '';
+      # kf — Kyranna Fardi architecture portfolio. Same notes service on
+      # phantom :8092, routed by Host header (PORTFOLIO_HOST).
+      "kf.dannydannydanny.me".extraConfig = ''
+        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8092
+      '';
     };
   };
 
