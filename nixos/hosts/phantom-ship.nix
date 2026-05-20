@@ -583,35 +583,10 @@ in
 
   # Catppuccin theme for Forgejo — module wired in via clan.nix's
   # phantom-ship.imports (inputs.catppuccin.nixosModules.catppuccin).
-  # The module's `flavor` option picks ONE static flavor; the auto
-  # variants (catppuccin-<accent>-auto) follow prefers-color-scheme —
-  # latte in light mode, mocha in dark. We override DEFAULT_THEME +
-  # THEMES below to use the auto variant.
   catppuccin.forgejo = {
     enable = true;
-    flavor = "mocha";        # static fallback; auto-variant takes precedence below
+    flavor = "mocha";
     accent = "mauve";
-  };
-
-  # Default to the auto-switching mauve theme (light in light mode, dark
-  # in dark mode). Replace THEMES with builtins + every catppuccin auto
-  # variant + the four mauve flavor variants, so the user-level
-  # appearance picker can still offer them.
-  services.forgejo.settings.ui = {
-    DEFAULT_THEME = lib.mkForce "catppuccin-mauve-auto";
-    THEMES = lib.mkForce (lib.concatStringsSep "," [
-      # Forgejo builtins
-      "forgejo-auto" "forgejo-light" "forgejo-dark"
-      # Auto-switching catppuccin (light in light mode, dark in dark mode)
-      "catppuccin-blue-auto" "catppuccin-flamingo-auto" "catppuccin-green-auto"
-      "catppuccin-lavender-auto" "catppuccin-maroon-auto" "catppuccin-mauve-auto"
-      "catppuccin-peach-auto" "catppuccin-pink-auto" "catppuccin-red-auto"
-      "catppuccin-rosewater-auto" "catppuccin-sapphire-auto" "catppuccin-sky-auto"
-      "catppuccin-teal-auto" "catppuccin-yellow-auto"
-      # Static mauve variants for manual override
-      "catppuccin-latte-mauve" "catppuccin-frappe-mauve"
-      "catppuccin-macchiato-mauve" "catppuccin-mocha-mauve"
-    ]);
   };
 
   # Auto-rebuild service/timer + safe.directory provided by the
