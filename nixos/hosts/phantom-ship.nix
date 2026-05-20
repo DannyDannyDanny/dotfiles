@@ -581,14 +581,6 @@ in
     };
   };
 
-  # Catppuccin theme for Forgejo — module wired in via clan.nix's
-  # phantom-ship.imports (inputs.catppuccin.nixosModules.catppuccin).
-  catppuccin.forgejo = {
-    enable = true;
-    flavor = "mocha";
-    accent = "mauve";
-  };
-
   # Auto-rebuild service/timer + safe.directory provided by the
   # shared dotfiles-rebuild NixOS module (see nixos/modules/dotfiles-rebuild.nix).
 }
