@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "catppuccin": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1779125773,
+        "narHash": "sha256-F34zmAgMQXHwvFb9SpCilX4cAIfF4+KvpzrJqnkNLJE=",
+        "owner": "catppuccin",
+        "repo": "nix",
+        "rev": "86996e2c4ee6a091fddb10de56dd21a1a5972bcb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "nix",
+        "type": "github"
+      }
+    },
     "clan-community": {
       "inputs": {
         "clan-core": [
@@ -500,6 +520,7 @@
     },
     "root": {
       "inputs": {
+        "catppuccin": "catppuccin",
         "clan-community": "clan-community",
         "clan-core": "clan-core",
         "disko": "disko_2",
