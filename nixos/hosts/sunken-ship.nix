@@ -72,7 +72,7 @@
   # x86_64-linux builds here via ssh-ng://danny@sunken-ship-zt).
   nix.settings.trusted-users = [ "root" "danny" ];
   environment.systemPackages = with pkgs; [
-    git # clone/bootstrap and dotfiles-rebuild timer
+    git # clone/bootstrap, repo-pull timers, dm-pull-deploy push
     brightnessctl # manual backlight; replaces removed `light` from nixpkgs
     uxplay # AirPlay mirroring receiver
     alsa-utils # aplay, amixer, arecord for audio debugging
@@ -347,7 +347,10 @@
   # not in the repo, so they survive pulls.
   systemd.services.mulbo-pull = {
     description = "Pull mulbo repo and restart mulbo-server if changed";
-    path = with pkgs; [ git systemd ];
+    # openssh: `git fetch origin` over an SSH remote forks `ssh`; without
+    # it git dies with "cannot run ssh: No such file or directory" and the
+    # unit fails (shows up as system `degraded`).
+    path = with pkgs; [ git openssh systemd ];
     environment = {
       GIT_CONFIG_COUNT   = "1";
       GIT_CONFIG_KEY_0   = "safe.directory";
@@ -370,6 +373,33 @@
     wantedBy = [ "timers.target" ];
     timerConfig.OnCalendar = "*-*-* *:11/15:00";  # every 15 min, offset from fitness-bot-pull and dotfiles-rebuild
     timerConfig.RandomizedDelaySec = "2min";
+  };
+
+  # dm-pull-deploy push automation. sunken-ship is the push node for the
+  # clan dm-pull-deploy instance (wired in flake-modules/clan.nix), but
+  # the upstream module only ships a manual `dm-send-deploy` binary — no
+  # scheduler. This timer announces the latest origin/main rev over
+  # data-mesher gossip; the watchers (dm-pull-deploy.path on sunken +
+  # phantom) compare and only rebuild when the rev actually changes, so
+  # re-announcing the same rev is a cheap no-op. This is the replacement
+  # for the legacy dotfiles-rebuild pull timer (being retired).
+  #
+  # dm-send-deploy self-discovers the rev via `git ls-remote` and signs
+  # with /run/secrets/vars/dm-pull-deploy-signing-key — needs root.
+  systemd.services.dm-pull-deploy-push = {
+    description = "Announce latest origin/main rev via data-mesher (dm-pull-deploy push)";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "/run/current-system/sw/bin/dm-send-deploy";
+      User = "root";
+    };
+  };
+
+  systemd.timers.dm-pull-deploy-push = {
+    wantedBy = [ "timers.target" ];
+    timerConfig.OnCalendar = "*-*-* *:04/15:00";  # every 15 min, offset from the other pull timers
+    timerConfig.RandomizedDelaySec = "2min";
+    timerConfig.Persistent = true;
   };
 
   # One-shot backfill: walks Navidrome's media_file, computes
@@ -443,6 +473,8 @@
     };
   };
 
-  # Auto-rebuild service/timer + safe.directory provided by the
-  # shared dotfiles-rebuild NixOS module (see nixos/modules/dotfiles-rebuild.nix).
+  # Deploys now flow through clan dm-pull-deploy: the dm-pull-deploy-push
+  # timer above announces origin/main, and the dm-pull-deploy.path watcher
+  # rebuilds on change. The legacy pull-based dotfiles-rebuild module was
+  # retired 2026-05-19.
 }

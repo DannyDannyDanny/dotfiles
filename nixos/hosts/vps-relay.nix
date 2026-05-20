@@ -46,8 +46,13 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys = [
-      # Same pubkey used to reach sunken-ship; set at install via clan.
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKW/akfIiVU5o63YrTAJVZhMj7kXfYHOnXDtlpVFW7pf danny@sunken-ship"
+      # Mac admin key (~/.ssh/id_ed25519_sunken_ship on the laptop — the
+      # key the Mac uses to reach the fleet). Used for `clan machines
+      # update vps-relay` from the Mac and at install via clan.
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKW/akfIiVU5o63YrTAJVZhMj7kXfYHOnXDtlpVFW7pf danny@mac-admin"
+      # sunken-ship's own key, so the push node can SSH into vps-relay
+      # over ZeroTier for mesh introspection / debugging.
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB9t4YAaoHvVouqp+qyFOq8o3SAtXMiAmjF6J0ldyx4g danny@sunken-ship"
     ];
   };
   users.users.root.openssh.authorizedKeys.keys =

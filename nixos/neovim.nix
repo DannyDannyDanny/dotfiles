@@ -41,6 +41,7 @@
       end
 
       -- General options
+      vim.opt.cursorline = true
       vim.opt.mouse = "a"
       vim.opt.listchars = { tab = "→ ", space = "·", nbsp = "␣", trail = "•", eol = "¶", precedes = "«", extends = "»" }
       vim.opt.clipboard:append("unnamedplus")

@@ -125,7 +125,6 @@ in {
         }
         clanHostsModule
         ../nixos/hosts/sunken-ship.nix
-        config.flake.nixosModules.dotfiles-rebuild
         config.flake.nixosModules.server-debug-tools
         config.flake.nixosModules.monitoring-node-exporter
         config.flake.nixosModules.monitoring-prometheus-server
@@ -169,7 +168,6 @@ in {
         inputs.nix-openclaw.nixosModules.openclaw-gateway
         inputs.catppuccin.nixosModules.catppuccin
         ../nixos/hosts/phantom-ship.nix
-        config.flake.nixosModules.dotfiles-rebuild
         config.flake.nixosModules.server-debug-tools
         config.flake.nixosModules.monitoring-node-exporter
         inputs.home-manager.nixosModules.home-manager

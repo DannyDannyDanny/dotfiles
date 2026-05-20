@@ -231,6 +231,7 @@
     zed-editor
     code-cursor
     cursor-cli
+    cinny-desktop # Matrix client (Tauri wrapper around the Cinny web app)
     dfu-util      # USB DFU firmware flasher (Flipper Zero etc.)
     discord
     mapscii
