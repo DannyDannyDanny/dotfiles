@@ -25,12 +25,6 @@
     nix-openclaw.url = "github:openclaw/nix-openclaw";
     nix-openclaw.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Catppuccin NixOS module — used for theming Forgejo (and any future
-    # NixOS-level services). Home-manager/neovim/alacritty Catppuccin lives
-    # outside this input (separate nixpkgs packages).
-    catppuccin.url = "github:catppuccin/nix";
-    catppuccin.inputs.nixpkgs.follows = "nixpkgs";
-
     clan-core.url = "https://git.clan.lol/clan/clan-core/archive/main.tar.gz";
     clan-core.inputs.nixpkgs.follows = "nixpkgs";
     clan-core.inputs.flake-parts.follows = "flake-parts";
