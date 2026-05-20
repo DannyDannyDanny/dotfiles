@@ -167,6 +167,7 @@ in {
         }
         clanHostsModule
         inputs.nix-openclaw.nixosModules.openclaw-gateway
+        inputs.catppuccin.nixosModules.catppuccin
         ../nixos/hosts/phantom-ship.nix
         config.flake.nixosModules.dotfiles-rebuild
         config.flake.nixosModules.server-debug-tools
