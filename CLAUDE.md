@@ -37,7 +37,7 @@ nix run git+https://git.clan.lol/clan/clan-core#clan-cli -- \
 - **Host configs** in `nixos/hosts/`:
   - `daniel-macbook-air.nix` — hostname `Daniel-Macbook-Air` (aarch64-darwin, nix-darwin)
   - `sunken-ship.nix` — NixOS home server (x86_64-linux, WiFi + AirPlay)
-  - `phantom-ship.nix` — NixOS home server (x86_64-linux, Ethernet)
+  - `phantom-ship.nix` — NixOS home server (x86_64-linux, WiFi uplink; ethernet port serves a downstream NAT subnet)
   - `wsl.nix` — WSL (x86_64-linux)
   - `server-install.nix` — disko-install target (LUKS)
 - **Home Manager:** integrated on macOS, WSL, and sunken-ship; user config in `nixos/home/danny/home.nix`
@@ -63,7 +63,8 @@ nix run git+https://git.clan.lol/clan/clan-core#clan-cli -- \
 - SSH: `ssh danny@phantom-ship`
 - Remote rebuild: `ssh ... 'cd /etc/dotfiles && sudo nixos-rebuild switch --flake .#phantom-ship'`
 - Auto-rebuild timer: same pattern as sunken-ship.
-- Ethernet only (no WiFi).
+- Uplink is WiFi (`wlp1s0`, 192.168.1.111, default route via 192.168.1.1).
+- Ethernet port (`enp0s31f6`, static 10.0.0.1/24) is NOT the router uplink — it serves a downstream NAT subnet (dnsmasq). Link is normally down when nothing is plugged in.
 
 ## Ollama
 
