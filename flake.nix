@@ -29,10 +29,9 @@
     clan-core.inputs.nixpkgs.follows = "nixpkgs";
     clan-core.inputs.flake-parts.follows = "flake-parts";
 
-    # clan-community: dm-pull-deploy etc. Pinned to our fork's fix branch
-    # until clan/clan-community#25 (machine.name hyphen sanitization) lands.
-    # Swap back to `archive/main.tar.gz` when merged.
-    clan-community.url = "git+https://git.clan.lol/dannydannydanny/clan-community.git?ref=fix/dm-pull-deploy-hyphen-hostnames";
+    # clan-community: dm-pull-deploy etc. Back on upstream main since
+    # clan/clan-community#25 (machine.name hyphen sanitization) merged.
+    clan-community.url = "https://git.clan.lol/clan/clan-community/archive/main.tar.gz";
     clan-community.inputs.nixpkgs.follows = "nixpkgs";
     clan-community.inputs.clan-core.follows = "clan-core";
   };

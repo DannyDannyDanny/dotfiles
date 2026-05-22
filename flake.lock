@@ -9,22 +9,18 @@
         "nixpkgs": [
           "nixpkgs"
         ],
-        "systems": "systems",
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1778267301,
-        "narHash": "sha256-/SEnX0wGQuvQ78EKWTIDA8nCUaJhCD0nVbtP5evFdSQ=",
-        "ref": "fix/dm-pull-deploy-hyphen-hostnames",
-        "rev": "bd2f9c63ed5613eb52a03116df88b06275171f55",
-        "revCount": 47,
-        "type": "git",
-        "url": "https://git.clan.lol/dannydannydanny/clan-community.git"
+        "lastModified": 1779453564,
+        "narHash": "sha256-q7iVGGhZYtAwsjf7sIKcYD5IgsTTTobWP/EStaDCUZc=",
+        "rev": "81e4c9cded645d0384812dd6b8f05bd2475ffe64",
+        "type": "tarball",
+        "url": "https://git.clan.lol/api/v1/repos/clan/clan-community/archive/81e4c9cded645d0384812dd6b8f05bd2475ffe64.tar.gz"
       },
       "original": {
-        "ref": "fix/dm-pull-deploy-hyphen-hostnames",
-        "type": "git",
-        "url": "https://git.clan.lol/dannydannydanny/clan-community.git"
+        "type": "tarball",
+        "url": "https://git.clan.lol/clan/clan-community/archive/main.tar.gz"
       }
     },
     "clan-core": {
@@ -40,7 +36,7 @@
           "nixpkgs"
         ],
         "sops-nix": "sops-nix",
-        "systems": "systems_2",
+        "systems": "systems",
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
@@ -182,7 +178,7 @@
     },
     "flake-utils": {
       "inputs": {
-        "systems": "systems_3"
+        "systems": "systems_2"
       },
       "locked": {
         "lastModified": 1731533236,
@@ -200,7 +196,7 @@
     },
     "flake-utils_2": {
       "inputs": {
-        "systems": "systems_4"
+        "systems": "systems_3"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -537,21 +533,6 @@
     },
     "systems": {
       "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
-        "type": "github"
-      }
-    },
-    "systems_2": {
-      "locked": {
         "lastModified": 1774449309,
         "narHash": "sha256-brhZ8DmuGtzkCYHJg4HEd602amKm89Y9ytsFZ5uWD1w=",
         "owner": "nix-systems",
@@ -566,7 +547,7 @@
         "type": "github"
       }
     },
-    "systems_3": {
+    "systems_2": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
@@ -581,7 +562,7 @@
         "type": "github"
       }
     },
-    "systems_4": {
+    "systems_3": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
