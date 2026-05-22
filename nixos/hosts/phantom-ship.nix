@@ -111,7 +111,7 @@ in
   # Passwordless sudo for wheel.
   security.sudo.wheelNeedsPassword = false;
   environment.systemPackages = with pkgs; [
-    git          # clone/bootstrap and dotfiles-rebuild timer
+    git          # clone/bootstrap and dm-pull-deploy
     nodejs       # npm for openclaw plugin installs
     python3      # node-gyp dependency for openclaw plugins
     wakeonlan    # wake rusty-anchor: wakeonlan 00:16:cb:87:20:ba
@@ -581,6 +581,7 @@ in
     };
   };
 
-  # Auto-rebuild service/timer + safe.directory provided by the
-  # shared dotfiles-rebuild NixOS module (see nixos/modules/dotfiles-rebuild.nix).
+  # Deploys flow through clan dm-pull-deploy: the dm-pull-deploy.path
+  # watcher rebuilds when sunken-ship announces a new origin/main rev.
+  # The legacy pull-based dotfiles-rebuild module was retired 2026-05-19.
 }
