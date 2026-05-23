@@ -162,6 +162,9 @@
   #
   # The slash-command bot (bot.py) was removed in May 2026 — the Mini App
   # is now the only interface. No python-telegram-bot dependency required.
+  # ExecStartPost re-publishes the bot's chat-side presence (menu button,
+  # description, cleared command list) every time the service starts.
+  # Idempotent against the Telegram API. Errors are non-fatal (`-` prefix).
   systemd.services.fitness-bot = let
     pythonEnv = pkgs.python3.withPackages (ps: with ps; [
       python-dotenv
@@ -179,6 +182,7 @@
     serviceConfig = {
       WorkingDirectory = "/home/danny/tg_fitness_bot";
       ExecStart = "${pythonEnv}/bin/python start.py";
+      ExecStartPost = "-${pythonEnv}/bin/python scripts/set-bot-presence.py";
       Restart = "on-failure";
       RestartSec = 10;
       User = "danny";
