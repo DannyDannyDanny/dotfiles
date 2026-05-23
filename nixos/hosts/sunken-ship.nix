@@ -149,23 +149,26 @@
     };
   };
 
-  # BigBiggerBiggestBot — Telegram fitness tracker with Mini App.
+  # BigBiggerBiggestBot — Mini App backend (no Telegram polling).
   # Code: https://github.com/DannyDannyDanny/bigbiggerbiggestbot cloned at /home/danny/tg_fitness_bot
-  # Bot token: ~danny/.secrets/bigbiggerbiggestbot
+  # Bot token (used only for validating Telegram WebApp initData HMACs):
+  #   ~danny/.secrets/bigbiggerbiggestbot
   # Deployment: fitness-bot-pull timer below runs every 15 min, git pulls, restarts service on changes.
   #
   # Mini App URL is fronted by Caddy on the vps-relay host at
   # https://bbbot.dannydannydanny.me (VPS → ZeroTier → localhost:8080).
-  # The bot's start.py honors WEBAPP_URL to skip starting its own
-  # cloudflared Quick Tunnel when we've got a stable URL from the VPS.
+  # start.py honors WEBAPP_URL to skip starting its own cloudflared
+  # Quick Tunnel when the stable URL from the VPS is already set.
+  #
+  # The slash-command bot (bot.py) was removed in May 2026 — the Mini App
+  # is now the only interface. No python-telegram-bot dependency required.
   systemd.services.fitness-bot = let
     pythonEnv = pkgs.python3.withPackages (ps: with ps; [
-      python-telegram-bot
       python-dotenv
       aiohttp
     ]);
   in {
-    description = "BigBiggerBiggestBot Telegram fitness tracker";
+    description = "BigBiggerBiggestBot Mini App backend";
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
@@ -228,7 +231,6 @@
   #   beta in shipyard_poc_bot's launcher → test → git push <branch>:main.
   systemd.services.fitness-bot-shipyard = let
     pythonEnv = pkgs.python3.withPackages (ps: with ps; [
-      python-telegram-bot
       python-dotenv
       aiohttp
     ]);

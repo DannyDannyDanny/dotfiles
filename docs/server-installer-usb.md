@@ -94,16 +94,45 @@ sudo dd if=result/iso/nixos-minimal-*.iso of=/dev/sdX status=progress bs=4M
 
 ## Live-system WiFi (optional, custom ISO only)
 
-Create `nixos/installer-wifi.nix` (gitignored):
+The minimal installer ISO runs NetworkManager, so live-system WiFi must be a
+declarative NetworkManager profile. `networking.wireless` / wpa_supplicant does
+**not** work here — NixOS asserts you cannot combine `networking.networkmanager`
+with `networking.wireless.networks`.
+
+Create `nixos/installer-wifi.nix` (gitignored — it holds the PSK):
 
 ```nix
 {
-  networking.wireless.enable = true;
-  networking.wireless.networks."YourSSID".psk = "your-password";
+  networking.networkmanager.ensureProfiles.profiles.installer-wifi = {
+    connection = {
+      id = "installer-wifi";
+      type = "wifi";
+    };
+    wifi = {
+      mode = "infrastructure";
+      ssid = "YourSSID";
+    };
+    wifi-security = {
+      auth-alg = "open";
+      key-mgmt = "wpa-psk";
+      psk = "your-password";
+    };
+    ipv4.method = "auto";
+    ipv6.method = "auto";
+  };
 }
 ```
 
-Add to flake's installer-iso modules, rebuild ISO on Linux.
+`flake-modules/installer-iso.nix` auto-includes this file when present (via a
+`builtins.pathExists` check) — no flake edit needed. Because the file is
+gitignored, the flake only sees it once it is staged:
+
+- **`build-installer-iso-on-server.sh`** copies the file to the build host and
+  runs `git add -f` automatically.
+- For a **direct `nix build`**, run `git add -f nixos/installer-wifi.nix` first
+  (staging is enough — never commit it; it contains the PSK).
+
+Then rebuild the ISO on Linux.
 
 ## Installed-system WiFi (optional)
 
