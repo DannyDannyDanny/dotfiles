@@ -110,6 +110,12 @@
       Address = "0.0.0.0";
       Port = 4533;
       MusicFolder = "/srv/music";
+      # Auto-delete `missing=1` rows during scan so transient files
+      # (e.g. mulbo dedupe quarantine ones) don't accumulate as stale
+      # track IDs that Substreamer caches and then 500s on. Without
+      # this, Navidrome keeps missing rows forever (default behaviour
+      # preserves play history; we trade that for client-cache hygiene).
+      Scanner.PurgeMissing = "missing";
     };
   };
 
