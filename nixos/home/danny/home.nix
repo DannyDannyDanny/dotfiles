@@ -88,6 +88,28 @@
       catppuccin
       tmux-fzf
       extrakto
+      # tmux-resurrect: prefix + Ctrl-s saves, prefix + Ctrl-r restores.
+      # Snapshot lives at ~/.local/share/tmux/resurrect/last (window
+      # layout, working dirs, pane contents if enabled). Survives
+      # force-quits / reboots / kernel panics.
+      {
+        plugin = resurrect;
+        extraConfig = ''
+          set -g @resurrect-capture-pane-contents 'on'
+          set -g @resurrect-strategy-nvim 'session'
+        '';
+      }
+      # tmux-continuum: auto-saves every 15min and auto-restores on
+      # tmux server start. With this, the next force-quit just costs
+      # you up to 15min of recent terminal activity, not the whole
+      # workspace.
+      {
+        plugin = continuum;
+        extraConfig = ''
+          set -g @continuum-restore 'on'
+          set -g @continuum-save-interval '15'
+        '';
+      }
     ];
   };
 
