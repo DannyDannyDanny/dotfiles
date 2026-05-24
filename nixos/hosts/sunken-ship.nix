@@ -115,7 +115,10 @@
       # track IDs that Substreamer caches and then 500s on. Without
       # this, Navidrome keeps missing rows forever (default behaviour
       # preserves play history; we trade that for client-cache hygiene).
-      Scanner.PurgeMissing = "missing";
+      # Valid values: never | always | full. `always` purges on every
+      # scan (selective + full); risk on transient missing is fine
+      # here (stable local disk).
+      Scanner.PurgeMissing = "always";
     };
   };
 
