@@ -321,6 +321,8 @@
       fastapi
       uvicorn
       python-multipart
+      mutagen   # tag writeback (enrich.write_tags); needed by the
+                # /enrich/revert endpoint which reuses enrich.py.
     ]);
   in {
     description = "Mulbo companion service (uploads, dedup, folders)";
