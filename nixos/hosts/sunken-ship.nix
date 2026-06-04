@@ -331,6 +331,10 @@
     after = [ "network-online.target" "navidrome.service" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
+    # ffmpeg: PCM extraction for quality.py's spectral-rolloff probe
+    # (chromaprint-dupe winner picker in --spectral mode). Without it,
+    # the subprocess silently fails and rolloff returns 0Hz.
+    path = with pkgs; [ ffmpeg ];
     environment = {
       MULBO_UPLOADS_DIR     = "/home/danny/music/mulbo-uploads";
       MULBO_INDEX_DB        = "/var/lib/mulbo-server/index.db";
