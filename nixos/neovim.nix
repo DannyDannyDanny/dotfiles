@@ -58,6 +58,39 @@
         end,
       })
 
+      -- Treesitter highlighting: parser-driven syntax highlighting (richer
+      -- than the regex-based default). Leaving `indent` off — it's still
+      -- buggy in several languages (python, yaml).
+      require'nvim-treesitter.configs'.setup {
+        highlight = { enable = true },
+      }
+
+      -- Sticky scroll: pin enclosing scopes (functions, classes, YAML keys,
+      -- etc.) to the top of the window as you scroll deeper. Same idea as
+      -- Zed/VS Code's "Sticky Scroll". `mode = 'topline'` matches Zed's
+      -- "scrolled past" feel; switch to 'cursor' if you'd rather it track
+      -- the cursor instead of the viewport.
+      require'treesitter-context'.setup {
+        enable = true,
+        max_lines = 5,
+        mode = 'topline',
+        trim_scope = 'outer',
+      }
+
+      -- Fish: expand tabs to spaces. Fish renders raw \t in the commandline
+      -- as the Unicode glyph ␉ (U+2409) and wrap-indents each line to the
+      -- column of the opening quote, which mangles Alt-E multiline edits.
+      -- Using spaces sidesteps the issue entirely.
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "fish",
+        callback = function()
+          vim.opt_local.expandtab = true
+          vim.opt_local.tabstop = 2
+          vim.opt_local.shiftwidth = 2
+          vim.opt_local.softtabstop = 2
+        end,
+      })
+
       -- Keymaps
       vim.keymap.set("n", "S", ":%s//g<Left><Left>", { desc = "Replace all" })
       vim.keymap.set("n", "<leader>w", ":w<CR>", { desc = "Save file" })
@@ -73,6 +106,8 @@
       catppuccin-nvim # theme
       goyo-vim        # write prose
       limelight-vim   # prose paragraph highlighter
+      nvim-treesitter.withAllGrammars  # parsers (also makes vim.treesitter.foldexpr work for markdown)
+      nvim-treesitter-context          # sticky scroll: pin parent scopes at top of window
     ];
   };
 }
