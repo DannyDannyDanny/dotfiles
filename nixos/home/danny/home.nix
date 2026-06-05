@@ -89,14 +89,21 @@
       tmux-fzf
       extrakto
       # tmux-resurrect: prefix + Ctrl-s saves, prefix + Ctrl-r restores.
-      # Snapshot lives at ~/.local/share/tmux/resurrect/last (window
-      # layout, working dirs, pane contents if enabled). Survives
-      # force-quits / reboots / kernel panics.
+      # Snapshot lives at ~/.tmux/resurrect/last (window layout, working
+      # dirs, pane contents if enabled). Survives force-quits / reboots
+      # / kernel panics.
+      #
+      # @resurrect-processes: programs to restart on restore. Default
+      # list covers vim/emacs/less/top/etc. but NOT nvim, claude, or
+      # ssh. The "~name->cmd" form re-runs the original argv; bare
+      # names match argv-less invocations. Without this, restored panes
+      # come back as plain fish prompts in the right directory.
       {
         plugin = resurrect;
         extraConfig = ''
           set -g @resurrect-capture-pane-contents 'on'
           set -g @resurrect-strategy-nvim 'session'
+          set -g @resurrect-processes 'nvim "~nvim->nvim *" claude "~claude->claude --continue" ssh "~ssh->ssh *"'
         '';
       }
       # tmux-continuum: auto-saves every 15min and auto-restores on
@@ -163,6 +170,11 @@
     ../../../assets/alacritty/catppuccin-latte-colors.toml;
   xdg.configFile."alacritty/catppuccin-mocha-colors.toml".source =
     ../../../assets/alacritty/catppuccin-mocha-colors.toml;
+
+  # Zed: settings.json is a read-only symlink to assets/zed/settings.json.
+  # To change a setting, edit the asset file and rebuild — editing via Zed's
+  # UI will fail because the target is in the nix store.
+  xdg.configFile."zed/settings.json".source = ../../../assets/zed/settings.json;
 
   # Alacritty: base config + imported active-colors.toml (updated without rebuild)
   programs.alacritty = {
