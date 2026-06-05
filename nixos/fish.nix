@@ -24,6 +24,38 @@
 
       set fish_greeting 🐟: (set_color yellow; date +%T; set_color green; date --iso-8601 2>/dev/null; or date +%F; set_color normal)
 
+      # gco: smart `git checkout` — if the branch is checked out in another
+      # worktree, cd there instead of failing with "already used by worktree at".
+      function gco --description 'git checkout, but cd into worktree if the branch lives there'
+        if test (count $argv) -eq 0
+          git checkout
+          return $status
+        end
+
+        set -l branch $argv[1]
+        set -l target_ref "refs/heads/$branch"
+        set -l wt_path ""
+        set -l current_wt ""
+        for line in (git worktree list --porcelain 2>/dev/null)
+          switch $line
+            case 'worktree *'
+              set current_wt (string replace -r '^worktree ' "" -- $line)
+            case "branch $target_ref"
+              set wt_path $current_wt
+              break
+          end
+        end
+
+        set -l here (git rev-parse --show-toplevel 2>/dev/null)
+        if test -n "$wt_path"; and test "$wt_path" != "$here"
+          echo "→ cd $wt_path (branch '$branch' is checked out in another worktree)"
+          cd $wt_path
+          return $status
+        end
+
+        git checkout $argv
+      end
+
       # Alacritty palette follows macOS appearance; refresh when opening a shell (LaunchAgent also polls).
       if test (uname -s) = Darwin
         bash ~/dotfiles/scripts/alacritty-sync-system-theme.sh >/dev/null 2>&1 &

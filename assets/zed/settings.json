@@ -1,0 +1,53 @@
+// Zed settings — tracked in dotfiles, symlinked into ~/.config/zed/settings.json
+// by home-manager (xdg.configFile in nixos/home/danny/home.nix).
+//
+// Because this is a symlink to a nix-store file, editing it from inside Zed
+// will fail (read-only). Edit THIS file in dotfiles, commit, and rebuild
+// (`darwin-rebuild switch --flake .`). To see Zed's full default settings,
+// run `zed: open default settings` from the command palette.
+{
+  "sticky_scroll": {
+    "enabled": true
+  },
+  "edit_predictions": {
+    "provider": "ollama"
+  },
+  "buffer_font_family": "JetBrains Mono",
+  "cli_default_open_behavior": "existing_window",
+  "project_panel": {
+    "dock": "left"
+  },
+  "outline_panel": {
+    "dock": "left"
+  },
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "git_panel": {
+    "dock": "left"
+  },
+  "agent": {
+    "dock": "right",
+    "default_model": {
+      "provider": "ollama",
+      "model": "llama3.2:latest"
+    }
+  },
+  "disable_ai": false,
+  "minimap": {
+    "show": "auto"
+  },
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+  "base_keymap": "VSCode",
+  "vim_mode": true,
+  "ui_font_size": 16,
+  "buffer_font_size": 15,
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "One Dark"
+  }
+}
