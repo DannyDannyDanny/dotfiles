@@ -47,6 +47,7 @@ in {
     inventory.machines.sunken-ship = { };
     inventory.machines.phantom-ship = { };
     inventory.machines.vps-relay = { };
+    inventory.machines.distant-shore = { };
 
     # ZeroTier mesh VPN. sunken-ship is the controller (manages network
     # membership); phantom-ship is a peer. The mac joins manually as an
@@ -58,6 +59,7 @@ in {
       roles.peer.machines.phantom-ship = { };
       roles.peer.machines.sunken-ship = { };
       roles.peer.machines.vps-relay = { };
+      roles.peer.machines.distant-shore = { };
     };
 
     # data-mesher — signed-file gossip protocol over libp2p (port 7946).
@@ -70,6 +72,7 @@ in {
       module.input = "clan-core";
       roles.default.machines.sunken-ship = { };
       roles.default.machines.phantom-ship = { };
+      roles.default.machines.distant-shore = { };
       roles.bootstrap.machines.sunken-ship = { };
     };
 
@@ -87,6 +90,7 @@ in {
       };
       roles.default.machines.sunken-ship.settings.action = "switch";
       roles.default.machines.phantom-ship.settings.action = "switch";
+      roles.default.machines.distant-shore.settings.action = "switch";
     };
 
     # `clan machines update` connection target. Priority 2000 > ZT's 900
@@ -109,6 +113,12 @@ in {
       # restarts with the clan-managed identity.
       roles.default.machines.vps-relay.settings = {
         host = "89.167.39.251";
+        user = "danny";
+      };
+      # distant-shore: LAN IP for the first update (not yet on ZT). Swap to
+      # its generated ZT IPv6 after it joins the mesh, like the others.
+      roles.default.machines.distant-shore.settings = {
+        host = "192.168.1.182";
         user = "danny";
       };
     };
@@ -147,6 +157,29 @@ in {
         }
         clanHostsModule
         ../nixos/hosts/vps-relay.nix
+        config.flake.nixosModules.monitoring-node-exporter
+        inputs.home-manager.nixosModules.home-manager
+        (hmModule {
+          user = "danny";
+          homeDirectory = "/home/danny";
+          stateVersion = "25.11";
+        })
+      ];
+    };
+
+    # distant-shore — ThinkPad X13 Gen 2, WiFi, Secure Boot via shim+MOK
+    # (installed standalone, then migrated into clan). targetHost is the LAN
+    # IP for the first `clan machines update`; switch to its ZT IPv6 once the
+    # mesh is up. Builds on the box itself (it has nix + internet).
+    machines.distant-shore = {
+      imports = [
+        {
+          clan.core.enableRecommendedDefaults = false;
+          clan.core.networking.targetHost = "danny@192.168.1.182";
+          clan.core.networking.buildHost = "danny@192.168.1.182";
+        }
+        clanHostsModule
+        ../nixos/hosts/distant-shore.nix
         config.flake.nixosModules.monitoring-node-exporter
         inputs.home-manager.nixosModules.home-manager
         (hmModule {
