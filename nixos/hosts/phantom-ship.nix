@@ -241,18 +241,37 @@ in
   # Code deployed out-of-band via rsync to /home/danny/shipyard/
   # (staying in-tree in ~/python-projects/26_shipyard/ until spun out to its own repo).
   # Bot token (not in repo): ~danny/.secrets/telegram-bot-token-shipyard
-  # Data (feedback.jsonl, pointer cache): ~danny/.local/share/shipyard/
+  # Data (feedback.jsonl, feedback.db, pointer cache, feedback_media/):
+  # ~danny/.local/share/shipyard/
+  #
+  # Feedback now accepts photos / voice / video / docs / stickers etc.
+  # Phase A captures + stores raw files; Phase B derives OCR text
+  # (tesseract), speech transcripts (whisper-cpp), poster frames
+  # (ffmpeg) and PDF text (pdftotext) — all via subprocess, so each
+  # tool degrades gracefully if missing.
   systemd.services.shipyard = let
     pythonEnv = pkgs.python3.withPackages (ps: with ps; [
       python-telegram-bot
       httpx
+      pillow                   # EXIF strip on captured photos
     ]);
+    # tesseract with English + Russian tessdata — vyscul writes in
+    # Russian, screenshots can land in either language.
+    tesseractWithLangs = pkgs.tesseract.override {
+      enableLanguages = [ "eng" "rus" ];
+    };
   in {
     description = "Shipyard Telegram bot (mini-app launcher + feedback)";
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
-    path = [ pythonEnv ];
+    path = [
+      pythonEnv
+      pkgs.ffmpeg              # video/animation posters, sticker decode
+      tesseractWithLangs       # photo OCR
+      pkgs.whisper-cpp         # voice/audio transcription
+      pkgs.poppler_utils       # pdftotext (document handling)
+    ];
     environment = {
       SHIPYARD_BOT_TOKEN_FILE = "/home/danny/.secrets/telegram-bot-token-shipyard";
       # Owner-only commands (/admin, /grant, /revoke) — anyone else gets ignored.
