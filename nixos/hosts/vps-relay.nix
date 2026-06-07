@@ -160,6 +160,11 @@
       "map.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8092
       '';
+      # studio — Kyranna's private art-learning archive. Same notes
+      # service on phantom :8092, routed by Host header (STUDIO_HOST).
+      "studio.dannydannydanny.me".extraConfig = ''
+        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8092
+      '';
     };
   };
 
