@@ -155,6 +155,11 @@
       "kf.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8092
       '';
+      # map — curated-architecture world map by Kyranna. Same notes
+      # service on phantom :8092, routed by Host header (MAP_HOST).
+      "map.dannydannydanny.me".extraConfig = ''
+        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8092
+      '';
     };
   };
 
