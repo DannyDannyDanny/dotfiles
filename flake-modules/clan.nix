@@ -22,6 +22,7 @@ let
   phantomShipZTv6 = "fdd5:53a2:de33:d269:6499:936c:48a:bbdc";
   vpsRelayZTv6 = "fdd5:53a2:de33:d269:6499:9305:339f:2ed3";
   distantShoreZTv6 = "fdd5:53a2:de33:d269:6499:93b6:ef1a:c3b3";
+  foreignPortZTv6 = "fdd5:53a2:de33:d269:6499:9389:9b18:6c52";
 
   # Shared across both servers: /etc/hosts entries so data-mesher's
   # libp2p /dns/<machine>.clan/... bootstrap multiaddrs resolve over ZT.
@@ -31,6 +32,7 @@ let
       "${phantomShipZTv6}" = [ "phantom-ship.clan" ];
       "${vpsRelayZTv6}" = [ "vps-relay.clan" ];
       "${distantShoreZTv6}" = [ "distant-shore.clan" ];
+      "${foreignPortZTv6}" = [ "foreign-port.clan" ];
     };
   };
 in {
@@ -50,6 +52,7 @@ in {
     inventory.machines.phantom-ship = { };
     inventory.machines.vps-relay = { };
     inventory.machines.distant-shore = { };
+    inventory.machines.foreign-port = { };
 
     # ZeroTier mesh VPN. sunken-ship is the controller (manages network
     # membership); phantom-ship is a peer. The mac joins manually as an
@@ -62,6 +65,7 @@ in {
       roles.peer.machines.sunken-ship = { };
       roles.peer.machines.vps-relay = { };
       roles.peer.machines.distant-shore = { };
+      roles.peer.machines.foreign-port = { };
     };
 
     # data-mesher — signed-file gossip protocol over libp2p (port 7946).
@@ -75,6 +79,7 @@ in {
       roles.default.machines.sunken-ship = { };
       roles.default.machines.phantom-ship = { };
       roles.default.machines.distant-shore = { };
+      roles.default.machines.foreign-port = { };
       roles.bootstrap.machines.sunken-ship = { };
     };
 
@@ -93,6 +98,7 @@ in {
       roles.default.machines.sunken-ship.settings.action = "switch";
       roles.default.machines.phantom-ship.settings.action = "switch";
       roles.default.machines.distant-shore.settings.action = "switch";
+      roles.default.machines.foreign-port.settings.action = "switch";
     };
 
     # `clan machines update` connection target. Priority 2000 > ZT's 900
@@ -121,6 +127,12 @@ in {
       # its generated ZT IPv6 after it joins the mesh, like the others.
       roles.default.machines.distant-shore.settings = {
         host = "192.168.1.182";
+        user = "danny";
+      };
+      # foreign-port: WiFi-only LAN IP for the first update; swap to its
+      # generated ZT IPv6 after it joins the mesh.
+      roles.default.machines.foreign-port.settings = {
+        host = "192.168.1.223";
         user = "danny";
       };
     };
@@ -184,6 +196,30 @@ in {
         }
         clanHostsModule
         ../nixos/hosts/distant-shore.nix
+        config.flake.nixosModules.monitoring-node-exporter
+        inputs.home-manager.nixosModules.home-manager
+        (hmModule {
+          user = "danny";
+          homeDirectory = "/home/danny";
+          stateVersion = "25.11";
+        })
+      ];
+    };
+
+    # foreign-port — WiFi-only laptop server, locally-signed boot chain
+    # (installed standalone, migrated into clan). targetHost is the LAN IP
+    # for the first `clan machines update`; switch to its ZT IPv6 once the
+    # mesh is up. buildHost = sunken-ship for the closure copy (avoids
+    # self-SSH).
+    machines.foreign-port = {
+      imports = [
+        {
+          clan.core.enableRecommendedDefaults = false;
+          clan.core.networking.targetHost = "danny@192.168.1.223";
+          clan.core.networking.buildHost = "danny@sunken-ship";
+        }
+        clanHostsModule
+        ../nixos/hosts/foreign-port.nix
         config.flake.nixosModules.monitoring-node-exporter
         inputs.home-manager.nixosModules.home-manager
         (hmModule {
