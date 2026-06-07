@@ -172,13 +172,15 @@ in {
     # distant-shore — ThinkPad X13 Gen 2, WiFi, Secure Boot via shim+MOK
     # (installed standalone, then migrated into clan). targetHost is the LAN
     # IP for the first `clan machines update`; switch to its ZT IPv6 once the
-    # mesh is up. Builds on the box itself (it has nix + internet).
+    # mesh is up. buildHost = sunken-ship: it's an x86_64 builder whose key is
+    # already in distant-shore's authorized_keys, so the closure copy works
+    # (building on distant-shore itself needs a fragile self-SSH).
     machines.distant-shore = {
       imports = [
         {
           clan.core.enableRecommendedDefaults = false;
           clan.core.networking.targetHost = "danny@192.168.1.182";
-          clan.core.networking.buildHost = "danny@192.168.1.182";
+          clan.core.networking.buildHost = "danny@sunken-ship";
         }
         clanHostsModule
         ../nixos/hosts/distant-shore.nix
