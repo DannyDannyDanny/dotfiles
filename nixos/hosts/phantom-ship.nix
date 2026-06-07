@@ -270,7 +270,7 @@ in
       pkgs.ffmpeg              # video/animation posters, sticker decode
       tesseractWithLangs       # photo OCR
       pkgs.whisper-cpp         # voice/audio transcription
-      pkgs.poppler_utils       # pdftotext (document handling)
+      pkgs.poppler-utils       # pdftotext (document handling)
     ];
     environment = {
       SHIPYARD_BOT_TOKEN_FILE = "/home/danny/.secrets/telegram-bot-token-shipyard";
