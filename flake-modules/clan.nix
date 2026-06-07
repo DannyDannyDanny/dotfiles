@@ -21,6 +21,7 @@ let
   sunkenShipZTv6 = "fdd5:53a2:de33:d269:6499:93d5:53a2:de33";
   phantomShipZTv6 = "fdd5:53a2:de33:d269:6499:936c:48a:bbdc";
   vpsRelayZTv6 = "fdd5:53a2:de33:d269:6499:9305:339f:2ed3";
+  distantShoreZTv6 = "fdd5:53a2:de33:d269:6499:93b6:ef1a:c3b3";
 
   # Shared across both servers: /etc/hosts entries so data-mesher's
   # libp2p /dns/<machine>.clan/... bootstrap multiaddrs resolve over ZT.
@@ -29,6 +30,7 @@ let
       "${sunkenShipZTv6}" = [ "sunken-ship.clan" ];
       "${phantomShipZTv6}" = [ "phantom-ship.clan" ];
       "${vpsRelayZTv6}" = [ "vps-relay.clan" ];
+      "${distantShoreZTv6}" = [ "distant-shore.clan" ];
     };
   };
 in {
