@@ -50,11 +50,11 @@ in
 
   # KomTolk (:8080), Shelfish (:8081), Scuttle (:8082), Bananasimulator
   # (:8083), Forgejo (:3000), Escape Hormuz (:8090), bon (:8091),
-  # notes (:8092) are reachable only over the ZeroTier mesh — the
-  # vps-relay Caddy reverse-proxies into them. Same pattern as
+  # notes (:8092), TDPixi (:8093) are reachable only over the ZeroTier mesh —
+  # the vps-relay Caddy reverse-proxies into them. Same pattern as
   # sunken-ship's bbbot. Not in global allowedTCPPorts, so the WAN side
   # stays closed.
-  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 3000 8080 8081 8082 8083 8090 8091 8092 ];
+  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 3000 8080 8081 8082 8083 8090 8091 8092 8093 ];
 
   hardware.enableRedistributableFirmware = true;  # iwlwifi (Intel 8260) + GPU + BT firmware
 
@@ -521,6 +521,29 @@ in
     serviceConfig = {
       WorkingDirectory = "/home/danny/notes";
       ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8092";
+      Restart = "on-failure";
+      RestartSec = 10;
+      User = "danny";
+    };
+  };
+
+  # TDPixi — Idle Tower Defence Telegram Mini App by @plasmagoat.
+  # Pure static serve, no DB. Code rsync'd to /home/danny/tdpixi/.
+  # Upstream: https://github.com/plasmagoat/TDPixi
+  systemd.services.tdpixi = let
+    pythonEnv = pkgs.python3.withPackages (ps: with ps; [
+      fastapi
+      uvicorn
+    ]);
+  in {
+    description = "tdpixi — Idle Tower Defence Mini App";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pythonEnv ];
+    serviceConfig = {
+      WorkingDirectory = "/home/danny/tdpixi";
+      ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8093";
       Restart = "on-failure";
       RestartSec = 10;
       User = "danny";

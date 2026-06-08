@@ -142,6 +142,10 @@
       "bon.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8091
       '';
+      # TDPixi — Idle Tower Defence Mini App by @plasmagoat, port 8093.
+      "tdpixi.dannydannydanny.me".extraConfig = ''
+        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8093
+      '';
       # notes — markdown blog (notes.X) + apex landing (X). Same backend
       # service on phantom :8092 routes by Host header.
       "notes.dannydannydanny.me".extraConfig = ''
