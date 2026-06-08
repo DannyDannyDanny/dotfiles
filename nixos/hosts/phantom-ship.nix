@@ -54,7 +54,7 @@ in
   # the vps-relay Caddy reverse-proxies into them. Same pattern as
   # sunken-ship's bbbot. Not in global allowedTCPPorts, so the WAN side
   # stays closed.
-  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 3000 8080 8081 8082 8083 8090 8091 8092 8093 ];
+  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 3000 8080 8081 8082 8083 8084 8090 8091 8092 8093 ];
 
   hardware.enableRedistributableFirmware = true;  # iwlwifi (Intel 8260) + GPU + BT firmware
 
@@ -176,6 +176,7 @@ in
     "d /home/danny/.local/share/shelfish 0755 danny users - -"
     "d /home/danny/.local/share/scuttle 0755 danny users - -"
     "d /home/danny/.local/share/bananasimulator 0755 danny users - -"
+    "d /home/danny/.local/share/bananasimulator-beta 0755 danny users - -"
     "d /home/danny/.local/share/komtolk 0755 danny users - -"
     "d /home/danny/.local/share/escape_hormuz 0755 danny users - -"
     "d /home/danny/.local/share/scuttle/tiles 0755 danny users - -"
@@ -379,6 +380,40 @@ in
     serviceConfig = {
       WorkingDirectory = "/home/danny/bananasimulator";
       ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8083";
+      Restart = "on-failure";
+      RestartSec = 10;
+      User = "danny";
+    };
+  };
+
+  # Bananasimulator BETA — cheat-instance for testing the full progression
+  # end-to-end. Separate DB, exposes /api/cheat/* (gated by BS_BETA_MODE=1)
+  # so the frontend cheat menu can seed canonical states and reset.
+  # Faster ripening (0.2 min/stage = ~3 min to compost) so cycles are
+  # testable in real time. Same code base; deploy to a sibling dir.
+  # vhost in vps-relay.nix → bananasimulator-beta.dannydannydanny.me.
+  systemd.services.bananasimulator-beta = let
+    pythonEnv = pkgs.python3.withPackages (ps: with ps; [
+      fastapi
+      uvicorn
+      httpx
+      python-telegram-bot
+    ]);
+  in {
+    description = "Bananasimulator BETA (cheat instance) FastAPI server";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    path = [ pythonEnv ];
+    environment = {
+      SHIPYARD_BOT_TOKEN_FILE = "/home/danny/.secrets/telegram-bot-token-shipyard";
+      BS_DB_PATH = "/home/danny/.local/share/bananasimulator-beta/bananasimulator.db";
+      BS_RIPE_MIN_PER_STAGE = "0.2";  # ~3 min to compost — testable in real time
+      BS_BETA_MODE = "1";             # exposes /api/cheat/* + flips beta=true in /api/me
+    };
+    serviceConfig = {
+      WorkingDirectory = "/home/danny/bananasimulator-beta";
+      ExecStart = "${pythonEnv}/bin/python -m uvicorn server:app --host :: --port 8084";
       Restart = "on-failure";
       RestartSec = 10;
       User = "danny";
