@@ -108,31 +108,23 @@ in {
       module.name = "internet";
       module.input = "clan-core";
       roles.default.machines.sunken-ship.settings = {
-        host = "fdd5:53a2:de33:d269:6499:93d5:53a2:de33";
+        host = sunkenShipZTv6;
         user = "danny";
       };
       roles.default.machines.phantom-ship.settings = {
-        host = "fdd5:53a2:de33:d269:6499:936c:48a:bbdc";
+        host = phantomShipZTv6;
         user = "danny";
       };
-      # Using public IPv4 while ZT identity is being bootstrapped on the
-      # VPS. Swap to ZT IPv6 (fdd5:53a2:de33:d269:6499:9305:339f:2ed3)
-      # after the first clan update uploads SOPS keys and zerotierone
-      # restarts with the clan-managed identity.
       roles.default.machines.vps-relay.settings = {
-        host = "89.167.39.251";
+        host = vpsRelayZTv6;
         user = "danny";
       };
-      # distant-shore: LAN IP for the first update (not yet on ZT). Swap to
-      # its generated ZT IPv6 after it joins the mesh, like the others.
       roles.default.machines.distant-shore.settings = {
-        host = "192.168.1.182";
+        host = distantShoreZTv6;
         user = "danny";
       };
-      # foreign-port: WiFi-only LAN IP for the first update; swap to its
-      # generated ZT IPv6 after it joins the mesh.
       roles.default.machines.foreign-port.settings = {
-        host = "192.168.1.223";
+        host = foreignPortZTv6;
         user = "danny";
       };
     };
@@ -165,9 +157,6 @@ in {
       imports = [
         {
           clan.core.enableRecommendedDefaults = false;
-          # Initial install uses --target-host override; subsequent
-          # updates go over ZT IPv6 (set once generated, via the
-          # internet instance above).
         }
         clanHostsModule
         ../nixos/hosts/vps-relay.nix
@@ -181,18 +170,15 @@ in {
       ];
     };
 
-    # distant-shore — ThinkPad X13 Gen 2, WiFi, Secure Boot via shim+MOK
-    # (installed standalone, then migrated into clan). targetHost is the LAN
-    # IP for the first `clan machines update`; switch to its ZT IPv6 once the
-    # mesh is up. buildHost = sunken-ship: it's an x86_64 builder whose key is
-    # already in distant-shore's authorized_keys, so the closure copy works
-    # (building on distant-shore itself needs a fragile self-SSH).
+    # distant-shore — ThinkPad X13 Gen 2, WiFi, Secure Boot via shim+MOK.
+    # buildHost = sunken-ship: x86_64 builder whose key is already in
+    # distant-shore's authorized_keys, avoiding fragile self-SSH for closures.
     machines.distant-shore = {
       imports = [
         {
           clan.core.enableRecommendedDefaults = false;
-          clan.core.networking.targetHost = "danny@192.168.1.182";
-          clan.core.networking.buildHost = "danny@sunken-ship";
+          clan.core.networking.targetHost = "danny@[${distantShoreZTv6}]";
+          clan.core.networking.buildHost = "danny@[${sunkenShipZTv6}]";
         }
         clanHostsModule
         ../nixos/hosts/distant-shore.nix
@@ -206,17 +192,14 @@ in {
       ];
     };
 
-    # foreign-port — WiFi-only laptop server, locally-signed boot chain
-    # (installed standalone, migrated into clan). targetHost is the LAN IP
-    # for the first `clan machines update`; switch to its ZT IPv6 once the
-    # mesh is up. buildHost = sunken-ship for the closure copy (avoids
-    # self-SSH).
+    # foreign-port — WiFi-only laptop server, locally-signed boot chain.
+    # buildHost = sunken-ship to avoid self-SSH for closure copy.
     machines.foreign-port = {
       imports = [
         {
           clan.core.enableRecommendedDefaults = false;
-          clan.core.networking.targetHost = "danny@192.168.1.223";
-          clan.core.networking.buildHost = "danny@sunken-ship";
+          clan.core.networking.targetHost = "danny@[${foreignPortZTv6}]";
+          clan.core.networking.buildHost = "danny@[${sunkenShipZTv6}]";
         }
         clanHostsModule
         ../nixos/hosts/foreign-port.nix
