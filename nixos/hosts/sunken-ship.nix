@@ -106,6 +106,12 @@
   # Web UI + Substreamer client on port 4533.
   services.navidrome = {
     enable = true;
+    # Bumped to 0.62.0 ahead of nixpkgs (#529720) for navidrome PR
+    # #5411 ("Relax playlist visibility in inPlaylist/notInPlaylist
+    # rules"). Without this the smart playlist Unrated (de-duped)
+    # silently keeps dupe-losers members. Drop this line + nixos/pkgs/
+    # navidrome/ when nixpkgs-unstable has 0.62.x.
+    package = pkgs.callPackage ../pkgs/navidrome { };
     settings = {
       Address = "0.0.0.0";
       Port = 4533;
