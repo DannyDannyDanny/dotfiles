@@ -22,6 +22,7 @@ in
   imports = [
     ./phantom-ship-hardware.nix
     ../pkgs/hara-gmail-mcp/module.nix
+    ../plane.nix  # Plane project tracker → plane.dannydannydanny.me (:8094)
   ];
 
   networking.hostName = "phantom-ship";
@@ -42,6 +43,12 @@ in
     enable = true;
     settings = {
       interface = "enp0s31f6";
+      # Without this dnsmasq binds the wildcard :53 and only filters by
+      # interface afterwards, which blocks podman's aardvark-dns (plane.nix)
+      # from binding :53 on the container bridge. bind-dynamic listens per
+      # address, only on the interface above, and tolerates the link being
+      # down (it usually is — nothing plugged in).
+      bind-dynamic = true;
       dhcp-range = "10.0.0.10,10.0.0.50,24h";
       dhcp-option = [ "3,10.0.0.1" "6,10.0.0.1" ];  # gateway + DNS
     };
@@ -50,11 +57,12 @@ in
 
   # KomTolk (:8080), Shelfish (:8081), Scuttle (:8082), Bananasimulator
   # (:8083), Forgejo (:3000), Escape Hormuz (:8090), bon (:8091),
-  # notes (:8092), TDPixi (:8093) are reachable only over the ZeroTier mesh —
-  # the vps-relay Caddy reverse-proxies into them. Same pattern as
-  # sunken-ship's bbbot. Not in global allowedTCPPorts, so the WAN side
-  # stays closed.
-  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 3000 8080 8081 8082 8083 8084 8090 8091 8092 8093 ];
+  # notes (:8092), TDPixi (:8093), Plane (:8094) are reachable only over
+  # the ZeroTier mesh — the vps-relay Caddy reverse-proxies into them.
+  # Same pattern as sunken-ship's bbbot. Not in global allowedTCPPorts,
+  # so the WAN side stays closed. (Plane's :8094 is a podman-published
+  # port, DNAT'd ahead of this chain — listed for documentation.)
+  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 3000 8080 8081 8082 8083 8084 8090 8091 8092 8093 8094 ];
 
   hardware.enableRedistributableFirmware = true;  # iwlwifi (Intel 8260) + GPU + BT firmware
 
