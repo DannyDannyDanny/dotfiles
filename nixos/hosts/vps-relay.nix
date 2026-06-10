@@ -214,6 +214,10 @@
     after = [ "caddy.service" ];
     wants = [ "caddy.service" ];
   };
+  # lego writes the challenge webroot 0750 acme:acme — without group
+  # membership Caddy serves 403s and issuance fails. (The nginx/httpd
+  # ACME integrations do this automatically; for Caddy it's manual.)
+  users.users.caddy.extraGroups = [ "acme" ];
 
   users.users.ftpuser = {
     isSystemUser = true;
