@@ -202,12 +202,15 @@
   # refuses login); uploads go in /srv/ftp/files.
 
   # Cert for FTPS via lego HTTP-01 against the Caddy-served webroot.
-  # vsftpd forks per session and re-reads the cert each time, so
-  # renewals need no service reload.
   security.acme = {
     acceptTerms = true;
     defaults.email = "powerhouseplayer@gmail.com";
-    certs."ftp.dannydannydanny.me".webroot = "/var/lib/acme/acme-challenge";
+    certs."ftp.dannydannydanny.me" = {
+      webroot = "/var/lib/acme/acme-challenge";
+      # vsftpd loads the cert once at daemon start (verified: it kept
+      # serving the stale one after issuance), so bounce it on renewal.
+      postRun = "systemctl restart vsftpd.service";
+    };
   };
   # First issuance needs Caddy up to answer the HTTP-01 challenge.
   systemd.services."acme-ftp.dannydannydanny.me" = {
