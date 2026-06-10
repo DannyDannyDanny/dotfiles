@@ -22,6 +22,7 @@ in
   imports = [
     ./phantom-ship-hardware.nix
     ../pkgs/hara-gmail-mcp/module.nix
+    ../../modules/server-backlight-off.nix
   ];
 
   networking.hostName = "phantom-ship";
@@ -58,21 +59,6 @@ in
 
   hardware.enableRedistributableFirmware = true;  # iwlwifi (Intel 8260) + GPU + BT firmware
 
-  boot.kernelParams = [ "consoleblank=60" ];  # blank TTY after 60s to reduce burn-in
-
-  # Turn off panel backlight after boot so the screen actually dims.
-  systemd.services.server-backlight-off = {
-    description = "Turn off panel backlight after console idle (reduce burn-in)";
-    after = [ "multi-user.target" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig.Type = "oneshot";
-    script = ''
-      ${pkgs.coreutils}/bin/sleep 65
-      for d in /sys/class/backlight/*; do
-        [ -f "$d/brightness" ] && echo 0 > "$d/brightness" 2>/dev/null || true
-      done
-    '';
-  };
   time.timeZone = "Europe/Copenhagen";
 
   nixpkgs.config.permittedInsecurePackages = [ "openclaw-2026.3.12" "openclaw-2026.4.12" ];

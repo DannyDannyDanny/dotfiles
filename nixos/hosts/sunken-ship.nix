@@ -8,29 +8,15 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [ ./sunken-ship-hardware.nix ];
+  imports = [
+    ./sunken-ship-hardware.nix
+    ../../modules/server-backlight-off.nix
+  ];
 
   networking.hostName = "sunken-ship";
   # No networks defined => uses /etc/wpa_supplicant.conf on the server
   networking.wireless.enable = true;
   time.timeZone = "Europe/Copenhagen";
-
-  boot.kernelParams = [ "consoleblank=60" ];  # blank TTY after 60s to reduce burn-in
-
-  # Turn off panel backlight after boot so the screen actually dims (consoleblank only blanks framebuffer).
-  # At the console, run: brightnessctl set 100%  (or `brightnessctl max`) to restore brightness.
-  systemd.services.server-backlight-off = {
-    description = "Turn off panel backlight after console idle (reduce burn-in)";
-    after = [ "multi-user.target" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig.Type = "oneshot";
-    script = ''
-      ${pkgs.coreutils}/bin/sleep 65
-      for d in /sys/class/backlight/*; do
-        [ -f "$d/brightness" ] && echo 0 > "$d/brightness" 2>/dev/null || true
-      done
-    '';
-  };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   programs.nix-ld.enable = true;  # run dynamically linked binaries (e.g. Claude Code remote CLI)
