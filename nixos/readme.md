@@ -32,8 +32,6 @@ sudo nixos-rebuild switch --flake /etc/dotfiles#sunken-ship \
   --option accept-flake-config true
 ```
 
-If the daemon doesn't have flakes: copy [server-configuration-with-flakes.nix](server-configuration-with-flakes.nix) to `/etc/nixos/configuration.nix`, `sudo nixos-rebuild switch`, then build the flake.
-
 SSH keys (not in repo): `scp ~/.ssh/*.pub danny@server:/tmp/`, then on server `mkdir -p ~/.ssh; cat /tmp/*.pub >> ~/.ssh/authorized_keys`. See [docs/ssh-and-secrets.md](../docs/ssh-and-secrets.md).
 
 No git in PATH: `sudo nix run nixpkgs#git -- -C /etc/dotfiles pull origin main`.
