@@ -413,14 +413,54 @@
   # re-announcing the same rev is a cheap no-op. This is the replacement
   # for the legacy dotfiles-rebuild pull timer (being retired).
   #
-  # dm-send-deploy self-discovers the rev via `git ls-remote` and signs
-  # with /run/secrets/vars/dm-pull-deploy-signing-key — needs root.
+  # Self-discovers the rev via `git ls-remote` and signs with
+  # /run/secrets/vars/dm-pull-deploy-signing-key — needs root.
+  #
+  # We deliberately do NOT call the upstream `dm-send-deploy` binary: it
+  # appends a raw `&narHash=<base64>` to the flake ref, and this nix's git
+  # fetcher mangles the hash's '/' into the fetch URL path
+  # ("…%3D/info/refs not valid: is this a git repository?"), so every
+  # pulled rebuild fails (sunken-ship was frozen on a May-08 generation as a
+  # result). The rev alone already pins the content exactly, so this
+  # corrected pusher emits `git+<url>?rev=<rev>` with no narHash.
   systemd.services.dm-pull-deploy-push = {
     description = "Announce latest origin/main rev via data-mesher (dm-pull-deploy push)";
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "/run/current-system/sw/bin/dm-send-deploy";
       User = "root";
+      ExecStart = let
+        pusher = pkgs.writeShellApplication {
+          name = "dm-pull-deploy-push-no-narhash";
+          runtimeInputs = [ pkgs.coreutils pkgs.git config.services.data-mesher.package ];
+          text = ''
+            set -euo pipefail
+            GIT_URL="https://github.com/DannyDannyDanny/dotfiles.git"
+            BRANCH="main"
+            KEY="${config.clan.core.vars.generators.dm-pull-deploy-signing-key.files."signing.key".path}"
+            NETWORK_ID="${config.clan.core.vars.generators.data-mesher-network.files."network.pub".path}"
+
+            REV=$(git ls-remote "$GIT_URL" "refs/heads/$BRANCH" | cut -f1)
+            if [ -z "$REV" ]; then
+              echo "Error: could not resolve refs/heads/$BRANCH from $GIT_URL" >&2
+              exit 1
+            fi
+            # No &narHash= — see comment above; the rev fully pins the content.
+            FLAKE_REF="git+$GIT_URL?rev=$REV"
+
+            TMPFILE=$(mktemp)
+            trap 'rm -f "$TMPFILE"' EXIT
+            printf '%s' "$FLAKE_REF" > "$TMPFILE"
+
+            data-mesher file update "$TMPFILE" \
+              --url http://localhost:7331 \
+              --network-id "$NETWORK_ID" \
+              --key "$KEY" \
+              --name "dm_pull_deploy/target"
+
+            echo "Deployment target pushed: $FLAKE_REF"
+          '';
+        };
+      in "${pusher}/bin/dm-pull-deploy-push-no-narhash";
     };
   };
 
