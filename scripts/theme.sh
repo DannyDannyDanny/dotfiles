@@ -3,7 +3,7 @@
 # Unified theme switching script for WSL and macOS
 # This script handles theme switching for both platforms
 
-set -e
+set -euo pipefail
 
 # Helper functions
 show_usage() {
@@ -36,7 +36,7 @@ show_status() {
   fi
 
   # Check platform-specific themes
-  if [[ -n "$WSL_DISTRO_NAME" ]]; then
+  if [[ -n "${WSL_DISTRO_NAME:-}" ]]; then
     echo "  Platform: WSL"
     echo "  Windows Terminal: configured via settings.json"
     echo "  Windows system theme: managed by theme command"
@@ -89,7 +89,7 @@ toggle_theme() {
   exec "$0" "$new_theme"
 }
 
-color_scheme=$1
+color_scheme=${1:-}
 
 # Handle special commands
 case "$color_scheme" in
@@ -121,7 +121,7 @@ echo "$color_scheme" > "$nvim_color_theme_path"
 echo "Updated Neovim theme: $color_scheme"
 
 # Detect platform and handle platform-specific theme switching
-if [[ -n "$WSL_DISTRO_NAME" ]]; then
+if [[ -n "${WSL_DISTRO_NAME:-}" ]]; then
   # WSL platform - handle Windows Terminal and system theme
   echo "Detected WSL platform"
 
