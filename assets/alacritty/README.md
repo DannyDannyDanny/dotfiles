@@ -34,7 +34,6 @@ theme status
 
 - `assets/alacritty/catppuccin-latte-colors.toml` / `catppuccin-mocha-colors.toml` — palette fragments
 - `scripts/alacritty-sync-system-theme.sh` — detect macOS appearance, copy palette, refresh nvim marker
-- `scripts/sync-alacritty-theme.sh` — thin wrapper (backwards compatible)
 - `nixos/home/danny/home.nix` — `programs.alacritty` + `xdg.configFile` for palettes
 - `nixos/hosts/daniel-macbook-air.nix` — LaunchAgent + `alacritty-sync-system-theme` in `environment.systemPackages`
 - `nixos/fish.nix` — optional shell-open sync on Darwin
