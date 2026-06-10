@@ -180,12 +180,25 @@
       "studio.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8092
       '';
-      # ACME HTTP-01 webroot for the FTPS cert (security.acme below) —
-      # the explicit http:// scheme stops Caddy from also trying to
-      # manage TLS for this name.
+      # Filebrowser web UI over the FTP tree (see filebrowser below).
+      # Caddy fetches its own cert for this name (TLS-ALPN); the FTPS
+      # daemon has a separate lego-managed one — two certs, same name,
+      # which Let's Encrypt is fine with.
+      "ftp.dannydannydanny.me".extraConfig = ''
+        reverse_proxy localhost:8095
+      '';
+      # Port 80 for the same name: serve the lego HTTP-01 webroot for
+      # the FTPS cert (security.acme below), redirect everything else to
+      # https. The explicit http:// scheme keeps this block plain-HTTP.
       "http://ftp.dannydannydanny.me".extraConfig = ''
-        root * /var/lib/acme/acme-challenge
-        file_server
+        @challenge path /.well-known/acme-challenge/*
+        handle @challenge {
+          root * /var/lib/acme/acme-challenge
+          file_server
+        }
+        handle {
+          redir https://ftp.dannydannydanny.me{uri} 308
+        }
       '';
     };
   };
@@ -246,10 +259,48 @@
     '';
   };
 
+  # /srv/ftp/files is managed by the filebrowser module's tmpfiles entry
+  # (0700 ftpuser:ftpuser) — declaring it here too would be a duplicate
+  # tmpfiles line for the same path.
   systemd.tmpfiles.rules = [
     "d /srv/ftp 0755 root root - -"
-    "d /srv/ftp/files 0755 ftpuser ftpuser - -"
   ];
+
+  # --- Filebrowser (web UI for the FTP tree) ---------------------------
+  # https://ftp.dannydannydanny.me — browse + upload from a browser.
+  # Runs as ftpuser over the FTP upload dir, so web uploads and FTP
+  # uploads are the same files with the same owner. Login is the same
+  # credential as FTP: preStart re-syncs the web user's password from
+  # the ftp-password var on every start (a password changed in the web
+  # UI is deliberately overwritten on the next restart).
+  services.filebrowser = {
+    enable = true;
+    user = "ftpuser";
+    group = "ftpuser";
+    settings = {
+      port = 8095;  # loopback only (default address = localhost)
+      root = "/srv/ftp/files";
+    };
+  };
+  systemd.services.filebrowser = {
+    serviceConfig.LoadCredential = [
+      "ftp-password:${config.clan.core.vars.generators.ftp-password.files."password".path}"
+    ];
+    # The password briefly appears in the CLI argv here; acceptable on a
+    # single-admin box (it's readable in /run/secrets by root anyway).
+    preStart = ''
+      pw="$(cat "$CREDENTIALS_DIRECTORY/ftp-password")"
+      fb() { ${lib.getExe pkgs.filebrowser} -d /var/lib/filebrowser/database.db "$@"; }
+      if fb users ls | grep -q ftpuser; then
+        fb users update ftpuser --password "$pw"
+      else
+        fb users add ftpuser "$pw" --perm.admin
+      fi
+      # filebrowser's first-run quick-setup can seed a stray "admin"
+      # user with a random password; make sure it's gone.
+      fb users rm admin || true
+    '';
+  };
 
   services.vsftpd = {
     enable = true;
