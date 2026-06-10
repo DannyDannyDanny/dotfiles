@@ -291,6 +291,9 @@
     preStart = ''
       pw="$(cat "$CREDENTIALS_DIRECTORY/ftp-password")"
       fb() { ${lib.getExe pkgs.filebrowser} -d /var/lib/filebrowser/database.db "$@"; }
+      if [ ! -f /var/lib/filebrowser/database.db ]; then
+        fb config init
+      fi
       if fb users ls | grep -q ftpuser; then
         fb users update ftpuser --password "$pw"
       else
