@@ -30,20 +30,31 @@ let
 
   target = ip: "[${ip}]:9100";
 
+  # The fleet, in nautical order. Used to label every scraped series with a
+  # friendly `alias` (ship name) — present even when a host is down.
+  fleet = [
+    { name = "sunken-ship";   ip = sunkenShipZTv6; }
+    { name = "phantom-ship";  ip = phantomShipZTv6; }
+    { name = "vps-relay";     ip = vpsRelayZTv6; }
+    { name = "distant-shore"; ip = distantShoreZTv6; }
+    { name = "foreign-port";  ip = foreignPortZTv6; }
+  ];
+
   # Telegram token, exposed to the alertmanager unit via systemd
   # LoadCredential (below) — readable only by the unit, DynamicUser and all.
   telegramTokenCred = "/run/credentials/alertmanager.service/telegram_token";
   # Random Grafana DB-encryption key, same mechanism.
   grafanaSecretKeyCred = "/run/credentials/grafana.service/secret_key";
 
-  # Node Exporter Full (grafana.com #1860), vendored verbatim. Its panels
-  # bind the datasource to the template-var uid "${ds_prometheus}"; rewrite
-  # that to our fixed Prometheus datasource uid so the dashboard renders
-  # without a manual datasource pick on first open.
+  # Provisioned dashboards live in ./grafana-dashboards. Copy them all in;
+  # only the vendored Node Exporter Full (#1860) needs its datasource
+  # template-var uid "${ds_prometheus}" rewritten to our fixed "prometheus"
+  # uid. The hand-authored fleet-*.json already reference uid "prometheus".
   grafanaDashboards = pkgs.runCommand "grafana-dashboards" { } ''
     mkdir -p "$out"
-    sed 's/''${ds_prometheus}/prometheus/g' \
-      ${./grafana-dashboards/node-exporter-full.json} > "$out"/node-exporter-full.json
+    cp ${./grafana-dashboards}/*.json "$out"/
+    chmod +w "$out"/node-exporter-full.json
+    sed -i 's/''${ds_prometheus}/prometheus/g' "$out"/node-exporter-full.json
   '';
 in {
   # --- Declarative secrets (clan vars → sops, encrypted in the repo) --------
@@ -75,16 +86,13 @@ in {
 
     scrapeConfigs = [{
       job_name = "node";
-      static_configs = [{
-        targets = [
-          (target sunkenShipZTv6)
-          (target phantomShipZTv6)
-          (target vpsRelayZTv6)
-          (target distantShoreZTv6)
-          (target foreignPortZTv6)
-        ];
-        labels.job = "node";
-      }];
+      # One static_config per ship so every series carries a friendly
+      # `alias` label (used by the fleet dashboards + alerts) — present
+      # even when a host is down, unlike node_uname_info's nodename.
+      static_configs = map (h: {
+        targets = [ (target h.ip) ];
+        labels = { job = "node"; alias = h.name; };
+      }) fleet;
     }];
 
     ruleFiles = [
@@ -97,8 +105,8 @@ in {
             for = "5m";
             labels.severity = "critical";
             annotations = {
-              summary = "{{ $labels.instance }} is down";
-              description = "{{ $labels.instance }} has been unreachable for 5 minutes.";
+              summary = "{{ $labels.alias }} is down";
+              description = "{{ $labels.alias }} ({{ $labels.instance }}) has been unreachable for 5 minutes.";
             };
           }];
         }];
