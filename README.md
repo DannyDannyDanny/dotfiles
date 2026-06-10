@@ -6,8 +6,8 @@ Extension of [dannydannydanny/methodology](https://github.com/DannyDannyDanny/me
 
 ## Roadmap
 
-- [firefox-scrolling](firefox-scrolling.md) via terminal
-- Server: [server-quickstart](server-quickstart.md); NixOS flake and bootstrap [nixos/readme.md](nixos/readme.md). SSH and secrets: [docs/ssh-and-secrets.md](docs/ssh-and-secrets.md). New server install (USB, LUKS, WiFi): [docs/server-installer-usb.md](docs/server-installer-usb.md).
+- [firefox-scrolling](docs/firefox-scrolling.md) via terminal
+- Server: [server-quickstart](docs/server-quickstart.md); NixOS flake and bootstrap [nixos/readme.md](nixos/readme.md). SSH and secrets: [docs/ssh-and-secrets.md](docs/ssh-and-secrets.md). New server install (USB, LUKS, WiFi): [docs/server-installer-usb.md](docs/server-installer-usb.md).
 - nvim checkhealth; tmux setup; [fonts](https://www.programmingfonts.org/) / nerdfonts; [HN: home server](https://news.ycombinator.com/item?id=34271167)
 
 ## Windows
