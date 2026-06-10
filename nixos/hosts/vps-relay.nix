@@ -196,8 +196,8 @@
   # data connection on a random port — so it terminates here directly.
   # Wildcard DNS *.dannydannydanny.me already resolves to this box.
   #
-  # Login: user "ftpuser"; password is a clan var:
-  #   clan vars get vps-relay ftp-password/password
+  # Login: user "ftpuser"; password is a clan var, readable on the box:
+  #   ssh danny@<vps> sudo cat /run/secrets/vars/ftp-password/password
   # Chroot is /srv/ftp (must stay root-owned/non-writable or vsftpd
   # refuses login); uploads go in /srv/ftp/files.
 
@@ -226,10 +226,11 @@
   users.groups.ftpuser = { };
 
   clan.core.vars.generators.ftp-password = {
-    # Plaintext stays in the encrypted store only (deploy = false) so it
-    # can be looked up; the machine gets just the hash, decrypted before
-    # user creation (neededFor = "users").
-    files."password".deploy = false;
+    # The Mac is encrypt-only (no admin age key), so the plaintext must
+    # be deployed to the machine to be retrievable at all — root-only
+    # under /run/secrets. The hash is decrypted before user creation
+    # (neededFor = "users").
+    files."password" = { };
     files."password.hash".neededFor = "users";
     runtimeInputs = [ pkgs.coreutils pkgs.openssl ];
     script = ''
