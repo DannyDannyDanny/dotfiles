@@ -54,7 +54,7 @@ nix run git+https://git.clan.lol/clan/clan-core#clan-cli -- \
 
 - SSH: `ssh -i ~/.ssh/id_ed25519_sunken_ship danny@sunken-ship`
 - Remote rebuild: `ssh ... 'cd /etc/dotfiles && sudo nixos-rebuild switch --flake .#sunken-ship'`
-- Auto-rebuild timer: `dotfiles-rebuild` — every 15 min. Check with `systemctl is-active dotfiles-rebuild.timer`.
+- Auto-deploy: `dm-pull-deploy` — `dm-pull-deploy-push.timer` announces origin/main every ~15 min; `dm-pull-deploy.path` triggers a rebuild when the target changes. Check with `journalctl -u dm-pull-deploy.service -n 20`. (The old `dotfiles-rebuild` timer is retired.)
 - WiFi connected; stays reachable when ethernet is unplugged.
 - Services: UxPlay (AirPlay receiver on Scarlett Solo)
 
@@ -62,7 +62,7 @@ nix run git+https://git.clan.lol/clan/clan-core#clan-cli -- \
 
 - SSH: `ssh danny@phantom-ship`
 - Remote rebuild: `ssh ... 'cd /etc/dotfiles && sudo nixos-rebuild switch --flake .#phantom-ship'`
-- Auto-rebuild timer: same pattern as sunken-ship.
+- Auto-deploy: dm-pull-deploy, same pattern as sunken-ship.
 - Uplink is WiFi (`wlp1s0`, 192.168.1.111, default route via 192.168.1.1).
 - Ethernet port (`enp0s31f6`, static 10.0.0.1/24) is NOT the router uplink — it serves a downstream NAT subnet (dnsmasq). Link is normally down when nothing is plugged in.
 
@@ -86,7 +86,7 @@ Flake lives at the repo root (not `nixos/`) — clan-cli silently ignores `?dir=
 
 **`enableRecommendedDefaults = false`:** we opted out fleet-wide because clan's defaults flip to `systemd-networkd` + `systemd-resolved` + `boot.initrd.systemd`, which breaks dnsmasq (NAT DNS on phantom-ship) and navidrome's resolv.conf bind-mount on sunken-ship. Revisit per-service in a later pass — the defaults also include handy extras (tcpdump, htop, curl, jq, nixos-facter). Option defined in `nixosModules/clanCore/defaults.nix` + `nixosModules/clanCore/networking.nix` inside the `clan-core` flake.
 
-**Deployment:** `dotfiles-rebuild` timer (every 15 min pull) is still the source of truth. `clan machines update` works as a push escape hatch; dm-pull-deploy replaces the timer in a later stage.
+**Deployment:** dm-pull-deploy is the source of truth (announce via data-mesher + path-triggered rebuild; replaced the old `dotfiles-rebuild` timer). `clan machines update` works as a push escape hatch.
 
 ## Shell
 

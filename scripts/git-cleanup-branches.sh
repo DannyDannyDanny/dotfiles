@@ -1,21 +1,32 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
 git rev-parse --git-dir >/dev/null 2>&1 || { echo "Not a git repository." >&2; exit 1; }
 
 default_branch="main"
 git rev-parse --verify refs/heads/main &>/dev/null || default_branch="master"
 
-git branch --merged "$default_branch" \
+# Delete local branches already merged into the default branch.
+# `|| true` because grep exits 1 when nothing matches (no branches to clean).
+merged=$(git branch --merged "$default_branch" \
   | grep -Fv "$default_branch" \
   | grep -vF '*' \
   | grep -vF '+' \
-  | xargs git branch -d \
-  && git fetch \
-  && git remote prune origin \
-  && git branch -v \
+  || true)
+if [ -n "$merged" ]; then
+  echo "$merged" | xargs git branch -d
+fi
+
+git fetch
+git remote prune origin
+
+# Delete local branches whose upstream is gone.
+gone=$(git branch -v \
   | grep -F '[gone]' \
   | grep -vF '*' \
   | grep -vF '+' \
   | awk '{print $1}' \
-  | xargs git branch -D
+  || true)
+if [ -n "$gone" ]; then
+  echo "$gone" | xargs git branch -D
+fi
