@@ -171,13 +171,21 @@ in {
     # Encrypts secrets stored in Grafana's DB. Sourced from a clan var via
     # systemd LoadCredential (see below) instead of a hand-placed /etc file.
     settings.security.secret_key = "$__file{${grafanaSecretKeyCred}}";
-    provision.datasources.settings.datasources = [{
-      name = "Prometheus";
-      type = "prometheus";
-      uid = "prometheus";  # referenced by the provisioned dashboard
-      url = "http://[::1]:9090";
-      isDefault = true;
-    }];
+    provision.datasources.settings = {
+      # The earlier uid-less provisioning left a "Prometheus" datasource with
+      # a random uid in Grafana's DB. Now that the dashboard pins datasource
+      # uid "prometheus", delete the stale one first so the fixed-uid
+      # datasource provisions cleanly — otherwise Grafana 13 aborts startup
+      # with "Datasource provisioning error: data source not found".
+      deleteDatasources = [{ name = "Prometheus"; orgId = 1; }];
+      datasources = [{
+        name = "Prometheus";
+        type = "prometheus";
+        uid = "prometheus";  # referenced by the provisioned dashboard
+        url = "http://[::1]:9090";
+        isDefault = true;
+      }];
+    };
     # Node Exporter Full (#1860) — CPU/RAM/disk/net/uptime/processes per host.
     provision.dashboards.settings.providers = [{
       name = "default";
