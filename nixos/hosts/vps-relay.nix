@@ -7,6 +7,10 @@
 # locally under /srv/ftp — FTP's separate data channel can't be relayed
 # through Caddy like the HTTP vhosts.
 { config, lib, pkgs, ... }:
+let
+  # Fleet ZT IPv6 addresses — single source of truth in lib/zerotier-hosts.nix.
+  zt = import ../../lib/zerotier-hosts.nix;
+in
 {
   imports = [ ../disko-cloud.nix ];
 
@@ -107,78 +111,78 @@
     # Tell ACME to use Let's Encrypt's production endpoint (Caddy default).
     virtualHosts = {
       "navidrome.dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:93d5:53a2:de33]:4533
+        reverse_proxy http://[${zt."sunken-ship"}]:4533
       '';
       "bbbot.dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:93d5:53a2:de33]:8080
+        reverse_proxy http://[${zt."sunken-ship"}]:8080
       '';
       # B3Bot beta — bbbot's staging tenant under shipyard_poc_bot.
       # Same backend host as bbbot prod, port 8081.
       "b3.dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:93d5:53a2:de33]:8081
+        reverse_proxy http://[${zt."sunken-ship"}]:8081
       '';
       # Shelfish — phantom-ship's ZT IPv6.
       "shelfish.dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8081
+        reverse_proxy http://[${zt."phantom-ship"}]:8081
       '';
       # Scuttle — same backend, different port. WebSocket upgrade is
       # transparent under reverse_proxy.
       "scuttle.dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8082
+        reverse_proxy http://[${zt."phantom-ship"}]:8082
       '';
       # Bananasimulator — same backend, port 8083.
       "bananasimulator.dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8083
+        reverse_proxy http://[${zt."phantom-ship"}]:8083
       '';
       # Bananasimulator BETA — separate service on port 8084 with
       # BS_BETA_MODE=1 (cheat menu + faster ripening for testing).
       "bananasimulator-beta.dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8084
+        reverse_proxy http://[${zt."phantom-ship"}]:8084
       '';
       # KomTolk (formerly translate-platform) — same backend, port 8080.
       "komtolk.dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8080
+        reverse_proxy http://[${zt."phantom-ship"}]:8080
       '';
       # Forgejo on phantom-ship — Phase 1 of the de-platform-from-GitHub
       # roadmap (vimwiki/diary/2026-05-03.md).
       "git.dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:3000
+        reverse_proxy http://[${zt."phantom-ship"}]:3000
       '';
       # Escape Hormuz — turn-based boat-race Mini App, port 8090.
       "escapehormuz.dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8090
+        reverse_proxy http://[${zt."phantom-ship"}]:8090
       '';
       # bon — receipt scanner Mini App, port 8091. Camera capture in
       # the WebView needs HTTPS, which Caddy terminates here.
       "bon.dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8091
+        reverse_proxy http://[${zt."phantom-ship"}]:8091
       '';
       # TDPixi — Idle Tower Defence Mini App by @plasmagoat, port 8093.
       "tdpixi.dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8093
+        reverse_proxy http://[${zt."phantom-ship"}]:8093
       '';
       # notes — markdown blog (notes.X) + apex landing (X). Same backend
       # service on phantom :8092 routes by Host header.
       "notes.dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8092
+        reverse_proxy http://[${zt."phantom-ship"}]:8092
       '';
       "dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8092
+        reverse_proxy http://[${zt."phantom-ship"}]:8092
       '';
       # kf — Kyranna Fardi architecture portfolio. Same notes service on
       # phantom :8092, routed by Host header (PORTFOLIO_HOST).
       "kf.dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8092
+        reverse_proxy http://[${zt."phantom-ship"}]:8092
       '';
       # map — curated-architecture world map by Kyranna. Same notes
       # service on phantom :8092, routed by Host header (MAP_HOST).
       "map.dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8092
+        reverse_proxy http://[${zt."phantom-ship"}]:8092
       '';
       # studio — Kyranna's private art-learning archive. Same notes
       # service on phantom :8092, routed by Host header (STUDIO_HOST).
       "studio.dannydannydanny.me".extraConfig = ''
-        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8092
+        reverse_proxy http://[${zt."phantom-ship"}]:8092
       '';
       # Filebrowser web UI over the FTP tree (see filebrowser below).
       # Caddy fetches its own cert for this name (TLS-ALPN); the FTPS

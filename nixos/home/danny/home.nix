@@ -13,15 +13,17 @@
   # For this to take effect, your ~/.ssh/config must include:
   #   Include ~/.ssh/config.d/*
   # near the top (before any host-specific blocks).
-  home.file.".ssh/config.d/zerotier".text = ''
-    Host sunken-ship-zt fdd5:53a2:de33:d269:6499:93d5:53a2:de33
-      HostName fdd5:53a2:de33:d269:6499:93d5:53a2:de33
+  # Addresses come from lib/zerotier-hosts.nix (single source of truth).
+  home.file.".ssh/config.d/zerotier".text =
+    let zt = import ../../../lib/zerotier-hosts.nix; in ''
+    Host sunken-ship-zt ${zt."sunken-ship"}
+      HostName ${zt."sunken-ship"}
       User danny
       IdentityFile ~/.ssh/id_ed25519_sunken_ship
       IdentitiesOnly yes
 
-    Host phantom-ship-zt fdd5:53a2:de33:d269:6499:936c:48a:bbdc
-      HostName fdd5:53a2:de33:d269:6499:936c:48a:bbdc
+    Host phantom-ship-zt ${zt."phantom-ship"}
+      HostName ${zt."phantom-ship"}
       User danny
       IdentityFile ~/.ssh/id_ed25519_phantom_ship
       IdentitiesOnly yes

@@ -15,14 +15,13 @@ let
       inherit lib user homeDirectory stateVersion userImports;
     };
 
-  # ZT IPv6 addresses of the two clan machines. Clan publishes these as
-  # generated vars at vars/per-machine/<host>/zerotier/zerotier-ip/value;
-  # duplicated here so we can drop them into /etc/hosts at module-eval time.
-  sunkenShipZTv6 = "fdd5:53a2:de33:d269:6499:93d5:53a2:de33";
-  phantomShipZTv6 = "fdd5:53a2:de33:d269:6499:936c:48a:bbdc";
-  vpsRelayZTv6 = "fdd5:53a2:de33:d269:6499:9305:339f:2ed3";
-  distantShoreZTv6 = "fdd5:53a2:de33:d269:6499:93b6:ef1a:c3b3";
-  foreignPortZTv6 = "fdd5:53a2:de33:d269:6499:9389:9b18:6c52";
+  # Fleet ZT IPv6 addresses — single source of truth in lib/zerotier-hosts.nix.
+  zt = import ../lib/zerotier-hosts.nix;
+  sunkenShipZTv6 = zt."sunken-ship";
+  phantomShipZTv6 = zt."phantom-ship";
+  vpsRelayZTv6 = zt."vps-relay";
+  distantShoreZTv6 = zt."distant-shore";
+  foreignPortZTv6 = zt."foreign-port";
 
   # Shared across both servers: /etc/hosts entries so data-mesher's
   # libp2p /dns/<machine>.clan/... bootstrap multiaddrs resolve over ZT.
@@ -136,8 +135,8 @@ in {
       imports = [
         {
           clan.core.enableRecommendedDefaults = false;
-          clan.core.networking.targetHost = "danny@[fdd5:53a2:de33:d269:6499:93d5:53a2:de33]";
-          clan.core.networking.buildHost = "danny@[fdd5:53a2:de33:d269:6499:93d5:53a2:de33]";
+          clan.core.networking.targetHost = "danny@[${sunkenShipZTv6}]";
+          clan.core.networking.buildHost = "danny@[${sunkenShipZTv6}]";
         }
         clanHostsModule
         ../nixos/hosts/sunken-ship.nix
@@ -217,8 +216,8 @@ in {
       imports = [
         {
           clan.core.enableRecommendedDefaults = false;
-          clan.core.networking.targetHost = "danny@[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]";
-          clan.core.networking.buildHost = "danny@[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]";
+          clan.core.networking.targetHost = "danny@[${phantomShipZTv6}]";
+          clan.core.networking.buildHost = "danny@[${phantomShipZTv6}]";
         }
         clanHostsModule
         inputs.nix-openclaw.nixosModules.openclaw-gateway

@@ -20,11 +20,13 @@
 # Routing: critical alerts repeat every 1h, everything else every 4h.
 { config, pkgs, ... }:
 let
-  sunkenShipZTv6   = "fdd5:53a2:de33:d269:6499:93d5:53a2:de33";
-  phantomShipZTv6  = "fdd5:53a2:de33:d269:6499:936c:48a:bbdc";
-  vpsRelayZTv6     = "fdd5:53a2:de33:d269:6499:9305:339f:2ed3";
-  distantShoreZTv6 = "fdd5:53a2:de33:d269:6499:93b6:ef1a:c3b3";
-  foreignPortZTv6  = "fdd5:53a2:de33:d269:6499:9389:9b18:6c52";
+  # Fleet ZT IPv6 addresses — single source of truth in lib/zerotier-hosts.nix.
+  zt = import ../lib/zerotier-hosts.nix;
+  sunkenShipZTv6   = zt."sunken-ship";
+  phantomShipZTv6  = zt."phantom-ship";
+  vpsRelayZTv6     = zt."vps-relay";
+  distantShoreZTv6 = zt."distant-shore";
+  foreignPortZTv6  = zt."foreign-port";
 
   target = ip: "[${ip}]:9100";
 
