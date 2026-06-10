@@ -58,24 +58,22 @@
         end,
       })
 
-      -- Treesitter highlighting: parser-driven syntax highlighting (richer
-      -- than the regex-based default). Leaving `indent` off — it's still
-      -- buggy in several languages (python, yaml).
-      require'nvim-treesitter.configs'.setup {
-        highlight = { enable = true },
-      }
+      -- Treesitter + sticky scroll setup is deferred via vim.schedule because
+      -- home-manager places plugins in pack/hm/start/ which gets added to rtp
+      -- only AFTER init.lua runs. A bare require here would error with
+      -- "module not found".
+      vim.schedule(function()
+        require'nvim-treesitter'.setup {
+          highlight = { enable = true },
+        }
 
-      -- Sticky scroll: pin enclosing scopes (functions, classes, YAML keys,
-      -- etc.) to the top of the window as you scroll deeper. Same idea as
-      -- Zed/VS Code's "Sticky Scroll". `mode = 'topline'` matches Zed's
-      -- "scrolled past" feel; switch to 'cursor' if you'd rather it track
-      -- the cursor instead of the viewport.
-      require'treesitter-context'.setup {
-        enable = true,
-        max_lines = 5,
-        mode = 'topline',
-        trim_scope = 'outer',
-      }
+        require'treesitter-context'.setup {
+          enable = true,
+          max_lines = 5,
+          mode = 'topline',
+          trim_scope = 'outer',
+        }
+      end)
 
       -- Fish: expand tabs to spaces. Fish renders raw \t in the commandline
       -- as the Unicode glyph ␉ (U+2409) and wrap-indents each line to the
