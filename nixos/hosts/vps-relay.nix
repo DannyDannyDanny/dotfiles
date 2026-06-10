@@ -3,6 +3,9 @@
 # Role: terminates public TLS via Caddy + Let's Encrypt, reverse-proxies
 # each declared subdomain over ZeroTier to the appropriate homelab host.
 # No navidrome/bbbot data ever hits disk here; this box is a relay.
+# Exception: the FTPS server (ftp.dannydannydanny.me) stores its files
+# locally under /srv/ftp — FTP's separate data channel can't be relayed
+# through Caddy like the HTTP vhosts.
 { config, lib, pkgs, ... }:
 {
   imports = [ ../disko-cloud.nix ];
@@ -70,10 +73,13 @@
   };
 
   # --- Firewall --------------------------------------------------------
-  # Public: 22 (SSH), 80 + 443 (Caddy).
+  # Public: 21 (FTPS control), 22 (SSH), 80 + 443 (Caddy).
   # ZT interface: trusted (set in the clan ZT module).
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 80 443 ];
+  networking.firewall.allowedTCPPorts = [ 21 22 80 443 ];
+  # FTP passive-mode data connections — must match pasv_min/max_port in
+  # the vsftpd config below.
+  networking.firewall.allowedTCPPortRanges = [ { from = 56000; to = 56010; } ];
 
   # fail2ban — public SSH gets brute-force probed within minutes of any
   # cloud VM being created. Ban offending IPs after a few failures.
@@ -174,7 +180,118 @@
       "studio.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8092
       '';
+      # ACME HTTP-01 webroot for the FTPS cert (security.acme below) —
+      # the explicit http:// scheme stops Caddy from also trying to
+      # manage TLS for this name.
+      "http://ftp.dannydannydanny.me".extraConfig = ''
+        root * /var/lib/acme/acme-challenge
+        file_server
+      '';
     };
+  };
+
+  # --- FTP server (ftp.dannydannydanny.me) -----------------------------
+  # vsftpd with explicit FTPS (TLS upgrade on port 21). Unlike the HTTP
+  # vhosts above this can't go through Caddy — FTP negotiates a second
+  # data connection on a random port — so it terminates here directly.
+  # Wildcard DNS *.dannydannydanny.me already resolves to this box.
+  #
+  # Login: user "ftpuser"; password is a clan var:
+  #   clan vars get vps-relay ftp-password/password
+  # Chroot is /srv/ftp (must stay root-owned/non-writable or vsftpd
+  # refuses login); uploads go in /srv/ftp/files.
+
+  # Cert for FTPS via lego HTTP-01 against the Caddy-served webroot.
+  # vsftpd forks per session and re-reads the cert each time, so
+  # renewals need no service reload.
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "powerhouseplayer@gmail.com";
+    certs."ftp.dannydannydanny.me".webroot = "/var/lib/acme/acme-challenge";
+  };
+  # First issuance needs Caddy up to answer the HTTP-01 challenge.
+  systemd.services."acme-ftp.dannydannydanny.me" = {
+    after = [ "caddy.service" ];
+    wants = [ "caddy.service" ];
+  };
+
+  users.users.ftpuser = {
+    isSystemUser = true;
+    group = "ftpuser";
+    home = "/srv/ftp";
+    description = "FTP-only login (no shell, no SSH key)";
+    hashedPasswordFile =
+      config.clan.core.vars.generators.ftp-password.files."password.hash".path;
+  };
+  users.groups.ftpuser = { };
+
+  clan.core.vars.generators.ftp-password = {
+    # Plaintext stays in the encrypted store only (deploy = false) so it
+    # can be looked up; the machine gets just the hash, decrypted before
+    # user creation (neededFor = "users").
+    files."password".deploy = false;
+    files."password.hash".neededFor = "users";
+    runtimeInputs = [ pkgs.coreutils pkgs.openssl ];
+    script = ''
+      head -c 32 /dev/urandom | base64 | tr -d '+/=\n' | head -c 24 > "$out"/password
+      openssl passwd -6 -in "$out"/password | tr -d '\n' > "$out"/password.hash
+    '';
+  };
+
+  systemd.tmpfiles.rules = [
+    "d /srv/ftp 0755 root root - -"
+    "d /srv/ftp/files 0755 ftpuser ftpuser - -"
+  ];
+
+  services.vsftpd = {
+    enable = true;
+    localUsers = true;
+    writeEnable = true;
+    chrootlocalUser = true;
+    # Allow-list: only ftpuser may even attempt a login.
+    userlistEnable = true;
+    userlistDeny = false;
+    userlist = [ "ftpuser" ];
+    # TLS is mandatory — plain FTP would send the password in cleartext
+    # over the public internet. If a legacy device ever needs plain FTP,
+    # flip these two to false.
+    forceLocalLoginsSSL = true;
+    forceLocalDataSSL = true;
+    rsaCertFile = "/var/lib/acme/ftp.dannydannydanny.me/fullchain.pem";
+    rsaKeyFile = "/var/lib/acme/ftp.dannydannydanny.me/key.pem";
+    extraConfig = ''
+      # vsftpd's compiled-in cipher default (DES-CBC3-SHA) no longer
+      # exists in modern OpenSSL — without this no client can connect.
+      ssl_ciphers=HIGH
+      # Strict TLS-session reuse on the data channel breaks several
+      # clients (curl, older FileZilla).
+      require_ssl_reuse=NO
+      pasv_enable=YES
+      pasv_min_port=56000
+      pasv_max_port=56010
+      # Login + transfer log to the journal (also feeds fail2ban).
+      xferlog_enable=YES
+      local_umask=022
+      ftpd_banner=ftp.dannydannydanny.me
+    '';
+  };
+  # The NixOS vsftpd module only defines a PAM service for its virtual
+  # users; for local users PAM falls through to the "other" stack, which
+  # is pam_deny — every login 530s without this.
+  security.pam.services.vsftpd = { };
+  systemd.services.vsftpd = {
+    # Don't flap-restart against a cert that hasn't been issued yet.
+    after = [ "acme-finished-ftp.dannydannydanny.me.target" ];
+    wants = [ "acme-finished-ftp.dannydannydanny.me.target" ];
+    serviceConfig.RestartSec = "5s";
+  };
+
+  services.fail2ban.jails.vsftpd.settings = {
+    enabled = true;
+    port = "ftp,ftp-data,ftps,ftps-data";
+    backend = "systemd";
+    maxretry = 5;
+    findtime = "10m";
   };
 
   # --- Basic tooling ---------------------------------------------------
