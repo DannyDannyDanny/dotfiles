@@ -127,7 +127,8 @@
             "mode": "thresholds"
           },
           "mappings": [],
-          "min": 0
+          "min": 0,
+          "max": 100
         },
         "overrides": []
       },
@@ -198,7 +199,8 @@
             "mode": "thresholds"
           },
           "mappings": [],
-          "min": 0
+          "min": 0,
+          "max": 100
         },
         "overrides": []
       },
@@ -269,7 +271,8 @@
             "mode": "thresholds"
           },
           "mappings": [],
-          "min": 0
+          "min": 0,
+          "max": 100
         },
         "overrides": []
       },
