@@ -22,7 +22,41 @@
   },
   "timepicker": {},
   "templating": {
-    "list": []
+    "list": [
+      {
+        "name": "ship",
+        "label": "Ship",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "query": {
+          "qryType": 1,
+          "query": "label_values(up{job=\"node\"}, alias)",
+          "refId": "StandardVariableQuery"
+        },
+        "definition": "label_values(up{job=\"node\"}, alias)",
+        "refresh": 2,
+        "includeAll": true,
+        "multi": true,
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "options": [],
+        "regex": "",
+        "sort": 1,
+        "hide": 0,
+        "skipUrlSync": false
+      }
+    ]
   },
   "annotations": {
     "list": [
@@ -61,7 +95,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "max by (alias) (node_hwmon_temp_celsius)",
+          "expr": "max by (alias) (node_hwmon_temp_celsius{alias=~\"$ship\"})",
           "refId": "A",
           "legendFormat": "{{alias}}",
           "editorMode": "code",
@@ -132,7 +166,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "max by (alias) (node_hwmon_temp_celsius)",
+          "expr": "max by (alias) (node_hwmon_temp_celsius{alias=~\"$ship\"})",
           "refId": "A",
           "legendFormat": "{{alias}}",
           "editorMode": "code",

@@ -22,7 +22,41 @@
   },
   "timepicker": {},
   "templating": {
-    "list": []
+    "list": [
+      {
+        "name": "ship",
+        "label": "Ship",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "query": {
+          "qryType": 1,
+          "query": "label_values(up{job=\"node\"}, alias)",
+          "refId": "StandardVariableQuery"
+        },
+        "definition": "label_values(up{job=\"node\"}, alias)",
+        "refresh": 2,
+        "includeAll": true,
+        "multi": true,
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "options": [],
+        "regex": "",
+        "sort": 1,
+        "hide": 0,
+        "skipUrlSync": false
+      }
+    ]
   },
   "annotations": {
     "list": [
@@ -61,7 +95,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "100 * (1 - avg by (alias) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m])))",
+          "expr": "100 * (1 - avg by (alias) (rate(node_cpu_seconds_total{mode=\"idle\",alias=~\"$ship\"}[5m])))",
           "refId": "A",
           "legendFormat": "{{alias}}",
           "editorMode": "code",
@@ -132,7 +166,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "100 * (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)",
+          "expr": "100 * (1 - node_memory_MemAvailable_bytes{alias=~\"$ship\"} / node_memory_MemTotal_bytes{alias=~\"$ship\"})",
           "refId": "A",
           "legendFormat": "{{alias}}",
           "editorMode": "code",
@@ -203,7 +237,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "100 * (1 - node_filesystem_avail_bytes{mountpoint=\"/\",fstype=\"ext4\"} / node_filesystem_size_bytes{mountpoint=\"/\",fstype=\"ext4\"})",
+          "expr": "100 * (1 - node_filesystem_avail_bytes{mountpoint=\"/\",fstype=\"ext4\",alias=~\"$ship\"} / node_filesystem_size_bytes{mountpoint=\"/\",fstype=\"ext4\",alias=~\"$ship\"})",
           "refId": "A",
           "legendFormat": "{{alias}}",
           "editorMode": "code",
@@ -274,7 +308,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum by (alias) (rate(node_network_receive_bytes_total{device!~\"lo\"}[5m]) + rate(node_network_transmit_bytes_total{device!~\"lo\"}[5m]))",
+          "expr": "sum by (alias) (rate(node_network_receive_bytes_total{device!~\"lo\",alias=~\"$ship\"}[5m]) + rate(node_network_transmit_bytes_total{device!~\"lo\",alias=~\"$ship\"}[5m]))",
           "refId": "A",
           "legendFormat": "{{alias}}",
           "editorMode": "code",

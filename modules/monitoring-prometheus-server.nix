@@ -99,16 +99,41 @@ in {
       (builtins.toFile "host-rules.yml" (builtins.toJSON {
         groups = [{
           name = "hosts";
-          rules = [{
-            alert = "HostDown";
-            expr = ''up{job="node"} == 0'';
-            for = "5m";
-            labels.severity = "critical";
-            annotations = {
-              summary = "{{ $labels.alias }} is down";
-              description = "{{ $labels.alias }} ({{ $labels.instance }}) has been unreachable for 5 minutes.";
-            };
-          }];
+          rules = [
+            {
+              alert = "HostDown";
+              expr = ''up{job="node"} == 0'';
+              for = "5m";
+              labels.severity = "critical";
+              annotations = {
+                summary = "{{ $labels.alias }} is down";
+                description = "{{ $labels.alias }} ({{ $labels.instance }}) has been unreachable for 5 minutes.";
+              };
+            }
+            {
+              # Root filesystem over 85% full. Warning (4h repeat), not
+              # critical — capacity creep, not an outage.
+              alert = "DiskFull";
+              expr = ''100 * (1 - node_filesystem_avail_bytes{mountpoint="/",fstype="ext4"} / node_filesystem_size_bytes{mountpoint="/",fstype="ext4"}) > 85'';
+              for = "15m";
+              labels.severity = "warning";
+              annotations = {
+                summary = ''{{ $labels.alias }} root disk {{ $value | printf "%.0f" }}% full'';
+                description = ''{{ $labels.alias }} "/" has been above 85% for 15 minutes.'';
+              };
+            }
+            {
+              # Any hwmon sensor sustained above 80°C.
+              alert = "HighTemp";
+              expr = ''max by (alias) (node_hwmon_temp_celsius) > 80'';
+              for = "10m";
+              labels.severity = "warning";
+              annotations = {
+                summary = ''{{ $labels.alias }} running hot: {{ $value | printf "%.0f" }}°C'';
+                description = ''{{ $labels.alias }} hottest sensor above 80°C for 10 minutes.'';
+              };
+            }
+          ];
         }];
       }))
     ];

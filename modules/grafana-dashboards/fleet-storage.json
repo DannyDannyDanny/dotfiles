@@ -22,7 +22,41 @@
   },
   "timepicker": {},
   "templating": {
-    "list": []
+    "list": [
+      {
+        "name": "ship",
+        "label": "Ship",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "query": {
+          "qryType": 1,
+          "query": "label_values(up{job=\"node\"}, alias)",
+          "refId": "StandardVariableQuery"
+        },
+        "definition": "label_values(up{job=\"node\"}, alias)",
+        "refresh": 2,
+        "includeAll": true,
+        "multi": true,
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "options": [],
+        "regex": "",
+        "sort": 1,
+        "hide": 0,
+        "skipUrlSync": false
+      }
+    ]
   },
   "annotations": {
     "list": [
@@ -61,7 +95,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "100 * (1 - node_filesystem_avail_bytes{fstype=~\"ext4|vfat\",mountpoint=~\"/|/boot\"} / node_filesystem_size_bytes{fstype=~\"ext4|vfat\",mountpoint=~\"/|/boot\"})",
+          "expr": "100 * (1 - node_filesystem_avail_bytes{fstype=~\"ext4|vfat\",mountpoint=~\"/|/boot\",alias=~\"$ship\"} / node_filesystem_size_bytes{fstype=~\"ext4|vfat\",mountpoint=~\"/|/boot\",alias=~\"$ship\"})",
           "refId": "A",
           "legendFormat": "{{alias}} {{mountpoint}}",
           "editorMode": "code",
@@ -132,7 +166,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "node_filesystem_avail_bytes{mountpoint=\"/\",fstype=\"ext4\"}",
+          "expr": "node_filesystem_avail_bytes{mountpoint=\"/\",fstype=\"ext4\",alias=~\"$ship\"}",
           "refId": "A",
           "legendFormat": "{{alias}}",
           "editorMode": "code",
@@ -214,7 +248,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "predict_linear(node_filesystem_avail_bytes{mountpoint=\"/\",fstype=\"ext4\"}[6h], 7*24*3600)",
+          "expr": "predict_linear(node_filesystem_avail_bytes{mountpoint=\"/\",fstype=\"ext4\",alias=~\"$ship\"}[6h], 7*24*3600)",
           "refId": "A",
           "legendFormat": "{{alias}}",
           "editorMode": "code",
