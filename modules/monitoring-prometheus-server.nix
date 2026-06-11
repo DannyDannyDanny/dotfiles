@@ -17,7 +17,7 @@
 # The Grafana dashboard (Node Exporter Full, grafana.com #1860) is
 # provisioned declaratively from ./grafana-dashboards — no UI import step.
 #
-# Routing: critical alerts repeat every 1h, everything else every 4h.
+# Routing: critical alerts repeat every 4h, everything else every 4h.
 { config, pkgs, ... }:
 let
   # Fleet ZT IPv6 addresses — single source of truth in lib/zerotier-hosts.nix.
@@ -157,8 +157,8 @@ in {
             matchers = [ ''severity="critical"'' ];
             receiver = "telegram-critical";
             group_wait = "10s";
-            group_interval = "1m";
-            repeat_interval = "1h";
+            group_interval = "5m";
+            repeat_interval = "4h";
           }];
         };
         receivers = [
