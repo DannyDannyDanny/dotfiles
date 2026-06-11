@@ -78,22 +78,36 @@ in {
     enable = true;
     port = 9090;
     listenAddress = "[::1]";
+    # High-def (raw 30s) retention for a month. Aggregated multi-year is a
+    # separate tier (Thanos / VictoriaMetrics) — see the homelab roadmap.
+    # ~600 MB at 30d on this fleet (was ~300 MB at the 15d default).
+    retentionTime = "30d";
 
     globalConfig = {
       scrape_interval = "30s";
       evaluation_interval = "30s";
     };
 
-    scrapeConfigs = [{
-      job_name = "node";
-      # One static_config per ship so every series carries a friendly
-      # `alias` label (used by the fleet dashboards + alerts) — present
-      # even when a host is down, unlike node_uname_info's nodename.
-      static_configs = map (h: {
-        targets = [ (target h.ip) ];
-        labels = { job = "node"; alias = h.name; };
-      }) fleet;
-    }];
+    scrapeConfigs = [
+      {
+        job_name = "node";
+        # One static_config per ship so every series carries a friendly
+        # `alias` label (used by the fleet dashboards + alerts) — present
+        # even when a host is down, unlike node_uname_info's nodename.
+        static_configs = map (h: {
+          targets = [ (target h.ip) ];
+          labels = { job = "node"; alias = h.name; };
+        }) fleet;
+      }
+      {
+        # CrowdSec LAPI + engine Prometheus metrics — only vps-relay runs it.
+        job_name = "crowdsec";
+        static_configs = [{
+          targets = [ "[${vpsRelayZTv6}]:6060" ];
+          labels = { job = "crowdsec"; alias = "vps-relay"; };
+        }];
+      }
+    ];
 
     ruleFiles = [
       (builtins.toFile "host-rules.yml" (builtins.toJSON {
