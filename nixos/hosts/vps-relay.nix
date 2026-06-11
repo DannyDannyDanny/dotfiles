@@ -296,6 +296,9 @@ in
   # tmpfiles line for the same path.
   systemd.tmpfiles.rules = [
     "d /srv/ftp 0755 root root - -"
+    # crowdsec setup script writes credentials here; must be owned by the
+    # crowdsec user from first boot (otherwise root:root breaks the write).
+    "d /var/lib/crowdsec 0750 crowdsec crowdsec - -"
   ];
 
   # --- Filebrowser (web UI for the FTP tree) ---------------------------
@@ -481,6 +484,10 @@ in
 
   # CrowdSec reads Caddy's log files; the caddy user/group owns them.
   users.users.crowdsec.extraGroups = [ "caddy" ];
+
+  # Caddy's default UMask (0177) writes log files as 600 (no group read).
+  # CrowdSec is in the caddy group, so 0027 → 640 lets it tail the logs.
+  systemd.services.caddy.serviceConfig.UMask = "0027";
 
   # --- Basic tooling ---------------------------------------------------
   environment.systemPackages = with pkgs; [
