@@ -1,9 +1,5 @@
 { pkgs, lib, config, ... }:
 {
-  # TODO: remove next two lines from here or from flake.nix
-  # home.username = "danny";
-  # home.homeDirectory = "/Users/danny";
-
   programs.home-manager.enable = true;
 
   # Import neovim configuration
@@ -156,7 +152,7 @@
 
   # Environment variables (user-level)
   home.sessionVariables = {
-    DBT_USER = "DNTH"; # TODO: remove this
+    DBT_USER = "DNTH"; # used by work dbt pipelines (leap/*-data-pipelines reference it in models)
     EDITOR = "nvim";
     VISUAL = "nvim";
   };
@@ -236,7 +232,6 @@
     ripgrep       # replacement for grep
     fd            # replacement for find
     wget          # downloader
-    # azure-cli   # TODO: remove this Azure cli tool
     gh            # github cli tool
     claude-code   # Anthropic agentic coding CLI
     forgejo-cli   # forgejo/codeberg cli (provides fj)
@@ -261,9 +256,7 @@
     # vlc           # video player - doesn't build for MacOS
 
     # Applications
-    # alacritty   # TODO: configured via programs.alacritty above, so not needed here
-    # warp-terminal # TODO: Bloat
-    # vscodium     # TODO: Bloat
+    # (alacritty comes from programs.alacritty above, not this list)
     zed-editor
     code-cursor
     cursor-cli
