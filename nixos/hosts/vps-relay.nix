@@ -441,9 +441,31 @@ in
   };
 
   # Firewall bouncer: translates CrowdSec decisions → nftables DROP rules.
-  # registerBouncer.enable defaults to true when services.crowdsec.enable = true,
-  # so the bouncer self-registers with the local LAPI on first start.
-  services.crowdsec-firewall-bouncer.enable = true;
+  #
+  # We disable auto-register because the NixOS module's register helper has
+  # two bugs: (1) it calls raw cscli without `-c <config>` so it can't find
+  # /etc/crowdsec/config.yaml (which doesn't exist — NixOS stores the config
+  # in the Nix store); (2) its StateDirectory claims /var/lib/crowdsec on
+  # every start, stealing ownership from the main crowdsec service.
+  #
+  # Instead, generate the bouncer key once manually then store it as a clan var:
+  #   ssh danny@<vps-relay-ip> sudo cscli bouncers add crowdsec-firewall-bouncer
+  #   clan vars set vps-relay crowdsec-bouncer/key   # paste key at the prompt
+  services.crowdsec-firewall-bouncer = {
+    enable = true;
+    registerBouncer.enable = false;
+    secrets.apiKeyPath =
+      config.clan.core.vars.generators.crowdsec-bouncer-key.files."key".path;
+  };
+
+  clan.core.vars.generators.crowdsec-bouncer-key = {
+    files."key" = {};
+    prompts.key = {
+      description = "CrowdSec firewall bouncer API key (run `sudo cscli bouncers add crowdsec-firewall-bouncer` on vps-relay to generate it)";
+      type = "hidden";
+      persist = true;
+    };
+  };
 
   # CrowdSec reads Caddy's log files; the caddy user/group owns them.
   users.users.crowdsec.extraGroups = [ "caddy" ];
