@@ -78,10 +78,14 @@ in {
     enable = true;
     port = 9090;
     listenAddress = "[::1]";
-    # High-def (raw 30s) retention for a month. Aggregated multi-year is a
-    # separate tier (Thanos / VictoriaMetrics) — see the homelab roadmap.
-    # ~600 MB at 30d on this fleet (was ~300 MB at the 15d default).
-    retentionTime = "30d";
+    # Long-haul raw (30s) retention: ~1000 days (~2.7 years). At the
+    # measured ~20 MB/day this plateaus near 20 GB — trivial vs free disk.
+    # The retention.size backstop hard-caps the TSDB at 30 GB so a future
+    # jump in series count can never run the root filesystem out of space
+    # (whichever limit hits first wins). See the homelab roadmap for the
+    # downsampled-multi-year tier (Thanos / VictoriaMetrics).
+    retentionTime = "1000d";
+    extraFlags = [ "--storage.tsdb.retention.size=30GB" ];
 
     globalConfig = {
       scrape_interval = "30s";
