@@ -221,7 +221,7 @@
     {
       "id": 7,
       "type": "timeseries",
-      "title": "🌩️ Suspicious Weather by Scenario",
+      "title": "🌩️ Suspicious Weather",
       "description": "Events poured into scenario buckets per second — the leading indicator. Sustained pour without overflow means probing below the ban threshold.",
       "gridPos": { "x": 12, "y": 4, "w": 12, "h": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
