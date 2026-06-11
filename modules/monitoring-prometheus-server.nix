@@ -201,7 +201,11 @@ in {
     settings.server = {
       http_addr = "::";
       http_port = 3000;
-      domain = "sunken-ship.clan";
+      # Served publicly via vps-relay Caddy (grafana.dannydannydanny.me),
+      # behind a basic_auth gate. root_url keeps Grafana's redirects/links
+      # correct behind the proxy. Still reachable ZT-direct on :3000 too.
+      domain = "grafana.dannydannydanny.me";
+      root_url = "https://grafana.dannydannydanny.me/";
     };
     # Encrypts secrets stored in Grafana's DB. Sourced from a clan var via
     # systemd LoadCredential (see below) instead of a hand-placed /etc file.

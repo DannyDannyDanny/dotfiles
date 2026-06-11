@@ -102,14 +102,34 @@ in
     };
   };
 
+  # Basic-auth gate hash for Grafana, kept out of the public repo as a
+  # sops-encrypted clan var. Provide it once (any Linux box with the admin
+  # key, or `clan vars set` from the mac):
+  #   printf 'GRAFANA_BCRYPT=%s' "$(caddy hash-password --plaintext '<pw>')" \
+  #     | clan vars set vps-relay grafana-basic-auth/auth
+  # (var file is named "auth" not "env" — the repo .gitignore ignores env/)
+  clan.core.vars.generators.grafana-basic-auth.files."auth" = { };
+
   # --- Caddy reverse proxy --------------------------------------------
   # Subdomains → clan backends over ZeroTier. IPs are sunken-ship's /
   # phantom-ship's ZT IPv6; brackets required in URLs.
   services.caddy = {
     enable = true;
     email = "powerhouseplayer@gmail.com";
+    # GRAFANA_BCRYPT for the grafana vhost's basic_auth gate — loaded into
+    # Caddy's process env, resolved at config provision as {env.GRAFANA_BCRYPT}.
+    environmentFile = config.clan.core.vars.generators.grafana-basic-auth.files."auth".path;
     # Tell ACME to use Let's Encrypt's production endpoint (Caddy default).
     virtualHosts = {
+      # Grafana (sunken-ship :3000) behind a basic_auth gate. It's admin
+      # tooling, so a proxy-level password sits in front of Grafana's own
+      # login (defense-in-depth) before anything is exposed publicly.
+      "grafana.dannydannydanny.me".extraConfig = ''
+        basic_auth {
+          danny {env.GRAFANA_BCRYPT}
+        }
+        reverse_proxy http://[${zt."sunken-ship"}]:3000
+      '';
       "navidrome.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[${zt."sunken-ship"}]:4533
       '';
