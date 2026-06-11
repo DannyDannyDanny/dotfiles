@@ -467,6 +467,16 @@ in
     };
   };
 
+  # The crowdsec-firewall-bouncer NixOS module generates the register helper
+  # service even when registerBouncer.enable = false. Its StateDirectory
+  # includes "crowdsec" which causes systemd to steal /var/lib/crowdsec
+  # ownership (DynamicUser UID collision), breaking the main crowdsec.service.
+  # Fix: remove "crowdsec" from its StateDirectory and disable auto-start.
+  systemd.services.crowdsec-firewall-bouncer-register = {
+    wantedBy = lib.mkForce [];
+    serviceConfig.StateDirectory = lib.mkForce "crowdsec-firewall-bouncer-register";
+  };
+
   # CrowdSec reads Caddy's log files; the caddy user/group owns them.
   users.users.crowdsec.extraGroups = [ "caddy" ];
 
