@@ -421,14 +421,14 @@ in
       }
     ];
 
-    # Enable the standalone LAPI (log processor + local API in the same
-    # process). Without this the module sets api.server.enable = false,
-    # credentials_path = null, and CrowdSec fails to start with "no API
-    # client section in configuration".
-    settings.lapi.credentialsFile = "/var/lib/crowdsec/local_api_credentials.yaml";
-
     settings.general = {
-      api.server.enable = true;
+      # settings.lapi.credentialsFile uses lib.types.path which requires the
+      # file at Nix eval time — a runtime path silently becomes null. Set the
+      # YAML key directly here instead (freeform type, no path coercion).
+      api.client.credentials_path = "/var/lib/crowdsec/local_api_credentials.yaml";
+      # lib.mkForce needed — the module hardcodes lib.mkDefault false and a
+      # plain `true` loses to it inside the freeform YAML merge.
+      api.server.enable = lib.mkForce true;
       # Bind Prometheus metrics to all interfaces; firewall limits to ZT only.
       # The module default is 127.0.0.1 which is unreachable from sunken-ship.
       prometheus = {
