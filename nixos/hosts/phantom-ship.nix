@@ -65,7 +65,7 @@ in
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "claude-code" ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   programs.nix-ld.enable = true;  # run dynamically linked binaries (e.g. Claude Code remote CLI)
-  system.stateVersion = "24.11";
+  system.stateVersion = "24.11";  # OS install era — never bump (HM stateVersion differs intentionally, see flake-modules/clan.nix)
 
   users.users.danny = {
     isNormalUser = true;

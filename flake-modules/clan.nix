@@ -10,6 +10,11 @@
 { config, inputs, ... }:
 let
   lib = inputs.nixpkgs.lib;
+  # NOTE on stateVersion: the HM stateVersion ("25.11" below) records when
+  # home-manager was FIRST ACTIVATED for this user (clan bootstrap, Apr 2026)
+  # and intentionally differs from the older system.stateVersion of the
+  # ships ("24.11", OS install era). Neither should be bumped or "aligned" —
+  # both gate one-time migration defaults, not features.
   hmModule = { user, homeDirectory, stateVersion ? null, userImports ? [ ] }:
     import ../lib/home-manager-user.nix {
       inherit lib user homeDirectory stateVersion userImports;
