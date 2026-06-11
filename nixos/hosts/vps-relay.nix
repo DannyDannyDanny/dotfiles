@@ -161,6 +161,12 @@ in
       "tdpixi.dannydannydanny.me".extraConfig = ''
         reverse_proxy http://[${zt."phantom-ship"}]:8093
       '';
+      # Plane — self-hosted project tracker (Linear-alike). Full stack
+      # runs as podman containers on phantom-ship (nixos/plane.nix);
+      # Plane's bundled proxy listens on :8094 and path-routes the rest.
+      "plane.dannydannydanny.me".extraConfig = ''
+        reverse_proxy http://[fdd5:53a2:de33:d269:6499:936c:48a:bbdc]:8094
+      '';
       # notes — markdown blog (notes.X) + apex landing (X). Same backend
       # service on phantom :8092 routes by Host header.
       "notes.dannydannydanny.me".extraConfig = ''
