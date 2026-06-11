@@ -6,4 +6,5 @@
   flake.nixosModules.server-debug-tools = ../modules/server-debug-tools.nix;
   flake.nixosModules.monitoring-node-exporter = ../modules/monitoring-node-exporter.nix;
   flake.nixosModules.monitoring-prometheus-server = ../modules/monitoring-prometheus-server.nix;
+  flake.nixosModules.fleet-watchdog = ../modules/fleet-watchdog.nix;
 }

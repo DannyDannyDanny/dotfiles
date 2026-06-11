@@ -165,6 +165,7 @@ in {
         clanHostsModule
         ../nixos/hosts/vps-relay.nix
         config.flake.nixosModules.monitoring-node-exporter
+        config.flake.nixosModules.fleet-watchdog
         inputs.home-manager.nixosModules.home-manager
         (hmModule {
           user = "danny";
