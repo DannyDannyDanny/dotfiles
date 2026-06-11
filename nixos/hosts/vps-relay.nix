@@ -421,8 +421,16 @@ in
       }
     ];
 
+    # Enable the standalone LAPI (log processor + local API in the same
+    # process). Without this the module sets api.server.enable = false,
+    # credentials_path = null, and CrowdSec fails to start with "no API
+    # client section in configuration".
+    settings.lapi.credentialsFile = "/var/lib/crowdsec/local_api_credentials.yaml";
+
     settings.general = {
+      api.server.enable = true;
       # Bind Prometheus metrics to all interfaces; firewall limits to ZT only.
+      # The module default is 127.0.0.1 which is unreachable from sunken-ship.
       prometheus = {
         enabled = true;
         level = "full";
