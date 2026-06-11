@@ -19,6 +19,21 @@
   time.timeZone = "Europe/Copenhagen";
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Reclaim disk weekly: drop system generations older than 14 days +
+  # unreferenced store paths, then hardlink identical files. The 457G root
+  # also holds the ~288G music library, so /nix/store creep matters here.
+  nix.gc = {
+    automatic = true;
+    dates = "Sun 04:00";
+    options = "--delete-older-than 14d";
+    randomizedDelaySec = "30min";
+  };
+  nix.optimise = {
+    automatic = true;
+    dates = [ "Sun 04:30" ];
+  };
+
   programs.nix-ld.enable = true;  # run dynamically linked binaries (e.g. Claude Code remote CLI)
   system.stateVersion = "24.11";  # OS install era — never bump (HM stateVersion differs intentionally, see flake-modules/clan.nix)
 
