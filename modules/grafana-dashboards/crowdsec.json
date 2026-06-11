@@ -5,7 +5,7 @@
   "editable": true,
   "timezone": "browser",
   "schemaVersion": 39,
-  "version": 1,
+  "version": 2,
   "refresh": "30s",
   "graphTooltip": 1,
   "style": "dark",
@@ -47,7 +47,7 @@
       },
       "targets": [{
         "datasource": { "type": "prometheus", "uid": "prometheus" },
-        "expr": "sum(cs_active_decisions{action=\"ban\"})",
+        "expr": "sum(cs_active_decisions{action=\"ban\"}) or vector(0)",
         "legendFormat": "bans",
         "refId": "A"
       }]
@@ -90,7 +90,7 @@
       "id": 3,
       "type": "stat",
       "title": "Alert Rate (1h)",
-      "description": "Alerts fired in the last hour.",
+      "description": "Buckets that overflowed (scenario triggered) in the last hour.",
       "gridPos": { "x": 12, "y": 0, "w": 6, "h": 4 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "options": {
@@ -116,7 +116,7 @@
       },
       "targets": [{
         "datasource": { "type": "prometheus", "uid": "prometheus" },
-        "expr": "sum(increase(cs_bucket_overflow_total[1h]))",
+        "expr": "sum(increase(cs_bucket_overflow_total[1h])) or vector(0)",
         "legendFormat": "alerts",
         "refId": "A"
       }]
@@ -125,7 +125,7 @@
       "id": 4,
       "type": "stat",
       "title": "Events Parsed (1h)",
-      "description": "Log events processed by the CrowdSec engine in the last hour.",
+      "description": "Log events processed by the CrowdSec parser in the last hour.",
       "gridPos": { "x": 18, "y": 0, "w": 6, "h": 4 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "options": {
@@ -147,7 +147,7 @@
       },
       "targets": [{
         "datasource": { "type": "prometheus", "uid": "prometheus" },
-        "expr": "sum(increase(cs_acq_processed_total[1h]))",
+        "expr": "sum(increase(cs_parser_hits_total[1h]))",
         "legendFormat": "events",
         "refId": "A"
       }]
@@ -156,7 +156,7 @@
       "id": 5,
       "type": "timeseries",
       "title": "Alert Rate by Scenario",
-      "description": "CrowdSec bucket overflows (= scenario triggers) per second.",
+      "description": "CrowdSec bucket overflows (scenario triggers) per second.",
       "gridPos": { "x": 0, "y": 4, "w": 12, "h": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "options": {
@@ -239,7 +239,7 @@
       "id": 8,
       "type": "timeseries",
       "title": "Events Ingested by Source",
-      "description": "Log events processed per data source (Caddy, SSH).",
+      "description": "Log events hitting the parser per source (Caddy files, SSH journalctl).",
       "gridPos": { "x": 12, "y": 12, "w": 12, "h": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "options": {
@@ -255,8 +255,8 @@
       },
       "targets": [{
         "datasource": { "type": "prometheus", "uid": "prometheus" },
-        "expr": "rate(cs_acq_processed_total[5m])",
-        "legendFormat": "{{datasource_path}}",
+        "expr": "rate(cs_parser_hits_total[5m])",
+        "legendFormat": "{{source}}",
         "refId": "A"
       }]
     },
@@ -264,7 +264,7 @@
       "id": 9,
       "type": "timeseries",
       "title": "Parser Hit Rate",
-      "description": "Events hitting each parser stage per second. High miss rate on a stage indicates unrecognised log formats.",
+      "description": "Events hitting the parser (total vs ok). High miss rate indicates unrecognised log formats.",
       "gridPos": { "x": 0, "y": 20, "w": 12, "h": 7 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "options": {
@@ -282,13 +282,13 @@
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
           "expr": "rate(cs_parser_hits_total[5m])",
-          "legendFormat": "{{stage}} hits",
+          "legendFormat": "{{source}} total",
           "refId": "A"
         },
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
           "expr": "rate(cs_parser_hits_ok_total[5m])",
-          "legendFormat": "{{stage}} ok",
+          "legendFormat": "{{source}} ok",
           "refId": "B"
         }
       ]
@@ -313,8 +313,8 @@
       },
       "targets": [{
         "datasource": { "type": "prometheus", "uid": "prometheus" },
-        "expr": "rate(cs_lapi_requests_total[5m])",
-        "legendFormat": "{{method}} {{path}} ({{code}})",
+        "expr": "rate(cs_lapi_route_requests_total[5m])",
+        "legendFormat": "{{method}} {{route}} ({{code}})",
         "refId": "A"
       }]
     }
