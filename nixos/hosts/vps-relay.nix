@@ -84,6 +84,8 @@ in
   # FTP passive-mode data connections — must match pasv_min/max_port in
   # the vsftpd config below.
   networking.firewall.allowedTCPPortRanges = [ { from = 56000; to = 56010; } ];
+  # CrowdSec Prometheus metrics — ZT-only so sunken-ship can scrape them.
+  networking.firewall.interfaces."zt+".allowedTCPPorts = [ 6060 ];
 
   # fail2ban — public SSH gets brute-force probed within minutes of any
   # cloud VM being created. Ban offending IPs after a few failures.
@@ -385,6 +387,58 @@ in
     maxretry = 5;
     findtime = "10m";
   };
+
+  # --- CrowdSec (HTTP + SSH threat detection) --------------------------
+  # LAPI + agent detect attacks from Caddy access logs and SSH journald.
+  # Firewall bouncer translates ban decisions into nftables DROP rules.
+  # Prometheus metrics at :6060 (ZT-only; scrape target added to sunken-ship).
+  #
+  # First deploy: register with the Central API to get crowd-sourced blocklists:
+  #   ssh danny@vps-relay sudo cscli capi register
+  #   sudo systemctl restart crowdsec
+  services.crowdsec = {
+    enable = true;
+
+    hub.collections = [
+      "crowdsecurity/linux"  # base syslog parser + common rules
+      "crowdsecurity/sshd"   # SSH brute-force scenarios
+      "crowdsecurity/caddy"  # Caddy HTTP access log scenarios
+    ];
+
+    localConfig.acquisitions = [
+      # SSH logs from journald (same source as the fail2ban sshd jail above).
+      {
+        source = "journalctl";
+        journalctl_filter = [ "_SYSTEMD_UNIT=sshd.service" ];
+        labels.type = "syslog";
+      }
+      # Caddy access logs — the NixOS Caddy module writes one JSON file per
+      # vhost to /var/log/caddy/access-<hostname>.log by default. Glob all.
+      {
+        source = "file";
+        filenames = [ "/var/log/caddy/access-*.log" ];
+        labels.type = "caddy";
+      }
+    ];
+
+    settings.general = {
+      # Bind Prometheus metrics to all interfaces; firewall limits to ZT only.
+      prometheus = {
+        enabled = true;
+        level = "full";
+        listen_addr = "0.0.0.0";
+        listen_port = 6060;
+      };
+    };
+  };
+
+  # Firewall bouncer: translates CrowdSec decisions → nftables DROP rules.
+  # registerBouncer.enable defaults to true when services.crowdsec.enable = true,
+  # so the bouncer self-registers with the local LAPI on first start.
+  services.crowdsec-firewall-bouncer.enable = true;
+
+  # CrowdSec reads Caddy's log files; the caddy user/group owns them.
+  users.users.crowdsec.extraGroups = [ "caddy" ];
 
   # --- Basic tooling ---------------------------------------------------
   environment.systemPackages = with pkgs; [
