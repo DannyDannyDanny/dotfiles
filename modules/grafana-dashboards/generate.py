@@ -133,7 +133,7 @@ dashboards = {}
 # 1) Fleet Command Bridge
 _pid[0] = 0
 p = []
-p.append(stat("🚢 Fleet Muster — who's afloat", 0, 0, 24, 5, UP, "{{alias}}",
+p.append(stat("🚢 Fleet Muster (who's afloat)", 0, 0, 24, 5, UP, "{{alias}}",
               steps=UP_STEPS, mappings=UP_MAP, colorMode="background", textMode="value_and_name"))
 p.append(gauge("⚙️ CPU load", 0, 5, 8, 8, CPU, "{{alias}}"))
 p.append(gauge("🧠 Memory used", 8, 5, 8, 8, RAM, "{{alias}}"))
@@ -168,7 +168,7 @@ p.append(stat("🔮 Projected free in 7 days", 12, 8, 12, 8, FS_PRED, "{{alias}}
               unit="bytes", colorMode="value", textMode="value_and_name",
               steps=[{"value": None, "color": "purple"}]))
 dashboards["fleet-storage"] = dashboard(
-    "fleet-storage", "🗄️ The Hold — Storage", ["fleet", "homelab"], p)
+    "fleet-storage", "🗄️ The Hold (Storage)", ["fleet", "homelab"], p)
 
 # 4) Currents (Network)
 _pid[0] = 0
@@ -179,7 +179,7 @@ p.append(stat("🌊 Total fleet throughput (in + out)", 0, 0, 24, 5, NET_TOT, "{
 p.append(timeseries("⬇️ Inbound (receive)", 0, 5, 12, 9, [tgt(NET_RX, "{{alias}}")], unit="Bps", fillOpacity=20))
 p.append(timeseries("⬆️ Outbound (transmit)", 12, 5, 12, 9, [tgt(NET_TX, "{{alias}}")], unit="Bps", fillOpacity=20))
 dashboards["fleet-network"] = dashboard(
-    "fleet-network", "🌊 Currents — Network", ["fleet", "homelab"], p)
+    "fleet-network", "🌊 Currents (Network)", ["fleet", "homelab"], p)
 
 # 5) Engine Room (Thermals)
 _pid[0] = 0
@@ -189,7 +189,7 @@ p.append(gauge("🌡️ Hottest sensor per ship", 0, 0, 24, 8, TEMP, "{{alias}}"
 p.append(timeseries("🔥 Temperature over time", 0, 8, 24, 9, [tgt(TEMP, "{{alias}}")],
                     unit="celsius", steps=TEMP_STEPS))
 dashboards["fleet-thermals"] = dashboard(
-    "fleet-thermals", "🌡️ Engine Room — Thermals", ["fleet", "homelab"], p)
+    "fleet-thermals", "🌡️ Engine Room (Thermals)", ["fleet", "homelab"], p)
 
 # --- write + validate ---
 for name, d in dashboards.items():

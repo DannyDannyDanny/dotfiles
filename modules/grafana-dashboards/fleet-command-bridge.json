@@ -78,7 +78,7 @@
     {
       "id": 1,
       "type": "stat",
-      "title": "🚢 Fleet Muster — who's afloat",
+      "title": "🚢 Fleet Muster (who's afloat)",
       "gridPos": {
         "h": 5,
         "w": 24,
