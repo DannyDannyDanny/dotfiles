@@ -375,16 +375,24 @@
   # Repo lives at /home/danny/python-projects (must be cloned manually first
   # — see bootstrap note above). DBs/state live in /var/lib/mulbo-server,
   # not in the repo, so they survive pulls.
+  # github.com host key, so root's git-over-SSH (mulbo-pull) verifies the
+  # host instead of dying with "Host key verification failed".
+  programs.ssh.knownHosts."github.com".publicKey =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl";
+
   systemd.services.mulbo-pull = {
     description = "Pull mulbo repo and restart mulbo-server if changed";
-    # openssh: `git fetch origin` over an SSH remote forks `ssh`; without
-    # it git dies with "cannot run ssh: No such file or directory" and the
-    # unit fails (shows up as system `degraded`).
+    # openssh: `git fetch origin` over the git@github SSH remote forks `ssh`.
     path = with pkgs; [ git openssh systemd ];
     environment = {
       GIT_CONFIG_COUNT   = "1";
       GIT_CONFIG_KEY_0   = "safe.directory";
       GIT_CONFIG_VALUE_0 = "/home/danny/python-projects";
+      # The unit runs as root, which has no GitHub key — that's why fetches
+      # were failing. Reuse danny's read-only deploy key (the one that
+      # cloned this private repo); IdentitiesOnly so root's absent keys
+      # aren't offered first. Host key pinned via knownHosts above.
+      GIT_SSH_COMMAND = "ssh -i /home/danny/.ssh/id_ed25519 -o IdentitiesOnly=yes";
     };
     script = ''
       set -euo pipefail
