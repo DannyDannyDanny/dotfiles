@@ -395,10 +395,6 @@ in
   # LAPI + agent detect attacks from Caddy access logs and SSH journald.
   # Firewall bouncer translates ban decisions into nftables DROP rules.
   # Prometheus metrics at :6060 (ZT-only; scrape target added to sunken-ship).
-  #
-  # First deploy: register with the Central API to get crowd-sourced blocklists:
-  #   ssh danny@vps-relay sudo cscli capi register
-  #   sudo systemctl restart crowdsec
   services.crowdsec = {
     enable = true;
 
@@ -431,6 +427,13 @@ in
     # causes a "defined both null and not null" error when merged with any
     # non-null override there.
     settings.lapi.credentialsFile = "/var/lib/crowdsec/local_api_credentials.yaml";
+
+    # Central API (crowd-sourced blocklists). With this set, the module's
+    # setup script runs `cscli capi register` automatically on first start
+    # and persists the credentials here. Without it, online_client gets
+    # credentials_path: null and a manual `cscli capi register` only prints
+    # the credentials to stdout — they're never saved.
+    settings.capi.credentialsFile = "/var/lib/crowdsec/online_api_credentials.yaml";
 
     settings.general = {
       api.server.enable = true;

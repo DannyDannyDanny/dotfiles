@@ -1,11 +1,11 @@
 {
   "uid": "crowdsec",
-  "title": "🛡️ CrowdSec",
+  "title": "🔭 Crow's Nest — Threat Watch",
   "tags": ["fleet", "security"],
   "editable": true,
   "timezone": "browser",
   "schemaVersion": 39,
-  "version": 2,
+  "version": 3,
   "refresh": "30s",
   "graphTooltip": 1,
   "style": "dark",
@@ -18,17 +18,58 @@
     {
       "id": 1,
       "type": "stat",
-      "title": "Active Bans",
-      "description": "Current number of active ban decisions in the LAPI.",
-      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
+      "title": "👁️ Lookout",
+      "description": "Is the CrowdSec engine on vps-relay up and being scraped?",
+      "gridPos": { "x": 0, "y": 0, "w": 4, "h": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "green", "value": 1 }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": { "text": "💤 ASLEEP", "color": "red", "index": 1 },
+                "1": { "text": "👁️ ON WATCH", "color": "green", "index": 0 }
+              }
+            }
+          ],
+          "noValue": "💤 ASLEEP"
+        }
+      },
+      "targets": [{
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "expr": "up{job=\"crowdsec\"}",
+        "legendFormat": "lookout",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "⛓️ In the Brig",
+      "description": "Active ban decisions in the LAPI right now.",
+      "gridPos": { "x": 4, "y": 0, "w": 5, "h": 4 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "options": {
         "reduceOptions": { "calcs": ["lastNotNull"] },
         "colorMode": "background",
         "graphMode": "area",
-        "justifyMode": "center",
-        "textMode": "auto",
-        "orientation": "auto"
+        "justifyMode": "center"
       },
       "fieldConfig": {
         "defaults": {
@@ -53,45 +94,11 @@
       }]
     },
     {
-      "id": 2,
-      "type": "stat",
-      "title": "Active Captchas",
-      "description": "Current number of active captcha decisions.",
-      "gridPos": { "x": 6, "y": 0, "w": 6, "h": 4 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "options": {
-        "reduceOptions": { "calcs": ["lastNotNull"] },
-        "colorMode": "background",
-        "graphMode": "area",
-        "justifyMode": "center"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "thresholds" },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 5 }
-            ]
-          },
-          "unit": "short",
-          "noValue": "0"
-        }
-      },
-      "targets": [{
-        "datasource": { "type": "prometheus", "uid": "prometheus" },
-        "expr": "sum(cs_active_decisions{action=\"captcha\"}) or vector(0)",
-        "legendFormat": "captchas",
-        "refId": "A"
-      }]
-    },
-    {
       "id": 3,
       "type": "stat",
-      "title": "Alert Rate (1h)",
-      "description": "Buckets that overflowed (scenario triggered) in the last hour.",
-      "gridPos": { "x": 12, "y": 0, "w": 6, "h": 4 },
+      "title": "🏴‍☠️ Boarding Attempts (1h)",
+      "description": "Scenarios triggered (bucket overflows) in the last hour — confirmed attack patterns.",
+      "gridPos": { "x": 9, "y": 0, "w": 5, "h": 4 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "options": {
         "reduceOptions": { "calcs": ["lastNotNull"] },
@@ -106,8 +113,8 @@
             "mode": "absolute",
             "steps": [
               { "color": "green", "value": null },
-              { "color": "yellow", "value": 20 },
-              { "color": "red", "value": 100 }
+              { "color": "yellow", "value": 5 },
+              { "color": "red", "value": 50 }
             ]
           },
           "unit": "short",
@@ -124,9 +131,9 @@
     {
       "id": 4,
       "type": "stat",
-      "title": "Events Parsed (1h)",
-      "description": "Log events processed by the CrowdSec parser in the last hour.",
-      "gridPos": { "x": 18, "y": 0, "w": 6, "h": 4 },
+      "title": "📜 Logs Scanned (1h)",
+      "description": "Log lines processed by the parser in the last hour (Caddy + SSH).",
+      "gridPos": { "x": 14, "y": 0, "w": 5, "h": 4 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "options": {
         "reduceOptions": { "calcs": ["lastNotNull"] },
@@ -154,9 +161,43 @@
     },
     {
       "id": 5,
+      "type": "stat",
+      "title": "🪣 Buckets Brewing",
+      "description": "Live scenario buckets currently tracking suspicious sources. Each bucket is a potential ban in progress.",
+      "gridPos": { "x": 19, "y": 0, "w": 5, "h": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 20 }
+            ]
+          },
+          "unit": "short",
+          "noValue": "0"
+        }
+      },
+      "targets": [{
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "expr": "cs_buckets or vector(0)",
+        "legendFormat": "buckets",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 6,
       "type": "timeseries",
-      "title": "Alert Rate by Scenario",
-      "description": "CrowdSec bucket overflows (scenario triggers) per second.",
+      "title": "⚔️ Alarms Raised by Scenario",
+      "description": "Scenario triggers (bucket overflows) per second — each one is a detected attack.",
       "gridPos": { "x": 0, "y": 4, "w": 12, "h": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "options": {
@@ -178,11 +219,36 @@
       }]
     },
     {
-      "id": 6,
+      "id": 7,
       "type": "timeseries",
-      "title": "Active Bans Over Time",
-      "description": "Total active ban decisions in the LAPI.",
+      "title": "🌩️ Suspicious Weather by Scenario",
+      "description": "Events poured into scenario buckets per second — the leading indicator. Sustained pour without overflow means probing below the ban threshold.",
       "gridPos": { "x": 12, "y": 4, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "tooltip": { "mode": "multi", "sort": "desc" },
+        "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["sum"] }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "lineWidth": 1, "fillOpacity": 10 },
+          "unit": "ops",
+          "color": { "mode": "palette-classic" }
+        }
+      },
+      "targets": [{
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "expr": "sum by (name) (rate(cs_bucket_poured_total[5m]))",
+        "legendFormat": "{{name}}",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 8,
+      "type": "timeseries",
+      "title": "⛓️ Brig Population Over Time",
+      "description": "Active ban decisions in the LAPI, by scenario.",
+      "gridPos": { "x": 0, "y": 12, "w": 12, "h": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "options": {
         "tooltip": { "mode": "multi", "sort": "desc" },
@@ -203,20 +269,20 @@
       }]
     },
     {
-      "id": 7,
+      "id": 9,
       "type": "table",
-      "title": "Active Decisions",
-      "description": "Current bans broken down by scenario, origin, and type.",
-      "gridPos": { "x": 0, "y": 12, "w": 12, "h": 8 },
+      "title": "📋 Brig Ledger",
+      "description": "Current decisions broken down by scenario, origin, and type.",
+      "gridPos": { "x": 12, "y": 12, "w": 12, "h": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "options": {
-        "sortBy": [{ "displayName": "Value", "desc": true }],
+        "sortBy": [{ "displayName": "Count", "desc": true }],
         "footer": { "show": false }
       },
       "fieldConfig": {
         "defaults": { "custom": { "align": "left" } },
         "overrides": [{
-          "matcher": { "id": "byName", "options": "Value" },
+          "matcher": { "id": "byName", "options": "Count" },
           "properties": [{ "id": "custom.width", "value": 80 }]
         }]
       },
@@ -230,17 +296,17 @@
       }],
       "transformations": [
         { "id": "organize", "options": {
-          "excludeByName": { "Time": true, "__name__": true, "job": true, "instance": true },
+          "excludeByName": { "Time": true, "__name__": true, "job": true, "instance": true, "alias": true },
           "renameByName": { "action": "Action", "origin": "Origin", "reason": "Scenario", "type": "Type", "Value": "Count" }
         }}
       ]
     },
     {
-      "id": 8,
+      "id": 10,
       "type": "timeseries",
-      "title": "Events Ingested by Source",
-      "description": "Log events hitting the parser per source (Caddy files, SSH journalctl).",
-      "gridPos": { "x": 12, "y": 12, "w": 12, "h": 8 },
+      "title": "🌊 Incoming Seas by Source",
+      "description": "Log events hitting the parser per source — which vhosts and services are taking traffic.",
+      "gridPos": { "x": 0, "y": 20, "w": 12, "h": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "options": {
         "tooltip": { "mode": "multi", "sort": "desc" },
@@ -261,11 +327,11 @@
       }]
     },
     {
-      "id": 9,
+      "id": 11,
       "type": "timeseries",
-      "title": "Parser Hit Rate",
-      "description": "Events hitting the parser (total vs ok). High miss rate indicates unrecognised log formats.",
-      "gridPos": { "x": 0, "y": 20, "w": 12, "h": 7 },
+      "title": "🧭 Parsed vs Flotsam",
+      "description": "Parser outcomes: ok = understood, ko = unrecognised log lines. Persistent ko on a source means a log format the parsers don't know.",
+      "gridPos": { "x": 12, "y": 20, "w": 12, "h": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "options": {
         "tooltip": { "mode": "multi", "sort": "desc" },
@@ -281,24 +347,49 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "rate(cs_parser_hits_total[5m])",
-          "legendFormat": "{{source}} total",
+          "expr": "sum(rate(cs_parser_hits_ok_total[5m]))",
+          "legendFormat": "parsed ok",
           "refId": "A"
         },
         {
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "expr": "rate(cs_parser_hits_ok_total[5m])",
-          "legendFormat": "{{source}} ok",
+          "expr": "sum(rate(cs_parser_hits_ko_total[5m]))",
+          "legendFormat": "unparsed (flotsam)",
           "refId": "B"
         }
       ]
     },
     {
-      "id": 10,
+      "id": 12,
       "type": "timeseries",
-      "title": "LAPI Request Rate",
-      "description": "HTTP requests to the local CrowdSec LAPI (from bouncers + cscli).",
-      "gridPos": { "x": 12, "y": 20, "w": 12, "h": 7 },
+      "title": "🏳️ Friendly Colours (whitelist hits)",
+      "description": "Events matched by whitelists (e.g. public DNS allow-list) and therefore never considered hostile.",
+      "gridPos": { "x": 0, "y": 28, "w": 12, "h": 7 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "tooltip": { "mode": "multi", "sort": "desc" },
+        "legend": { "displayMode": "list", "placement": "bottom" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "lineWidth": 1, "fillOpacity": 5 },
+          "unit": "ops",
+          "color": { "mode": "palette-classic" }
+        }
+      },
+      "targets": [{
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "expr": "sum by (name) (rate(cs_node_wl_hits_total[5m])) or vector(0)",
+        "legendFormat": "{{name}}",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 13,
+      "type": "timeseries",
+      "title": "⚓ LAPI Traffic",
+      "description": "HTTP requests to the local CrowdSec API (heartbeats, bouncer decision pulls, cscli).",
+      "gridPos": { "x": 12, "y": 28, "w": 12, "h": 7 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "options": {
         "tooltip": { "mode": "multi", "sort": "desc" },
@@ -314,7 +405,7 @@
       "targets": [{
         "datasource": { "type": "prometheus", "uid": "prometheus" },
         "expr": "rate(cs_lapi_route_requests_total[5m])",
-        "legendFormat": "{{method}} {{route}} ({{code}})",
+        "legendFormat": "{{method}} {{route}}",
         "refId": "A"
       }]
     }
