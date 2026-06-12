@@ -211,8 +211,18 @@ in {
   # Hand the Telegram token to alertmanager as a systemd credential. The
   # clan var is decrypted to a root-only path; LoadCredential re-exposes it
   # to the (DynamicUser) unit under $CREDENTIALS_DIRECTORY.
-  systemd.services.alertmanager.serviceConfig.LoadCredential =
-    [ "telegram_token:${config.clan.core.vars.generators.alertmanager-telegram.files."token".path}" ];
+  #
+  # reloadIfChanged + ExecReload: nixos-rebuild switch sends SIGHUP instead of
+  # restarting alertmanager when the unit changes. This preserves the in-memory
+  # nflog so active-alert notifications aren't re-sent on every deploy.
+  systemd.services.alertmanager = {
+    reloadIfChanged = true;
+    serviceConfig = {
+      LoadCredential =
+        [ "telegram_token:${config.clan.core.vars.generators.alertmanager-telegram.files."token".path}" ];
+      ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+    };
+  };
 
   services.grafana = {
     enable = true;

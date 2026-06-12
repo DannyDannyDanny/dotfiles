@@ -578,48 +578,6 @@ in
     };
   };
 
-  # Hara morning heartbeat — daily email check + Telegram good-morning ping.
-  # Runs claude in print mode with the Gmail MCP, then sends output via Bot API.
-  # Token lives in ~/.claude/channels/telegram/.env (managed by the telegram plugin).
-  systemd.services.hara-heartbeat = {
-    description = "Hara morning heartbeat (email check + Telegram ping)";
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    path = [ pkgs.claude-code pkgs.curl pkgs.jq pkgs.gnused ];
-    environment = {
-      HOME = "/home/danny";
-    };
-    serviceConfig = {
-      Type = "oneshot";
-      User = "danny";
-      Group = "users";
-      WorkingDirectory = "/home/danny";
-      EnvironmentFile = "/etc/claude-channels/env";
-    };
-    script = ''
-      set -euo pipefail
-      CHAT_ID="66070351"
-      BOT_TOKEN=$(grep '^TELEGRAM_BOT_TOKEN=' /home/danny/.claude/channels/telegram/.env | cut -d= -f2-)
-      MSG=$(${pkgs.claude-code}/bin/claude -p \
-        "You are Hara, a concise cat-energy AI assistant. Read ~/.hara/HEARTBEAT.md. Check Gmail for all three accounts (danielth95, powerhouseplayer, wildstylewarrior) for urgent unread emails — security alerts, invoices, anything requiring a decision; skip newsletters and marketing. Compose a short message for Danny: flag urgent emails if any, otherwise just a brief check-in. One message, very short, cat energy." \
-        --mcp-config /etc/hara/mcp-servers.json \
-        2>/dev/null | ${pkgs.gnused}/bin/sed 's/\*\*//g; s/\*//g; s/__//g; s/_//g')
-      ${pkgs.curl}/bin/curl -sf -X POST \
-        "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
-        -H "Content-Type: application/json" \
-        -d "{\"chat_id\": $CHAT_ID, \"text\": $(echo "$MSG" | ${pkgs.jq}/bin/jq -Rs .)}" \
-        > /dev/null
-    '';
-  };
-
-  systemd.timers.hara-heartbeat = {
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnCalendar = "06:07";
-      Timezone = "Europe/Copenhagen";
-      Persistent = true;
-    };
-  };
 
   # Forgejo — self-hosted Git forge. Phase 1 of the de-platform-from-GitHub
   # roadmap (vimwiki/diary/2026-05-03.md). Public URL git.dannydannydanny.me
