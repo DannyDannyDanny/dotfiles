@@ -47,6 +47,8 @@ in {
       # "uhk-agent"        # Ultimate Hacking Keyboard configuration — removed, nixpkgs marks x86_64-linux only TODO
     ];
     onActivation.cleanup = "zap";
+    # Homebrew ≥5.1 refuses --cleanup without a force flag; drop once nix-darwin#1789 lands.
+    onActivation.extraFlags = [ "--force-cleanup" ];
   };
 
   # macOS niceties
