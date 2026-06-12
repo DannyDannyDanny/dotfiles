@@ -2,7 +2,7 @@
   flake.darwinConfigurations."Daniel-Macbook-Air" = inputs.nix-darwin.lib.darwinSystem {
     modules = [
       # Overlay: make zen-browser available as pkgs.zen-browser
-      { nixpkgs.overlays = [ (final: prev: {
+      { nixpkgs.overlays = [ (final: _prev: {
           zen-browser = inputs.zen-browser.packages.${final.stdenv.hostPlatform.system}.default;
         }) ];
       }

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
   alacrittySyncSystemTheme = pkgs.writeShellScriptBin "alacritty-sync-system-theme"
