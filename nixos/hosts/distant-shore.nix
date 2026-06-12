@@ -13,6 +13,11 @@
   ];
 
   boot.loader.systemd-boot.enable = true;
+  # systemd in initrd: required for TPM2 LUKS auto-unlock (tpm2-device=auto
+  # in disko's crypttabExtraOpts). Opt-in per-host — the fleet-wide
+  # enableRecommendedDefaults=false concerns (dnsmasq, resolv.conf binds)
+  # don't apply to this machine.
+  boot.initrd.systemd.enable = true;
   # Secure Boot is enforced and the BIOS supervisor password is unknown, so
   # we can't enrol our own SB keys. Instead, shim (MS-signed) is placed on
   # the ESP and chain-loads systemd-boot; the NVRAM boot entry points at
