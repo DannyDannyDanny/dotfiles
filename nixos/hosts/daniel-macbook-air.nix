@@ -4,6 +4,9 @@ let
   alacrittySyncSystemTheme = pkgs.writeShellScriptBin "alacritty-sync-system-theme"
     (builtins.readFile ../../scripts/alacritty-sync-system-theme.sh);
 
+  ptyWatchdog = pkgs.writeShellScriptBin "pty-watchdog"
+    (builtins.readFile ../../scripts/pty-watchdog.sh);
+
   # nix-darwin's nix.gc / nix.optimise require nix.enable; with Determinate (nix.enable = false)
   # we schedule the same commands via launchd using nixpkgs' nix CLI (same defaults as upstream modules).
   nixGcInterval = [{ Weekday = 7; Hour = 3; Minute = 15; }];
@@ -70,6 +73,7 @@ in {
 
   environment.systemPackages = [
     alacrittySyncSystemTheme
+    ptyWatchdog
     pkgs.feishin  # Subsonic/Navidrome desktop music player
   ];
 
@@ -81,6 +85,18 @@ in {
       ProgramArguments = [ "${alacrittySyncSystemTheme}/bin/alacritty-sync-system-theme" ];
       StandardOutPath = "/tmp/alacritty-theme-sync.log";
       StandardErrorPath = "/tmp/alacritty-theme-sync-error.log";
+    };
+  };
+
+  # Claude.app leaks PTY masters (lsof /dev/ptmx); notify at 80% of
+  # kern.tty.ptmx_max before forkpty starts failing ("Device not configured").
+  launchd.user.agents.pty-watchdog = {
+    serviceConfig = {
+      RunAtLoad = true;
+      StartInterval = 600;
+      ProgramArguments = [ "${ptyWatchdog}/bin/pty-watchdog" ];
+      StandardOutPath = "/tmp/pty-watchdog.log";
+      StandardErrorPath = "/tmp/pty-watchdog-error.log";
     };
   };
 
