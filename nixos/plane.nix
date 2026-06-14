@@ -86,7 +86,16 @@ let
     GUNICORN_WORKERS = "1";
     USE_MINIO = "1";
     API_KEY_RATE_LIMIT = "60/minute";
-    MINIO_ENDPOINT_SSL = "0";
+    # Force https into MinIO presigned upload/download URLs. Plane signs
+    # them against the public request host but takes the scheme from
+    # request.scheme (storage.py), and since TLS terminates at vps-relay
+    # the api only ever sees plain http over ZT — Plane never sets
+    # Django's SECURE_PROXY_SSL_HEADER, so request.scheme is always
+    # "http". Without this the browser gets an http:// presigned URL on
+    # an https page and blocks the PUT as mixed content ("Failed to
+    # upload cover image"). =1 hardcodes https; the browser PUTs to
+    # https://plane.../uploads/* → vps-relay → proxy → minio.
+    MINIO_ENDPOINT_SSL = "1";
     WEBHOOK_ALLOWED_IPS = "";
     WEBHOOK_ALLOWED_HOSTS = "";
   } // dbEnv // redisEnv // s3Env // mqEnv // proxyEnv;
