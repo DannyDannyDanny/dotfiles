@@ -234,6 +234,7 @@
     wget          # downloader
     gh            # github cli tool
     claude-code   # Anthropic agentic coding CLI
+    uv            # Python pkg/runner; `uvx` runs the Plane MCP server (self-managed py, GC-safe)
     forgejo-cli   # forgejo/codeberg cli (provides fj)
     git           # version control
     jujutsu       # Git alternative
