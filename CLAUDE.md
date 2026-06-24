@@ -1,29 +1,21 @@
 # CLAUDE.md
 
-## Build commands
+Public, dev-machine dotfiles: macOS (nix-darwin) + WSL (NixOS) plus the shared
+home-manager dev environment (shell, editor, terminal, dev tooling). The
+homelab/fleet config (servers, clan, topology, secrets) lives in a **separate
+private `homelab` repo** and is not part of this repo.
 
-The flake lives at the repo root (`~/dotfiles/flake.nix`) — clan-cli doesn't handle flakes in subdirs.
+## Build commands
 
 ```bash
 # macOS (from ~/dotfiles)
-darwin-rebuild switch --flake .
-
-# NixOS servers (SSH from mac, or on server)
-sudo nixos-rebuild switch --flake .#sunken-ship
-sudo nixos-rebuild switch --flake .#phantom-ship
+darwin-rebuild switch --flake .#Daniel-Macbook-Air
 
 # WSL
 sudo nixos-rebuild switch --flake ~/dotfiles#wsl
 
 # Update flake + rebuild (fish alias: nixupdate)
 cd ~/dotfiles && sudo nix flake update && sudo darwin-rebuild switch --flake ~/dotfiles#Daniel-Macbook-Air
-
-# Installer ISO (Linux only, cannot build on macOS)
-cd ~/dotfiles && nix build .#installer-iso
-
-# Clan push update (from mac; builds on target so aarch64-darwin → x86_64-linux works)
-nix run git+https://git.clan.lol/clan/clan-core#clan-cli -- \
-  machines update sunken-ship --flake ~/dotfiles
 ```
 
 ## Rebuild protocol
@@ -32,39 +24,21 @@ nix run git+https://git.clan.lol/clan/clan-core#clan-cli -- \
 
 ## Flake architecture
 
-- **Flake:** `nixos/flake.nix` — single flake for all hosts
-- **Inputs:** nixpkgs-unstable, nix-darwin, home-manager, nixos-wsl, disko, zen-browser
-- **Host configs** in `nixos/hosts/`:
-  - `daniel-macbook-air.nix` — hostname `Daniel-Macbook-Air` (aarch64-darwin, nix-darwin)
-  - `sunken-ship.nix` — NixOS home server (x86_64-linux, WiFi + AirPlay)
-  - `phantom-ship.nix` — NixOS home server (x86_64-linux, WiFi uplink; ethernet port serves a downstream NAT subnet)
-  - `wsl.nix` — WSL (x86_64-linux)
-  - `server-install.nix` — disko-install target (LUKS)
-- **Home Manager:** integrated on macOS, WSL, and sunken-ship; user config in `nixos/home/danny/home.nix`
-- **Shared modules:** `nixos/fish.nix` (fish + bash), `nixos/ollama.nix`
-- **Darwin config name:** `Daniel-Macbook-Air` (must match in rebuild commands)
+- **Flake:** `flake.nix` at the repo root (flake-parts + `import-tree` of `flake-modules/`).
+- **Inputs:** nixpkgs-unstable, nix-darwin, home-manager, nixos-wsl, vscode-server, zen-browser.
+- **Hosts** (`nixos/hosts/`): `daniel-macbook-air.nix` (hostname `Daniel-Macbook-Air`, aarch64-darwin) and `wsl.nix` (x86_64-linux).
+- **Home Manager dev env:** `nixos/home/danny/home.nix` (+ `nixos/neovim.nix`), wired via `lib/home-manager-user.nix`.
+- **Shared modules:** `nixos/fish.nix` (fish + bash), `nixos/ollama.nix`.
+- **Darwin config name:** `Daniel-Macbook-Air` (must match in rebuild commands).
+
+The private `homelab` repo consumes this repo as a flake input to reuse the dev
+env (`lib/home-manager-user.nix`) — no duplication.
 
 ## Repo rules
 
-- **Public repo** — no keys, tokens, or identifying secrets. Use `scp` or config outside the repo.
-- **SSH keys:** one key per purpose (e.g. `id_ed25519_github`, `id_ed25519_servers`). Use `IdentityFile` + `IdentitiesOnly yes` in `~/.ssh/config`. Keys stay outside the repo.
-- **Commit and push** before testing on sunken-ship — the server clones/pulls from origin.
-
-## Server (sunken-ship)
-
-- SSH: `ssh -i ~/.ssh/id_ed25519_sunken_ship danny@sunken-ship`
-- Remote rebuild: `ssh ... 'cd /etc/dotfiles && sudo nixos-rebuild switch --flake .#sunken-ship'`
-- Auto-deploy: `dm-pull-deploy` — `dm-pull-deploy-push.timer` announces origin/main every ~15 min; `dm-pull-deploy.path` triggers a rebuild when the target changes. Check with `journalctl -u dm-pull-deploy.service -n 20`. (The old `dotfiles-rebuild` timer is retired.)
-- WiFi connected; stays reachable when ethernet is unplugged.
-- Services: UxPlay (AirPlay receiver on Scarlett Solo)
-
-## Server (phantom-ship)
-
-- SSH: `ssh danny@phantom-ship`
-- Remote rebuild: `ssh ... 'cd /etc/dotfiles && sudo nixos-rebuild switch --flake .#phantom-ship'`
-- Auto-deploy: dm-pull-deploy, same pattern as sunken-ship.
-- Uplink is WiFi (`wlp1s0`, 192.168.1.111, default route via 192.168.1.1).
-- Ethernet port (`enp0s31f6`, static 10.0.0.1/24) is NOT the router uplink — it serves a downstream NAT subnet (dnsmasq). Link is normally down when nothing is plugged in.
+- **Public repo** — no keys, tokens, identifying secrets, or fleet topology. Use `scp` or config outside the repo.
+- **SSH keys:** one key per purpose (e.g. `id_ed25519_github`). Use `IdentityFile` + `IdentitiesOnly yes` in `~/.ssh/config`. Keys stay outside the repo.
+- **Fleet ZeroTier SSH aliases** come from a gitignored `lib/zerotier-ssh.local.nix` (host names + addresses are topology and stay out of this repo).
 
 ## Ollama
 
@@ -73,20 +47,6 @@ Custom nix-darwin module at `nixos/ollama.nix` (upstream PR not yet merged). Ena
 ## Alacritty (macOS)
 
 Terminal colors follow **System Settings → Appearance**: `programs.alacritty` imports `~/.config/alacritty/active-colors.toml`; `scripts/alacritty-sync-system-theme.sh` copies Catppuccin latte/mocha there when the OS mode changes. **nix-darwin** `launchd.user.agents.alacritty-system-theme` polls every 30s; **fish** runs the same script on interactive startup. After changing Nix, one `darwin-rebuild switch`. Details: `assets/alacritty/README.md`.
-
-## clan.lol
-
-**CLI invocation:** clan-cli is not installed globally. Run ad-hoc via:
-
-```bash
-nix run git+https://git.clan.lol/clan/clan-core#clan-cli -- machines list --flake ~/dotfiles
-```
-
-Flake lives at the repo root (not `nixos/`) — clan-cli silently ignores `?dir=` so a subdir flake breaks `clan machines update`.
-
-**`enableRecommendedDefaults = false`:** we opted out fleet-wide because clan's defaults flip to `systemd-networkd` + `systemd-resolved` + `boot.initrd.systemd`, which breaks dnsmasq (NAT DNS on phantom-ship) and navidrome's resolv.conf bind-mount on sunken-ship. Revisit per-service in a later pass — the defaults also include handy extras (tcpdump, htop, curl, jq, nixos-facter). Option defined in `nixosModules/clanCore/defaults.nix` + `nixosModules/clanCore/networking.nix` inside the `clan-core` flake.
-
-**Deployment:** dm-pull-deploy is the source of truth (announce via data-mesher + path-triggered rebuild; replaced the old `dotfiles-rebuild` timer). `clan machines update` works as a push escape hatch.
 
 ## Shell
 

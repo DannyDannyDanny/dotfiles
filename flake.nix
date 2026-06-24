@@ -18,22 +18,9 @@
 
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
-
-    disko.url = "github:nix-community/disko";
-    disko.inputs.nixpkgs.follows = "nixpkgs";
-
-    nix-openclaw.url = "github:openclaw/nix-openclaw";
-    nix-openclaw.inputs.nixpkgs.follows = "nixpkgs";
-
-    clan-core.url = "https://git.clan.lol/clan/clan-core/archive/main.tar.gz";
-    clan-core.inputs.nixpkgs.follows = "nixpkgs";
-    clan-core.inputs.flake-parts.follows = "flake-parts";
-
-    # clan-community: dm-pull-deploy etc. Back on upstream main since
-    # clan/clan-community#25 (machine.name hyphen sanitization) merged.
-    clan-community.url = "https://git.clan.lol/clan/clan-community/archive/main.tar.gz";
-    clan-community.inputs.nixpkgs.follows = "nixpkgs";
-    clan-community.inputs.clan-core.follows = "clan-core";
+    # Fleet/infra inputs (clan-core, clan-community, disko, nix-openclaw) moved
+    # to the PRIVATE homelab repo as part of the INFRA-144 split. This public
+    # repo is dev-machine (macOS + WSL) + devshell only.
   };
 
   outputs = inputs @ { flake-parts, import-tree, ... }:

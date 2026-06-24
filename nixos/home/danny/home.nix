@@ -9,21 +9,16 @@
   # For this to take effect, your ~/.ssh/config must include:
   #   Include ~/.ssh/config.d/*
   # near the top (before any host-specific blocks).
-  # Addresses come from lib/zerotier-hosts.nix (single source of truth).
-  home.file.".ssh/config.d/zerotier".text =
-    let zt = import ../../../lib/zerotier-hosts.nix; in ''
-    Host sunken-ship-zt ${zt."sunken-ship"}
-      HostName ${zt."sunken-ship"}
-      User danny
-      IdentityFile ~/.ssh/id_ed25519_sunken_ship
-      IdentitiesOnly yes
-
-    Host phantom-ship-zt ${zt."phantom-ship"}
-      HostName ${zt."phantom-ship"}
-      User danny
-      IdentityFile ~/.ssh/id_ed25519_phantom_ship
-      IdentitiesOnly yes
-  '';
+  #
+  # The fleet's host names + ZeroTier addresses are topology and live ONLY in a
+  # gitignored local fragment (and the private homelab repo) — never in this
+  # public repo. On the admin machine, drop lib/zerotier-ssh.local.nix (it
+  # returns the SSH-config text for the fleet aliases); without it this is a
+  # no-op, so the public repo carries zero topology.
+  home.file.".ssh/config.d/zerotier" =
+    lib.mkIf (builtins.pathExists ../../../lib/zerotier-ssh.local.nix) {
+      text = import ../../../lib/zerotier-ssh.local.nix;
+    };
 
   # tmux (user-level; same config on macOS and NixOS if you reuse this file)
   programs.tmux = {
