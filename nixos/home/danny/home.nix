@@ -67,6 +67,10 @@
       bind | split-window -h -c "#{pane_current_path}"
       bind - split-window -v -c "#{pane_current_path}"
 
+      # Rebalance panes to a tiled grid (prefix + =).
+      # Rescues a near-zero pane caused by accidental Alt-f + arrow resize.
+      bind = select-layout tiled
+
       # Enable mouse with smooth scrolling
       set -g mouse on
       # Override the default wheel bindings that cause 5-line jumps
@@ -81,7 +85,15 @@
       bind -T copy-mode-vi WheelDownPane send-keys -X scroll-down
     '';
     plugins = with pkgs.tmuxPlugins; [
-      catppuccin
+      # Truncate window names to 20 chars so a long name doesn't consume
+      # the entire status bar and hide all other window labels.
+      {
+        plugin = catppuccin;
+        extraConfig = ''
+          set -g @catppuccin_window_default_text "#{=/20/...:window_name}"
+          set -g @catppuccin_window_current_text "#{=/20/...:window_name}"
+        '';
+      }
       tmux-fzf
       extrakto
       # tmux-resurrect: prefix + Ctrl-s saves, prefix + Ctrl-r restores.
