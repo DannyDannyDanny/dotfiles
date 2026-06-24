@@ -18,10 +18,10 @@ result
 # OpenClaw: Telegram user ID (not committed to public repo)
 nixos/hosts/openclaw-allow-from.nix
 
-# Fleet ZeroTier SSH aliases (topology: host names + addresses) — local-only,
-# consumed by home.nix as an ~/.ssh/config.d drop-in. Never committed to this
-# public repo. See INFRA-144 split.
-lib/zerotier-ssh.local.nix
+# Fleet ZeroTier SSH aliases (topology: host names + addresses) — local-only
+# plaintext drop-in, installed by home.nix at activation into ~/.ssh/config.d.
+# Never committed to this public repo. See INFRA-144 split.
+lib/zerotier-ssh.local
 
 # Archived / local-only directories
 openclaw-documents-repo/

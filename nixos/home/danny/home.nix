@@ -5,20 +5,23 @@
   # Import neovim configuration
   imports = [ ../../neovim.nix ];
 
-  # ZeroTier SSH aliases — managed drop-in under ~/.ssh/config.d/.
-  # For this to take effect, your ~/.ssh/config must include:
+  # ZeroTier SSH aliases — installed at ACTIVATION from a local-only plaintext
+  # drop-in. For these to resolve, ~/.ssh/config must include:
   #   Include ~/.ssh/config.d/*
   # near the top (before any host-specific blocks).
   #
-  # The fleet's host names + ZeroTier addresses are topology and live ONLY in a
-  # gitignored local fragment (and the private homelab repo) — never in this
-  # public repo. On the admin machine, drop lib/zerotier-ssh.local.nix (it
-  # returns the SSH-config text for the fleet aliases); without it this is a
-  # no-op, so the public repo carries zero topology.
-  home.file.".ssh/config.d/zerotier" =
-    lib.mkIf (builtins.pathExists ../../../lib/zerotier-ssh.local.nix) {
-      text = import ../../../lib/zerotier-ssh.local.nix;
-    };
+  # The fleet's host names + ZeroTier addresses are topology and live ONLY in the
+  # local file (and the private homelab repo) — never in this public repo. Place
+  # the Host blocks in ~/dotfiles/lib/zerotier-ssh.local; absent it this is a
+  # no-op. Done at activation (not via home.file) because a flake build cannot
+  # read a gitignored file — flakes exclude untracked files from the source.
+  home.activation.zerotierSshAliases = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    _zt_src="$HOME/dotfiles/lib/zerotier-ssh.local"
+    if [ -r "$_zt_src" ]; then
+      run mkdir -p "$HOME/.ssh/config.d"
+      run install -m600 "$_zt_src" "$HOME/.ssh/config.d/zerotier"
+    fi
+  '';
 
   # tmux (user-level; same config on macOS and NixOS if you reuse this file)
   programs.tmux = {
